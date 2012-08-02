@@ -7,14 +7,14 @@ For now the bundle uses the route name as the transaction name on NewRelic.
 
 ## Result
 
-    ![Ekino NewRelicBundle](https://dl.dropbox.com/s/bufb6f8o0end5xo/ekino_newrelic_bundle.png "Ekino NewRelicBundle")
+![Ekino NewRelicBundle](https://dl.dropbox.com/s/bufb6f8o0end5xo/ekino_newrelic_bundle.png "Ekino NewRelicBundle")
 
 
 ## Installation
 
 ### Step 0 : Install NewRelic
 
-    review http://newrelic.com ...
+review http://newrelic.com ...
 
 ### Step 1 (alternative): Using Composer (recommended)
 
