@@ -12,7 +12,6 @@
             "homepage": "http://ekino.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "symfony/symfony": "*"
     },

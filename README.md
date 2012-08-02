@@ -5,6 +5,10 @@ This bundle integrates the NewRelic PHP API into Symfony2. For more information 
 
 For now the bundle uses the route name as the transaction name on NewRelic.
 
+## Result
+
+    ![Ekino NewRelicBundle](https://dl.dropbox.com/s/bufb6f8o0end5xo/ekino_newrelic_bundle.png "Ekino NewRelicBundle")
+
 
 ## Installation
 
