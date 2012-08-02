@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
+
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="collection" />
+            <argument type="collection" />
+        </service>
+
+        <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
+            <argument />
+            <argument />
+        </service>
+
+        <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
+            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-1"/>
+
+            <argument type="service" id="ekino.new_relic" />
+        </service>
+    </services>
+</container>
