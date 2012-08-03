@@ -1,6 +1,8 @@
 Ekino NewRelic Bundle
 =====================
 
+[![Build Status](https://secure.travis-ci.org/ekino/EkinoNewRelicBundle.png?branch=master)](http://travis-ci.org/ekino/EkinoNewRelicBundle)
+
 This bundle integrates the NewRelic PHP API into Symfony2. For more information about NewRelic, please visit http://newrelic.com.
 
 For now the bundle uses the route name as the transaction name on NewRelic.
