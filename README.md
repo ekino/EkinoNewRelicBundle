@@ -20,8 +20,15 @@ review http://newrelic.com ...
 
 ### Step 1: Using Composer (recommended)
 
+Use `composer.phar`:
 
-First, add the following to your `composer.json` file:
+```bash
+$ php composer.phar require ekino/newrelic-bundle
+```
+You just have to specify the version you want : `master-dev`.
+It will add the package in your `composer.json` file and install it.
+
+Or you can do it by yourself, first, add the following to your `composer.json` file:
 
 ```js
 // composer.json
@@ -38,7 +45,7 @@ Then, you can install the new dependencies by running Composer's ``update``
 command from the directory where your ``composer.json`` file is located:
 
 ```bash
-$ php composer.phar update
+$ php composer.phar update ekino/newrelic-bundle
 ```
 
 ### Step 1 (alternative) : Using ``deps`` file (Symfony 2.0.x)
