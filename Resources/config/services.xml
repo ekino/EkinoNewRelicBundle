@@ -9,9 +9,12 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
 
             <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
             <argument type="collection" />
             <argument type="collection" />
         </service>
+
+        <service id="ekino.new_relic.interactor" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" />
 
         <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
             <argument />
@@ -22,6 +25,7 @@
             <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-1"/>
 
             <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
         </service>
     </services>
 </container>

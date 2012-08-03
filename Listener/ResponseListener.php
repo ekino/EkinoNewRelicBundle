@@ -13,19 +13,22 @@ namespace Ekino\Bundle\NewRelicBundle\Listener;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+
 
 class ResponseListener
 {
-    protected $ignoreRoutes;
+    protected $newRelic;
 
-    protected $ignoreUrls;
+    protected $interactor;
 
     /**
      * @param NewRelic $newRelic
      */
-    public function __construct(NewRelic $newRelic)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor)
     {
-        $this->newRelic = $newRelic;
+        $this->newRelic   = $newRelic;
+        $this->interactor = $interactor;
     }
 
     /**
@@ -34,11 +37,11 @@ class ResponseListener
     public function onCoreResponse(FilterResponseEvent $event)
     {
         foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
-            newrelic_custom_metric($name, (double) $value);
+            $this->interactor->addCustomMetric($name, $value);
         }
 
         foreach ($this->newRelic->getCustomParameters() as $name => $value) {
-            newrelic_add_custom_parameter($name, $value);
+            $this->interactor->addCustomParameter($name, $value);
         }
     }
 }

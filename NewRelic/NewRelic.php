@@ -60,6 +60,24 @@ class NewRelic
     }
 
     /**
+     * @param string $name
+     * @param string $value
+     */
+    public function addCustomParameter($name, $value)
+    {
+        $this->customParameters[(string) $name] = (string) $value;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function addCustomMetric($name, $value)
+    {
+        $this->customMetrics[(string) $name] = (double) $value;
+    }
+
+    /**
      * @return array
      */
     public function getCustomParameters()

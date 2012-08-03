@@ -16,7 +16,7 @@ For now the bundle uses the route name as the transaction name on NewRelic.
 
 review http://newrelic.com ...
 
-### Step 1 (alternative): Using Composer (recommended)
+### Step 1: Using Composer (recommended)
 
 
 First, add the following to your `composer.json` file:
@@ -39,7 +39,7 @@ command from the directory where your ``composer.json`` file is located:
 $ php composer.phar update
 ```
 
-### Step 1 (alternative): Using ``deps`` file (Symfony 2.0.x)
+### Step 1 (alternative) : Using ``deps`` file (Symfony 2.0.x)
 
 First, checkout a copy of the code. Just add the following to the ``deps``
 file of your Symfony Standard Distribution:
