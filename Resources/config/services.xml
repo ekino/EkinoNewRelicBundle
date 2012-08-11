@@ -12,6 +12,7 @@
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument type="collection" />
             <argument type="collection" />
+            <argument />
         </service>
 
         <service id="ekino.new_relic.interactor" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" />

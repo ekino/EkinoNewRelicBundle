@@ -29,6 +29,13 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('api_key')->defaultValue(false)->end()
                 ->scalarNode('application_name')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('transaction_naming')
+                    ->defaultValue('route')
+                    ->validate()
+                        ->ifNotInArray(array('route', 'controller'))
+                        ->thenInvalid('Invalid transaction naming scheme "%s", must be "route" or "controller".')
+                    ->end()
+                ->end()
             ->end()
         ;
 

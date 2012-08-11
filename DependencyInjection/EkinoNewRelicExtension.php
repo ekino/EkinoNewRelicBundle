@@ -16,6 +16,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
+use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
+
 /**
  * This is the class that loads and manages your bundle configuration
  *
@@ -39,5 +41,8 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(0, $config['api_key'])
         ;
 
+        $container->getDefinition('ekino.new_relic.request_listener')
+            ->replaceArgument(4, $config['transaction_naming'] == 'route' ? RequestListener::TRANSACTION_NAMING_ROUTE : RequestListener::TRANSACTION_NAMING_CONTROLLER)
+        ;
     }
 }
