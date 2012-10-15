@@ -15,12 +15,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 
 class RequestListener
 {
-    const TRANSACTION_NAMING_ROUTE = 0;
-    const TRANSACTION_NAMING_CONTROLLER = 1;
-
     protected $ignoreRoutes;
 
     protected $ignoreUrls;
@@ -29,7 +27,7 @@ class RequestListener
 
     protected $interactor;
 
-    protected $transactionNaming;
+    protected $transactionNamingStrategy;
 
     /**
      * @param NewRelic                    $newRelic
@@ -37,13 +35,13 @@ class RequestListener
      * @param array                       $ignoreRoutes
      * @param array                       $ignoreUrls
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, $transactionNaming = self::TRANSACTION_NAMING_ROUTE)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy)
     {
         $this->interactor   = $interactor;
         $this->newRelic     = $newRelic;
         $this->ignoreRoutes = $ignoreRoutes;
         $this->ignoreUrls   = $ignoreUrls;
-        $this->transactionNaming = $transactionNaming;
+        $this->transactionNamingStrategy = $transactionNamingStrategy;
     }
 
     /**
@@ -55,17 +53,9 @@ class RequestListener
             return;
         }
 
-        if ($this->transactionNaming == self::TRANSACTION_NAMING_ROUTE)
-        {
-            $route = $event->getRequest()->get('_route');
-            $this->interactor->setTransactionName($route ?: 'Unknown Symfony route');
-        }
-        else if ($this->transactionNaming == self::TRANSACTION_NAMING_CONTROLLER)
-        {
-            $controller = $event->getRequest()->get('_controller');
-            $this->interactor->setTransactionName($controller ?: 'Unknown Symfony controller');
-        }
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
+        $this->interactor->setTransactionName($transactionName);
         $this->interactor->setApplicationName($this->newRelic->getName());
     }
 }

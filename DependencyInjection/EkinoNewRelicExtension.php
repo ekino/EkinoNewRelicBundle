@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 
 use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
 
@@ -36,13 +37,51 @@ class EkinoNewRelicExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        if ($config['logging'])
+        {
+            $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
+        }
+        else
+        {
+            $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.real');
+        }
+
+        $container->getDefinition('ekino.new_relic.response_listener')
+            ->replaceArgument(2, $config['instrument']);
+        ;
+
+        if (!$config['log_exceptions'])
+        {
+            $container->removeDefintion('ekino.new_relic.exception_listener');
+        }
+
         $container->getDefinition('ekino.new_relic')
             ->replaceArgument(0, $config['application_name'])
             ->replaceArgument(1, $config['api_key'])
         ;
 
+        switch ($config['transaction_naming'])
+        {
+            case 'controller':
+                $transaction_naming_service = new Reference('ekino.new_relic.transaction_naming_strategy.controller');
+                break;
+            case 'route':
+                $transaction_naming_service = new Reference('ekino.new_relic.transaction_naming_strategy.route');
+                break;
+            case 'service':
+                if (!isset($config['transaction_naming_service']))
+                {
+                    throw new \LogicException('When using the "service", transaction naming scheme, the "transaction_naming_service" config parameter must be set.');
+                }
+
+                $transaction_naming_service = new Reference($config['transaction_naming_service']);
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf('Invalid transaction naming scheme "%s", must be "route", "controller" or "service".', $config['transaction_naming']));
+        }
+
         $container->getDefinition('ekino.new_relic.request_listener')
-            ->replaceArgument(4, $config['transaction_naming'] == 'route' ? RequestListener::TRANSACTION_NAMING_ROUTE : RequestListener::TRANSACTION_NAMING_CONTROLLER)
+            ->replaceArgument(4, $transaction_naming_service)
         ;
     }
 }

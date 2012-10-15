@@ -42,4 +42,26 @@ interface NewRelicInteractorInterface
      * @return void
      */
     function addCustomParameter($name, $value);
+
+    /**
+     * @return string
+     */
+    function getBrowserTimingHeader();
+
+    /**
+     * @return string
+     */
+    function getBrowserTimingFooter();
+
+    /**
+     * @return void
+     */
+    function disableAutoRUM();
+
+    /**
+     * @param Exception $exception
+     *
+     * @return void
+     */
+    function noticeException(\Exception $e);
 }
