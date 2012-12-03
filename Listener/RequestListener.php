@@ -51,7 +51,7 @@ class RequestListener
 
         $route = $event->getRequest()->get('_route');
 
-        $this->interactor->setTransactionName($route ?: 'symfony unknow route');
         $this->interactor->setApplicationName($this->newRelic->getName());
+        $this->interactor->setTransactionName($route ?: 'symfony unknown route');
     }
 }
