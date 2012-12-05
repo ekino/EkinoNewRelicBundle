@@ -52,7 +52,7 @@ class EkinoNewRelicExtension extends Extension
 
         if (!$config['log_exceptions'])
         {
-            $container->removeDefintion('ekino.new_relic.exception_listener');
+            $container->removeDefinition('ekino.new_relic.exception_listener');
         }
 
         $container->getDefinition('ekino.new_relic')
