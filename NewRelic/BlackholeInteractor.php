@@ -1,24 +1,14 @@
 <?php
 
-/*
- * This file is part of the Sonata project.
- *
- * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
-class NewRelicInteractor implements NewRelicInteractorInterface
+class BlackholeInteractor implements NewRelicInteractorInterface
 {
     /**
      * {@inheritdoc}
      */
     public function setApplicationName($name)
     {
-        newrelic_set_appname($name);
     }
 
     /**
@@ -26,7 +16,6 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function setTransactionName($name)
     {
-        newrelic_name_transaction($name);
     }
 
     /**
@@ -34,7 +23,6 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function addCustomMetric($name, $value)
     {
-        newrelic_custom_metric((string) $name, (double) $value);
     }
 
     /**
@@ -42,7 +30,6 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function addCustomParameter($name, $value)
     {
-        newrelic_custom_parameter((string) $name, (string) $value);
     }
 
     /**
@@ -50,7 +37,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingHeader()
     {
-        return newrelic_get_browser_timing_header();
+        return '';
     }
 
     /**
@@ -58,7 +45,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingFooter()
     {
-        return newrelic_get_browser_timing_footer();
+        return '';
     }
 
     /**
@@ -66,7 +53,6 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function disableAutoRUM()
     {
-        newrelic_disable_autorum();
     }
 
     /**
@@ -74,6 +60,5 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function noticeException(\Exception $e)
     {
-        newrelic_notice_error(null, $e);
     }
 }

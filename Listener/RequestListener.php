@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 
 class RequestListener
 {
@@ -26,18 +27,21 @@ class RequestListener
 
     protected $interactor;
 
+    protected $transactionNamingStrategy;
+
     /**
      * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
      * @param array                       $ignoreRoutes
      * @param array                       $ignoreUrls
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy)
     {
         $this->interactor   = $interactor;
         $this->newRelic     = $newRelic;
         $this->ignoreRoutes = $ignoreRoutes;
         $this->ignoreUrls   = $ignoreUrls;
+        $this->transactionNamingStrategy = $transactionNamingStrategy;
     }
 
     /**
@@ -49,9 +53,9 @@ class RequestListener
             return;
         }
 
-        $route = $event->getRequest()->get('_route');
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
-        $this->interactor->setTransactionName($route ?: 'symfony unknow route');
+        $this->interactor->setTransactionName($transactionName);
         $this->interactor->setApplicationName($this->newRelic->getName());
     }
 }

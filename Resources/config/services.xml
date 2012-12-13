@@ -4,6 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="ekino.new_relic.interactor.real.class">Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor</parameter>
+    </parameters>
+
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
             <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
@@ -12,9 +16,21 @@
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument type="collection" />
             <argument type="collection" />
+            <argument />
         </service>
 
-        <service id="ekino.new_relic.interactor" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" />
+        <service id="ekino.new_relic.exception_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ExceptionListener">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0"/>
+
+            <argument type="service" id="ekino.new_relic.interactor" />
+        </service>
+
+        <service id="ekino.new_relic.interactor.real" class="%ekino.new_relic.interactor.real.class%" public="false" />
+
+        <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
+            <argument type="service" id="ekino.new_relic.interactor.real" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
 
         <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
             <argument />
@@ -26,6 +42,11 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
+            <argument>false</argument>
         </service>
+
+        <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
+
+        <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
     </services>
 </container>
