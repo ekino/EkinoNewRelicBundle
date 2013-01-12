@@ -12,16 +12,16 @@ namespace :newrelic do
 
       if !changelog
         logger.debug "Getting log of changes for New Relic Deployment details"
-        from_revision = source.next_revision(current_revision)
+        from_revision = source.local.next_revision(current_revision)
         if scm == :git
           log_command = "git log --no-color --pretty=format:'  * %an: %s' --abbrev-commit --no-merges #{previous_revision}..#{real_revision}"
         else
-          log_command = "#{source.log(from_revision)}"
+          log_command = "#{source.local.log(from_revision)}"
         end
         changelog = `#{log_command}`
       end
       if rev.nil?
-        rev = source.query_revision(source.head()) do |cmd|
+        rev = source.local.query_revision(source.local.head()) do |cmd|
           logger.debug "executing locally: '#{cmd}'"
           `#{cmd}`
         end
