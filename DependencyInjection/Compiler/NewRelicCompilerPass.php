@@ -32,5 +32,6 @@ class NewRelicCompilerPass implements CompilerPassInterface
 
         $container->removeDefinition('ekino.new_relic.request_listener');
         $container->removeDefinition('ekino.new_relic.response_listener');
+        $container->removeDefinition('ekino.new_relic.exception_listener');
     }
 }

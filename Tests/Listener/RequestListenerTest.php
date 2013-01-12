@@ -25,12 +25,14 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
         $interactor->expects($this->never())->method('setTransactionName');
 
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array());
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
         $listener->onCoreRequest($event);
     }
 
@@ -39,12 +41,14 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
         $interactor->expects($this->once())->method('setTransactionName');
 
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array());
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
         $listener->onCoreRequest($event);
     }
 }
