@@ -89,6 +89,15 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function noticeError($msg)
+    {
+        $this->log('Sending notice error to New Relic');
+        $this->interactor->noticeError($msg);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function noticeException(\Exception $e)
     {
         $this->log('Sending exception to New Relic');
