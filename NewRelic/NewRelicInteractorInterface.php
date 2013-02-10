@@ -59,6 +59,13 @@ interface NewRelicInteractorInterface
     function disableAutoRUM();
 
     /**
+     * @param string $msg
+     *
+     * @return void
+     */
+    function noticeError($msg);
+
+    /**
      * @param Exception $exception
      *
      * @return void

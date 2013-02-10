@@ -72,6 +72,14 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function noticeError($msg)
+    {
+        newrelic_notice_error($msg);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function noticeException(\Exception $e)
     {
         newrelic_notice_error(null, $e);
