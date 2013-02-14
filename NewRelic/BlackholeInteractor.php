@@ -58,6 +58,13 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function noticeError($msg)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function noticeException(\Exception $e)
     {
     }
