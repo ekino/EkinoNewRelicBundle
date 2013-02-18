@@ -72,7 +72,7 @@ class ResponseListener
                 $response = $event->getResponse();
 
                 // We can only instrument HTML responses
-                if ($response->headers->get('Content-Type') == 'text/html') {
+                if (substr($response->headers->get('Content-Type'), 0, 9) == 'text/html') {
                     $responseContent = $response->getContent();
 
                     $responseContent = preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
