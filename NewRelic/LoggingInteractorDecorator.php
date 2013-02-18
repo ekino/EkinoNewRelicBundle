@@ -87,7 +87,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     {
         $this->log('Getting New Relic RUM timing header');
 
-        $this->interactor->getBrowserTimingHeader();
+        return $this->interactor->getBrowserTimingHeader();
     }
 
     /**
@@ -97,7 +97,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     {
         $this->log('Getting New Relic RUM timing footer');
 
-        $this->interactor->getBrowserTimingFooter();
+        return $this->interactor->getBrowserTimingFooter();
     }
 
     /**
