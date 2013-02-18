@@ -15,17 +15,32 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
-
+/**
+ * Newrelic response listener
+ */
 class ResponseListener
 {
+    /**
+     * @var NewRelic
+     */
     protected $newRelic;
 
+    /**
+     * @var NewRelicInteractorInterface
+     */
     protected $interactor;
 
+    /**
+     * @var boolean
+     */
     protected $instrument;
 
     /**
-     * @param NewRelic $newRelic
+     * Constructor
+     *
+     * @param NewRelic                    $newRelic
+     * @param NewRelicInteractorInterface $interactor
+     * @param boolean                     $instrument
      */
     public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, $instrument = false)
     {
@@ -35,6 +50,8 @@ class ResponseListener
     }
 
     /**
+     * On core response
+     *
      * @param FilterResponseEvent $event
      */
     public function onCoreResponse(FilterResponseEvent $event)
@@ -47,27 +64,24 @@ class ResponseListener
             $this->interactor->addCustomParameter($name, $value);
         }
 
-        if ($this->instrument)
-        {
+        if ($this->instrument) {
             $this->interactor->disableAutoRUM();
+
             // Some requests might not want to get instrumented
-            if ($event->getRequest()->attributes->get('_instrument', true))
-            {
-              $response = $event->getResponse();
+            if ($event->getRequest()->attributes->get('_instrument', true)) {
+                $response = $event->getResponse();
 
-              // We can only instrument HTML responses
-              if ($response->headers->get('Content-Type') == 'text/html')
-              {
-                $response_content = $response->getContent();
+                // We can only instrument HTML responses
+                if (substr($response->headers->get('Content-Type'), 0, 9) == 'text/html') {
+                    $responseContent = $response->getContent();
 
-                $response_content = preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $response_content);
-                $response_content = preg_replace('/<\s*\/\s*body\s*>/', $this->interactor->getBrowserTimingFooter().'$0', $response_content);
+                    $responseContent = preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
+                    $responseContent = preg_replace('/<\s*\/\s*body\s*>/', $this->interactor->getBrowserTimingFooter().'$0', $responseContent);
 
-                if ($response_content)
-                {
-                  $response->setContent($response_content);
+                    if ($responseContent) {
+                        $response->setContent($responseContent);
+                    }
                 }
-              }
             }
         }
     }
