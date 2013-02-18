@@ -4,21 +4,42 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
+/**
+ * Logging interactor
+ */
 class LoggingInteractorDecorator implements NewRelicInteractorInterface
 {
+    /**
+     * @var NewRelicInteractorInterface
+     */
     protected $interactor;
+
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
 
+    /**
+     * Constructor
+     *
+     * @param NewRelicInteractorInterface $interactor
+     * @param LoggerInterface             $logger
+     */
     public function __construct(NewRelicInteractorInterface $interactor, LoggerInterface $logger = null)
     {
         $this->interactor = $interactor;
         $this->logger = $logger;
     }
 
+    /**
+     * Logs a given message
+     *
+     * @param string $message
+     * @param array  $context
+     */
     protected function log($message, array $context = array())
     {
-        if ($this->logger)
-        {
+        if ($this->logger) {
             $this->logger->debug($message, $context);
         }
     }
@@ -65,7 +86,8 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function getBrowserTimingHeader()
     {
         $this->log('Getting New Relic RUM timing header');
-        $this->interactor->getBrowserTimingHeader();
+
+        return $this->interactor->getBrowserTimingHeader();
     }
 
     /**
@@ -74,7 +96,8 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function getBrowserTimingFooter()
     {
         $this->log('Getting New Relic RUM timing footer');
-        $this->interactor->getBrowserTimingFooter();
+
+        return $this->interactor->getBrowserTimingFooter();
     }
 
     /**
