@@ -18,5 +18,10 @@
     "autoload": {
         "psr-0": { "Ekino\\Bundle\\NewRelicBundle": "" }
     },
-    "target-dir": "Ekino/Bundle/NewRelicBundle"
+    "target-dir": "Ekino/Bundle/NewRelicBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
 }
