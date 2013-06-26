@@ -71,4 +71,14 @@ interface NewRelicInteractorInterface
      * @return void
      */
     function noticeException(\Exception $e);
+
+    /**
+     * @return void
+     */
+    function enableBackgroundJob();
+
+    /**
+     * @return void
+     */
+    function disableBackgroundJob();
 }
