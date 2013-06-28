@@ -25,6 +25,32 @@ class CommandListener
      */
     public function onConsoleCommand(ConsoleCommandEvent $event)
     {
+        $command = $event->getCommand();
+        $input = $event->getInput();
+
+        $this->interactor->setTransactionName($command->getName());
         $this->interactor->enableBackgroundJob();
+
+        // send parameters to New Relic
+        foreach ($input->getOptions() as $key => $value) {
+            $key = '--' . $key;
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    $this->interactor->addCustomParameter($key . '[' . $k . ']', $v);
+                } 
+            } else {
+                $this->interactor->addCustomParameter($key, $value);
+            }
+        }
+
+        foreach ($input->getArguments() as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    $this->interactor->addCustomParameter($key . '[' . $k . ']', $v);
+                }
+            } else {
+                $this->interactor->addCustomParameter($key, $value);
+            }
+        }
     }
 }
