@@ -55,7 +55,7 @@ class EkinoNewRelicExtension extends Extension
             $container->removeDefinition('ekino.new_relic.exception_listener');
         }
 
-        if (!$config['backgroundjob_command']) {
+        if (!$config['log_commands']) {
             $container->removeDefinition('ekino.new_relic.command_listener');
         }
 
