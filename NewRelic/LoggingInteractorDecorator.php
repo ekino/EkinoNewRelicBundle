@@ -135,4 +135,22 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         $this->log('Sending exception to New Relic');
         $this->interactor->noticeException($e);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBackgroundJob()
+    {
+        $this->log('Enabling New Relic background job');
+        $this->interactor->enableBackgroundJob();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBackgroundJob()
+    {
+        $this->log('Disabling New Relic background job');
+        $this->interactor->enableBackgroundJob();
+    }
 }

@@ -84,4 +84,20 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     {
         newrelic_notice_error(null, $e);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBackgroundJob()
+    {
+        newrelic_background_job(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBackgroundJob()
+    {
+        newrelic_background_job(false);
+    }
 }
