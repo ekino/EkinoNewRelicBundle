@@ -55,7 +55,9 @@ class RequestListener
 
         $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
-        $this->interactor->setApplicationName($this->newRelic->getName());
+        if ($this->newRelic->getName()) {
+            $this->interactor->setApplicationName($this->newRelic->getName());
+        }
         $this->interactor->setTransactionName($transactionName);
     }
 }

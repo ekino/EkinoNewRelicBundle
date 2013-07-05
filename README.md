@@ -100,8 +100,8 @@ $bundles = array(
 # app/config/config.yml
 
 ekino_new_relic:
-    // ...
-    application_name: Awesome Application # (mandatory, default value in newrelic is PHP Application)
+    application_name: Awesome Application # default value in newrelic is "PHP Application", or whatever is set
+                                          # as php ini-value
     api_key:                              # New Relic API
     logging: false                        # If true, logs all New Relic interactions to the Symfony log
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
