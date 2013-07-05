@@ -77,4 +77,18 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     public function noticeException(\Exception $e)
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function enableBackgroundJob()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function disableBackgroundJob()
+    {
+    }
 }

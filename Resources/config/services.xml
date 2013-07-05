@@ -45,6 +45,12 @@
             <argument>false</argument>
         </service>
 
+        <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">
+            <tag name="kernel.event_listener" event="console.command" method="onConsoleCommand" priority="0"/>
+
+            <argument type="service" id="ekino.new_relic.interactor" />
+        </service>
+
         <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
 
         <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
