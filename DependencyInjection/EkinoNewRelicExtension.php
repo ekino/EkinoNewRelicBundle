@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of Ekino New Relic bundle.
  *
  * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
  *
