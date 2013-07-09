@@ -5,7 +5,7 @@ Ekino NewRelic Bundle
 
 This bundle integrates the NewRelic PHP API into Symfony2. For more information about NewRelic, please visit http://newrelic.com.
 
-For now the bundle uses the route name as the transaction name on NewRelic.
+The bundle can use either the route name or the controller name as the transaction name. For CLI commands the transaction name is the command name.
 
 ## Result
 
@@ -101,6 +101,26 @@ $bundles = array(
 
 ekino_new_relic:
     // ...
-    application_name: Awesome Aplication # (mandatory, default value in newrelic is PHP Application)
-    api_key:                             # New Relic API
+    application_name: Awesome Application # (mandatory, default value in newrelic is PHP Application)
+    api_key:                              # New Relic API
+    logging: false                        # If true, logs all New Relic interactions to the Symfony log
+    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
+    log_exceptions: false                 # If true, sends exceptions to New Relic
+    log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only)
+    transaction_naming: route             # route, controller or service (see below)
+    transaction_naming_service: ~         # Transaction naming service (see below)
 ```
+
+## Enhanced RUM instrumentation
+
+The bundle comes with an option for enhanced real user monitoring. Ordinarily the New Relic extension (unless disabled by configuration) automatically adds a tracking code for RUM instrumentation to all HTML responses. Using enhanced RUM instrumentation, the bundle allows you to selectivly disable instrumentation on certain requests.
+
+This can be useful if, e.g. you're returing HTML verbatim for an HTML editor.
+
+If enhanced RUM instrumentation is enabled, you can *disable* instrumentation for a given request by passing along a ```_instrument``` request parameter, and setting it to ```false```. This can be done e.g. through the routing configuration.
+
+## Transaction naming strategies
+
+The bundle comes with two built-in transaction naming strategies. ```route``` and ```controller```, naming the New Relic transaction after the route or controller respectively. However, the bundle supports custom transaction naming strategies through the ```service``` configuration option. If you have selected the ```service``` configuration option, you must pass the name of your own transaction naming service as the ```transaction_naming_service``` configuration option.
+
+The transaction naming service class must implement the ```Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface``` interface. For more information on creating your own services, see the Symfony documentation on [Creating/Configuring Services in the Container](http://symfony.com/doc/current/book/service_container.html#creating-configuring-services-in-the-container).
