@@ -42,7 +42,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function addCustomParameter($name, $value)
     {
-        newrelic_custom_parameter((string) $name, (string) $value);
+        newrelic_add_custom_parameter((string) $name, (string) $value);
     }
 
     /**
