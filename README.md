@@ -100,6 +100,7 @@ $bundles = array(
 # app/config/config.yml
 
 ekino_new_relic:
+    enabled: true                         # Defaults to true
     application_name: Awesome Application # default value in newrelic is "PHP Application", or whatever is set
                                           # as php ini-value
     api_key:                              # New Relic API
