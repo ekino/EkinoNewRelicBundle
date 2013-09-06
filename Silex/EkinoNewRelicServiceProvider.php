@@ -24,12 +24,13 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
     {
         $app['new_relic.enabled'] = function_exists('newrelic_name_transaction');
         $app['new_relic.application_name'] = 'Silex Application';
+        $app['new_relic.api_key'] = null;
         $app['new_relic.logging'] = false;
         $app['new_relic.log_exceptions'] = false;
         $app['new_relic.log_commands'] = false;
 
         $app['new_relic'] = $app->share(function ($app) {
-            return new NewRelic();
+            return new NewRelic($app['new_relic.application_name'], $app['new_relic.api_key']);
         });
 
         $app['new_relic.transaction_naming_strategy'] = $app->share(function ($app) {
@@ -44,14 +45,14 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
             }
 
             return $app['new_relic.interactor.real'];
-        })
+        });
 
         $app['new_relic.interactor.real'] = $app->share(function ($app) {
             return new NewRelicInteractor();
         });
 
         $app['new_relic.interactor.logger'] = $app->share(function ($app) {
-            return new LoggingInteractorDecorator($app['new_relic.interactor.real'], isset($app['logger']) ? $app['logger'] : null)
+            return new LoggingInteractorDecorator($app['new_relic.interactor.real'], isset($app['logger']) ? $app['logger'] : null);
         });
 
         $app['new_relic.request_listener'] = $app->share(function ($app) {
