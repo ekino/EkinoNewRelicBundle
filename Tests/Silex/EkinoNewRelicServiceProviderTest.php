@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Ekino New Relic bundle.
+ *
+ * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Ekino\Bundle\NewRelicBundle\Tests\Silex;
 
 use Silex\Application;
@@ -7,9 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Ekino\Bundle\NewRelicBundle\Silex\EkinoNewRelicServiceProvider;
 
+/**
+ * Validate
+ *
+ * @author Jérôme Tamarelle <jerome@tamarelle.net>
+ */
 class EkinoNewRelicServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testListenerCalled()
+    public function testRequestListener()
     {
         $app = $this->createApplication();
 
@@ -30,7 +44,50 @@ class EkinoNewRelicServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function createApplication()
+    /**
+     * @expectedException        RuntimeException
+     * @expectedExceptionMessage Test Exception
+     */
+    public function testExceptionListener()
+    {
+        $app = $this->createApplication();
+
+        $app['new_relic.log_exceptions'] = true;
+
+        $app['new_relic.interactor.real']
+            ->expects($this->once())
+            ->method('noticeException')
+        ;
+
+        $response = $app->handle(Request::create('/error'));
+    }
+
+    /**
+     * @expectedException        RuntimeException
+     * @expectedExceptionMessage Test Exception
+     */
+    public function testExceptionListenerDisabledByDefault()
+    {
+        $app = $this->createApplication();
+
+        $this->assertFalse($app['new_relic.log_exceptions']);
+
+        $app['new_relic.interactor.real']
+            ->expects($this->never())
+            ->method('noticeException')
+        ;
+
+        $response = $app->handle(Request::create('/error'));
+    }
+
+    public function testCommandRegistered()
+    {
+        $app = $this->createApplication();
+
+        $this->assertInstanceOf('Symfony\\Component\\Console\\Command\\Command', $app['new_relic.command.notify']);
+    }
+
+    private function createApplication()
     {
         $app = new Application();
         unset($app['exception_handler']);
@@ -46,7 +103,7 @@ class EkinoNewRelicServiceProviderTest extends \PHPUnit_Framework_TestCase
         })->bind('my_page');
 
         $app->get('/error', function () {
-            throw new \RuntimeException('test');
+            throw new \RuntimeException('Test Exception');
         })->bind('my_error');
 
         return $app;
