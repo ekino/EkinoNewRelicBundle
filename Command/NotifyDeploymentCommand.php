@@ -11,7 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,8 +19,24 @@ use Symfony\Component\Console\Input\InputOption;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 
-class NotifyDeploymentCommand extends ContainerAwareCommand
+class NotifyDeploymentCommand extends Command
 {
+    /**
+     * @var NewRelic
+     */
+    private $newrelic;
+
+    /**
+     * @param NewRelic $newrelic
+     */
+    public function __construct(NewRelic $newrelic)
+    {
+        $this->newrelic = $newrelic;
+
+        parent::__construct();
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -55,7 +71,7 @@ class NotifyDeploymentCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $newrelic = $this->getContainer()->get('ekino.new_relic');
+        $newrelic = $this->newrelic;
 
         $status = $this->performRequest($newrelic->getApiKey(), $this->createPayload($newrelic, $input));
 
