@@ -14,6 +14,8 @@ namespace Ekino\Bundle\NewRelicBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler\NewRelicCompilerPass;
+use Symfony\Component\Console\Application;
+use Ekino\Bundle\NewRelicBundle\Command\NotifyDeploymentCommand;
 
 class EkinoNewRelicBundle extends Bundle
 {
@@ -23,5 +25,20 @@ class EkinoNewRelicBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new NewRelicCompilerPass());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function registerCommands(Application $application)
+    {
+        parent::registerCommands($application);
+
+        $container = $application->getKernel()->getContainer();
+
+        if ($container->has('ekino.new_relic')) {
+            $newrelic = $container->get('ekino.new_relic');
+            $application->add(new NotifyDeploymentCommand($newrelic));
+        }
     }
 }
