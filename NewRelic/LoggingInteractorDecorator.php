@@ -11,7 +11,8 @@
 
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
+
 
 /**
  * Logging interactor

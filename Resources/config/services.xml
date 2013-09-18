@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="ekino.new_relic.interactor.real.class">Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor</parameter>
+        <parameter key="ekino.new_relic.interactor.blackhole.class">Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor</parameter>
     </parameters>
 
     <services>
@@ -26,6 +27,7 @@
         </service>
 
         <service id="ekino.new_relic.interactor.real" class="%ekino.new_relic.interactor.real.class%" public="false" />
+        <service id="ekino.new_relic.interactor.blackhole" class="%ekino.new_relic.interactor.blackhole.class%" public="false" />
 
         <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
             <argument type="service" id="ekino.new_relic.interactor.real" />
