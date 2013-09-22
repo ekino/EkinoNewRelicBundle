@@ -12,8 +12,10 @@
             "homepage": "http://ekino.com"
         }
     ],
-    "require": {
-        "symfony/symfony": "*"
+    "require-dev": {
+        "silex/silex": "~1.0",
+        "symfony/framework-bundle": "*",
+        "symfony/console": "*"
     },
     "autoload": {
         "psr-0": { "Ekino\\Bundle\\NewRelicBundle": "" }
