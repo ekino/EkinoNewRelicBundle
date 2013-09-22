@@ -16,6 +16,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Ekino\Bundle\NewRelicBundle\Silex\EkinoNewRelicServiceProvider;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+
 /**
  * Validate
  *
@@ -78,6 +84,32 @@ class EkinoNewRelicServiceProviderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $response = $app->handle(Request::create('/error'));
+    }
+
+    public function testConsoleListener()
+    {
+        $app = $this->createApplication();
+
+        $app['new_relic.interactor.real']
+            ->expects($this->once())
+            ->method('setTransactionName')
+            ->with($this->equalTo('my-command'))
+        ;
+
+        $app['new_relic.interactor.real']
+            ->expects($this->once())
+            ->method('enableBackgroundJob')
+        ;
+
+        $app->boot();
+
+        $event = new ConsoleCommandEvent(
+            new Command('my-command'),
+            new ArrayInput(array()),
+            new NullOutput()
+        );
+
+        $app['dispatcher']->dispatch(ConsoleEvents::COMMAND, $event);
     }
 
     public function testCommandRegistered()
