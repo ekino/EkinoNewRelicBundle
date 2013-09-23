@@ -46,7 +46,7 @@ class CommandListener
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
                     $this->interactor->addCustomParameter($key . '[' . $k . ']', $v);
-                } 
+                }
             } else {
                 $this->interactor->addCustomParameter($key, $value);
             }
