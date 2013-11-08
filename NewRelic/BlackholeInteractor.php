@@ -16,7 +16,7 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setApplicationName($name)
+    public function setApplicationName($name, $key = null)
     {
     }
 

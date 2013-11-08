@@ -13,6 +13,7 @@ namespace Ekino\Bundle\NewRelicBundle\Listener;
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 
 class CommandListener
 {
@@ -21,12 +22,15 @@ class CommandListener
      */
     protected $interactor;
 
+    protected $newRelic;
+
     /**
      * @param NewRelicInteractorInterface $interactor
      */
-    public function __construct(NewRelicInteractorInterface $interactor)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor)
     {
         $this->interactor = $interactor;
+        $this->newRelic = $newRelic;
     }
 
     /**
@@ -36,7 +40,9 @@ class CommandListener
     {
         $command = $event->getCommand();
         $input = $event->getInput();
-
+        if ($this->newRelic->getName()) {
+            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getApiKey());
+        }
         $this->interactor->setTransactionName($command->getName());
         $this->interactor->enableBackgroundJob();
 
