@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('api_key')->defaultValue(false)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
                 ->scalarNode('application_name')->defaultValue(null)->end()
+                ->scalarNode('xmit')->defaultValue(false)->end()
                 ->scalarNode('logging')
                     ->defaultFalse()
                     ->validate()

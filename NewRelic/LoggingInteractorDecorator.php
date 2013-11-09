@@ -56,10 +56,10 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setApplicationName($name, $key = null)
+    public function setApplicationName($name, $key = null, $xmit = false)
     {
         $this->log(sprintf('Setting New Relic Application name to %s', $name));
-        $this->interactor->setApplicationName($name, $key);
+        $this->interactor->setApplicationName($name, $key, $xmit);
     }
 
     /**

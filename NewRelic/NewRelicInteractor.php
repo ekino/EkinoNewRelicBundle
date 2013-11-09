@@ -16,9 +16,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setApplicationName($name, $key = null)
+    public function setApplicationName($name, $key = null, $xmit = false)
     {
-        newrelic_set_appname($name, $key, true);
+        newrelic_set_appname($name, $key, $xmit);
     }
 
     /**
