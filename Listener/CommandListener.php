@@ -41,7 +41,7 @@ class CommandListener
         $command = $event->getCommand();
         $input = $event->getInput();
         if ($this->newRelic->getName()) {
-            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getApiKey());
+            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey());
         }
         $this->interactor->setTransactionName($command->getName());
         $this->interactor->enableBackgroundJob();

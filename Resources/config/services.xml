@@ -35,6 +35,7 @@
         <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
             <argument />
             <argument />
+            <argument />
         </service>
 
         <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">

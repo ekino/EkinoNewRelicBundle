@@ -66,6 +66,7 @@ class EkinoNewRelicExtension extends Extension
         $container->getDefinition('ekino.new_relic')
             ->replaceArgument(0, $config['application_name'])
             ->replaceArgument(1, $config['api_key'])
+            ->replaceArgument(2, $config['license_key'])
         ;
 
         switch ($config['transaction_naming'])
