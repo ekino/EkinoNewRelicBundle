@@ -18,7 +18,7 @@ interface NewRelicInteractorInterface
      *
      * @return void
      */
-    function setApplicationName($name, $key = null);
+    function setApplicationName($name, $key = null, $xmit = false);
 
     /**
      * @param string $name

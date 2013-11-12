@@ -17,6 +17,10 @@ class NewRelic
 
     protected $apiKey;
 
+    protected $licenseKey;
+
+    protected $xmit;
+
     protected $framework;
 
     protected $customMetrics;
@@ -26,11 +30,14 @@ class NewRelic
     /**
      * @param string $name
      * @param string $apiKey
+     * @param string $licenseKey
      */
-    public function __construct($name, $apiKey)
+    public function __construct($name, $apiKey, $licenseKey = null, $xmit = false)
     {
         $this->name             = $name;
         $this->apiKey           = $apiKey;
+        $this->licenseKey       = $licenseKey;
+        $this->xmit             = $xmit;
         $this->customMetrics    = array();
         $this->customParameters = array();
     }
@@ -141,5 +148,21 @@ class NewRelic
     public function getApiKey()
     {
         return $this->apiKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLicenseKey()
+    {
+        return $this->licenseKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getXmit()
+    {
+        return $this->xmit;
     }
 }
