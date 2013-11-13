@@ -12,21 +12,11 @@
 namespace Ekino\Bundle\NewRelicBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler\NewRelicCompilerPass;
 use Symfony\Component\Console\Application;
 use Ekino\Bundle\NewRelicBundle\Command\NotifyDeploymentCommand;
 
 class EkinoNewRelicBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new NewRelicCompilerPass());
-    }
-
     /**
      * {@inheritdoc}
      */

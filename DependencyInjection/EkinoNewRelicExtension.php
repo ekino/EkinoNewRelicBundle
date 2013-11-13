@@ -13,11 +13,10 @@ namespace  Ekino\Bundle\NewRelicBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
-
-use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -34,20 +33,22 @@ class EkinoNewRelicExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        if (!$config['enabled']) {
-            return;
-        }
-
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $interactor = $config['enabled'] && function_exists('newrelic_name_transaction')
+            ? 'ekino.new_relic.interactor.real'
+            : 'ekino.new_relic.interactor.blackhole';
 
         if ($config['logging'])
         {
             $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
+            $container->getDefinition('ekino.new_relic.interactor.logger')
+                ->replaceArgument(0, new Reference($interactor));
         }
         else
         {
-            $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.real');
+            $container->setAlias('ekino.new_relic.interactor', $interactor);
         }
 
         $container->getDefinition('ekino.new_relic.response_listener')
