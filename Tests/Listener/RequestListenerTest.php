@@ -32,7 +32,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, $namingStrategy);
         $listener->onCoreRequest($event);
     }
 
@@ -48,7 +48,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, $namingStrategy);
         $listener->onCoreRequest($event);
     }
 }

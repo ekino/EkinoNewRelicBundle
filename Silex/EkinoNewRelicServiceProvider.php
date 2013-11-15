@@ -70,7 +70,7 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
 
         // Listeners
         $app['new_relic.request_listener'] = $app->share(function ($app) {
-            return new RequestListener($app['new_relic'], $app['new_relic.interactor'], array(), array(), $app['new_relic.transaction_naming_strategy']);
+            return new RequestListener($app['new_relic'], $app['new_relic.interactor'], $app['new_relic.transaction_naming_strategy']);
         });
         $app['new_relic.exception_listener'] = $app->share(function ($app) {
             return new ExceptionListener($app['new_relic.interactor']);

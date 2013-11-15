@@ -19,10 +19,6 @@ use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrat
 
 class RequestListener
 {
-    protected $ignoreRoutes;
-
-    protected $ignoreUrls;
-
     protected $newRelic;
 
     protected $interactor;
@@ -35,12 +31,10 @@ class RequestListener
      * @param array                       $ignoreRoutes
      * @param array                       $ignoreUrls
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, TransactionNamingStrategyInterface $transactionNamingStrategy)
     {
         $this->interactor   = $interactor;
         $this->newRelic     = $newRelic;
-        $this->ignoreRoutes = $ignoreRoutes;
-        $this->ignoreUrls   = $ignoreUrls;
         $this->transactionNamingStrategy = $transactionNamingStrategy;
     }
 
