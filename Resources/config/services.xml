@@ -15,8 +15,6 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
-            <argument type="collection" />
-            <argument type="collection" />
             <argument />
         </service>
 

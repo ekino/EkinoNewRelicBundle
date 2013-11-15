@@ -92,7 +92,7 @@ class EkinoNewRelicExtension extends Extension
         }
 
         $container->getDefinition('ekino.new_relic.request_listener')
-            ->replaceArgument(4, $transaction_naming_service)
+            ->replaceArgument(2, $transaction_naming_service)
         ;
     }
 }
