@@ -20,11 +20,6 @@ use Psr\Log\LoggerInterface;
 class LoggingInteractorDecorator implements NewRelicInteractorInterface
 {
     /**
-     * @var NewRelicInteractorInterface
-     */
-    protected $interactor;
-
-    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -32,12 +27,10 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * Constructor
      *
-     * @param NewRelicInteractorInterface $interactor
      * @param LoggerInterface             $logger
      */
-    public function __construct(NewRelicInteractorInterface $interactor, LoggerInterface $logger = null)
+    public function __construct(LoggerInterface $logger = null)
     {
-        $this->interactor = $interactor;
         $this->logger = $logger;
     }
 
@@ -60,7 +53,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function setApplicationName($name, $key = null, $xmit = false)
     {
         $this->log(sprintf('Setting New Relic Application name to %s', $name));
-        $this->interactor->setApplicationName($name, $key, $xmit);
     }
 
     /**
@@ -69,7 +61,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function setTransactionName($name)
     {
         $this->log(sprintf('Setting New Relic Transaction name to %s', $name));
-        $this->interactor->setTransactionName($name);
     }
 
     /**
@@ -78,7 +69,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function addCustomMetric($name, $value)
     {
         $this->log(sprintf('Adding custom New Relic metric %s: %s', $name, $value));
-        $this->interactor->addCustomMetric($name, $value);
     }
 
     /**
@@ -87,7 +77,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function addCustomParameter($name, $value)
     {
         $this->log(sprintf('Adding custom New Relic parameter %s: %s', $name, $value));
-        $this->interactor->addCustomParameter($name, $value);
     }
 
     /**
@@ -96,8 +85,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function getBrowserTimingHeader()
     {
         $this->log('Getting New Relic RUM timing header');
-
-        return $this->interactor->getBrowserTimingHeader();
+        return '';
     }
 
     /**
@@ -106,8 +94,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function getBrowserTimingFooter()
     {
         $this->log('Getting New Relic RUM timing footer');
-
-        return $this->interactor->getBrowserTimingFooter();
+        return '';
     }
 
     /**
@@ -116,7 +103,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function disableAutoRUM()
     {
         $this->log('Disabling New Relic Auto-RUM');
-        $this->interactor->disableAutoRUM();
     }
 
     /**
@@ -125,7 +111,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function noticeError($msg)
     {
         $this->log('Sending notice error to New Relic');
-        $this->interactor->noticeError($msg);
     }
 
     /**
@@ -134,7 +119,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function noticeException(\Exception $e)
     {
         $this->log('Sending exception to New Relic');
-        $this->interactor->noticeException($e);
     }
 
     /**
@@ -143,7 +127,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function enableBackgroundJob()
     {
         $this->log('Enabling New Relic background job');
-        $this->interactor->enableBackgroundJob();
     }
 
     /**
@@ -152,6 +135,5 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function disableBackgroundJob()
     {
         $this->log('Disabling New Relic background job');
-        $this->interactor->enableBackgroundJob();
     }
 }
