@@ -99,19 +99,21 @@ $bundles = array(
 ``` yaml
 # app/config/config.yml
 
+All possible options with their defaults.
+
 ekino_new_relic:
-    enabled: true                         # Defaults to true
-    application_name: Awesome Application # default value in newrelic is "PHP Application", or whatever is set
-                                          # as php ini-value
-    api_key:                              # New Relic API
-    license_key:                          # New Relic license key
-    xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true
-    logging: false                        # If true, logs all New Relic interactions to the Symfony log
-    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
-    log_exceptions: false                 # If true, sends exceptions to New Relic
-    log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only)
-    transaction_naming: route             # route, controller or service (see below)
-    transaction_naming_service: ~         # Transaction naming service (see below)
+    enabled: true
+    application_name: ~           # Application name (default php.ini)
+    api_key: ~                    # New Relic API key (default php.ini)
+    license_key: ~                # New Relic license key (default php.ini)
+    xmit: false                   # Record the metric data up to the point
+                                  # newrelic_set_appname is called
+    logging: false                # Log into default logger
+    instrument: false             # Enhanced New Relic RUM instrumentation (see below)
+    log_exceptions: false         # Sends exceptions to New Relic
+    log_commands: true            # Record CLI commands as Background jobs (>2.3 only)
+    transaction_naming: route     # route, controller or service (see below)
+    transaction_naming_service: ~ # Transaction naming service (see below)
 ```
 
 ## Enhanced RUM instrumentation
@@ -145,5 +147,5 @@ Options:
  --changelog    A list of changes for this deployment
  --description  Text annotation for the deployment — notes for you
 ```
- 
+
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
