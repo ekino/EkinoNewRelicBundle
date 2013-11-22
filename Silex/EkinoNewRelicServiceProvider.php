@@ -79,7 +79,7 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
             return new ResponseListener($app['new_relic'], $app['new_relic.interactor'], false);
         });
         $app['new_relic.console_listener'] = $app->share(function ($app) {
-            return new CommandListener($app['new_relic'], $app['new_relic.interactor']);
+            return new CommandListener($app['new_relic'], $app['new_relic.interactor'], array());
         });
 
         // Optional command

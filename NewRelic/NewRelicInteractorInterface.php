@@ -28,6 +28,11 @@ interface NewRelicInteractorInterface
     function setTransactionName($name);
 
     /**
+     * @return void
+     */
+    public function ignoreTransaction();
+
+    /**
      * @param string $name
      * @param string $value
      *

@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="ekino.new_relic.interactor.real.class">Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor</parameter>
         <parameter key="ekino.new_relic.interactor.blackhole.class">Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor</parameter>
+        <parameter key="ekino.new_relic.request_listener.ignored_routes" type="collection" />
+        <parameter key="ekino.new_relic.request_listener.ignored_paths" type="collection" />
     </parameters>
 
     <services>
@@ -15,8 +17,8 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
-            <argument type="collection" />
-            <argument type="collection" />
+            <argument type="collection">%ekino.new_relic.request_listener.ignored_routes%</argument>
+            <argument type="collection">%ekino.new_relic.request_listener.ignored_paths%</argument>
             <argument />
             <argument />
         </service>
@@ -56,6 +58,7 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
+            <argument type="collection">%ekino.new_relic.request_listener.ignored_commands%</argument>
         </service>
 
         <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />

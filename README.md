@@ -113,6 +113,9 @@ ekino_new_relic:
     using_symfony_cache: false            # Symfony HTTP cache (see below)
     transaction_naming: route             # route, controller or service (see below)
     transaction_naming_service: ~         # Transaction naming service (see below)
+    ignored_routes: []                    # No transaction recorded for this routes
+    ignored_paths: []                     # No transaction recorded for this paths
+    ignored_commands: []                  # No transaction recorded for this commands (background tasks)
 ```
 
 ## Enhanced RUM instrumentation
@@ -153,5 +156,5 @@ Options:
  --changelog    A list of changes for this deployment
  --description  Text annotation for the deployment — notes for you
 ```
- 
+
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
