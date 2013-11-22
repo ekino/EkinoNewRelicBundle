@@ -30,8 +30,7 @@ class EkinoNewRelicExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
 
         if ($config['transaction_naming'] =='service' && !isset($config['transaction_naming_service'])) {
             throw new \LogicException('When using the "service", transaction naming scheme, the "transaction_naming_service" config parameter must be set.');
@@ -57,12 +56,20 @@ class EkinoNewRelicExtension extends Extension
             $interactor->addMethodCall('addInteractor', array(new Reference('ekino.new_relic.interactor.real')));
         }
 
-        if (!$config['log_exceptions']) {
-            $container->removeDefinition('ekino.new_relic.exception_listener');
+        if ($config['log_exceptions']) {
+            $container->getDefinition('ekino.new_relic.exception_listener')
+                ->addTag(
+                    'kernel.event_listener',
+                    array('event' => 'kernel.exception', 'method' => 'onKernelException')
+                );
         }
 
-        if (!$config['log_commands']) {
-            $container->removeDefinition('ekino.new_relic.command_listener');
+        if ($config['log_commands']) {
+            $container->getDefinition('ekino.new_relic.command_listener')
+                ->addTag(
+                    'kernel.event_listener',
+                    array('event' => 'console.command', 'method' => 'onConsoleCommand')
+                );
         }
     }
 }
