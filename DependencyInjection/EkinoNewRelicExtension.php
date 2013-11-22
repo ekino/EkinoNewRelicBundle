@@ -36,6 +36,9 @@ class EkinoNewRelicExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter('ekino.new_relic.request_listener.ignored_routes', $config['ignored_routes']);
+        $container->setParameter('ekino.new_relic.request_listener.ignored_paths', $config['ignored_paths']);
+
         $interactor = $config['enabled'] && extension_loaded('newrelic')
             ? 'ekino.new_relic.interactor.real'
             : 'ekino.new_relic.interactor.blackhole';
