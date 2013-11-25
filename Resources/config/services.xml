@@ -5,59 +5,57 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="ekino.new_relic.interactor.real.class">Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor</parameter>
-        <parameter key="ekino.new_relic.interactor.blackhole.class">Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor</parameter>
+        <parameter key="ekino.new_relic.configuration.application_name" />
+        <parameter key="ekino.new_relic.configuration.api_key" />
+        <parameter key="ekino.new_relic.configuration.license_key" />
+        <parameter key="ekino.new_relic.configuration.xmit" />
+        <parameter key="ekino.new_relic.configuration.instrument" />
     </parameters>
 
     <services>
-        <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
-            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
-
-            <argument type="service" id="ekino.new_relic" />
-            <argument type="service" id="ekino.new_relic.interactor" />
-            <argument type="collection" />
-            <argument type="collection" />
-            <argument />
+        <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic">
+            <argument>%ekino.new_relic.configuration.application_name%</argument>
+            <argument>%ekino.new_relic.configuration.api_key%</argument>
+            <argument>%ekino.new_relic.configuration.license_key%</argument>
+            <argument>%ekino.new_relic.configuration.xmit%</argument>
         </service>
 
-        <service id="ekino.new_relic.exception_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ExceptionListener">
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0"/>
-
-            <argument type="service" id="ekino.new_relic.interactor" />
-        </service>
-
-        <service id="ekino.new_relic.interactor.real" class="%ekino.new_relic.interactor.real.class%" public="false" />
-        <service id="ekino.new_relic.interactor.blackhole" class="%ekino.new_relic.interactor.blackhole.class%" public="false" />
-
+        <service id="ekino.new_relic.interactor" class="Ekino\Bundle\NewRelicBundle\NewRelic\CompositeInteractor" public="false" />
+        <service id="ekino.new_relic.interactor.newrelic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
         <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
-            <argument type="service" id="ekino.new_relic.interactor.real" />
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
-        <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
-            <argument />
-            <argument />
-            <argument />
-            <argument />
+        <service id="ekino.new_relic.transaction_naming_strategy" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface" synthetic="true" />
+        <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
+        <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
+
+
+        <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1" />
+
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
+            <argument type="collection" />
+            <argument type="collection" />
+            <argument type="service" id="ekino.new_relic.transaction_naming_strategy" />
         </service>
 
         <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
-            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-1"/>
+            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-1" />
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
-            <argument>false</argument>
+            <argument>%ekino.new_relic.configuration.instrument%</argument>
+        </service>
+
+        <service id="ekino.new_relic.exception_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ExceptionListener">
+            <argument type="service" id="ekino.new_relic.interactor" />
         </service>
 
         <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">
-            <tag name="kernel.event_listener" event="console.command" method="onConsoleCommand" priority="0"/>
-
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
         </service>
-
-        <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
-
-        <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
     </services>
 </container>
