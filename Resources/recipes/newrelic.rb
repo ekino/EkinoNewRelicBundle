@@ -31,7 +31,7 @@ namespace :newrelic do
       logger.debug "Uploading deployment to New Relic"
       capifony_pretty_print "--> Notifying New Relic of deployment"
 
-      run "cd #{latest_release} && #{php_bin} #{symfony_console} newrelic:notify-deployment --env=#{symfony_env_prod} --no-debug --revision='#{rev}' --changelog='#{changelog}' --description='#{description}' --user='#{user}'"
+      run "cd #{latest_release} && #{php_bin} #{symfony_console} newrelic:notify-deployment --env=#{symfony_env_prod} --no-debug --revision=#{rev.shellescape} --changelog=#{changelog.to_s.shellescape} --description=#{description.to_s.shellescape} --user=#{user.to_s.shellescape}"
       capifony_puts_ok
     rescue Capistrano::CommandError
       logger.info "Unable to notify New Relic of the deployment... skipping"
