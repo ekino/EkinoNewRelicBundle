@@ -30,18 +30,25 @@ class RequestListener
     protected $transactionNamingStrategy;
 
     /**
+     * @var boolean
+     */
+    protected $symfonyCache;
+
+    /**
      * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
      * @param array                       $ignoreRoutes
      * @param array                       $ignoreUrls
+     * @param boolean                     $symfonyCache
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy, $symfonyCache = false)
     {
         $this->interactor   = $interactor;
         $this->newRelic     = $newRelic;
         $this->ignoreRoutes = $ignoreRoutes;
         $this->ignoreUrls   = $ignoreUrls;
         $this->transactionNamingStrategy = $transactionNamingStrategy;
+        $this->symfonyCache      = $symfonyCache;
     }
 
     /**
@@ -56,8 +63,13 @@ class RequestListener
         $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
         if ($this->newRelic->getName()) {
+            if ($this->symfonyCache) {
+                $this->interactor->startTransaction($this->newRelic->getName());
+            }
+
             $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
         }
+
         $this->interactor->setTransactionName($transactionName);
     }
 }

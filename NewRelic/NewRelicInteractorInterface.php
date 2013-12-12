@@ -81,4 +81,20 @@ interface NewRelicInteractorInterface
      * @return void
      */
     function disableBackgroundJob();
+
+    /**
+     * If you previously ended a transaction you many want to start a new one.
+     *
+     * @param string $name app name
+     *
+     * @return void
+     */
+    public function startTransaction($name);
+
+    /**
+     * End a transaction now
+     *
+     * @return void
+     */
+    public function endTransaction();
 }

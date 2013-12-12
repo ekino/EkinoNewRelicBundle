@@ -36,17 +36,24 @@ class ResponseListener
     protected $instrument;
 
     /**
+     * @var boolean
+     */
+    protected $symfonyCache;
+
+    /**
      * Constructor
      *
      * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
      * @param boolean                     $instrument
+     * @param boolean                     $symfonyCache
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, $instrument = false)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, $instrument = false, $symfonyCache = false)
     {
-        $this->newRelic   = $newRelic;
-        $this->interactor = $interactor;
-        $this->instrument = $instrument;
+        $this->newRelic     = $newRelic;
+        $this->interactor   = $interactor;
+        $this->instrument   = $instrument;
+        $this->symfonyCache = $symfonyCache;
     }
 
     /**
@@ -83,6 +90,10 @@ class ResponseListener
                     }
                 }
             }
+        }
+
+        if ($this->symfonyCache) {
+            $this->interactor->endTransaction();
         }
     }
 }

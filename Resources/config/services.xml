@@ -11,12 +11,13 @@
 
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
-            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="-1"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="1"/>
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument type="collection" />
             <argument type="collection" />
+            <argument />
             <argument />
         </service>
 
@@ -42,11 +43,12 @@
         </service>
 
         <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
-            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-1"/>
+            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-255"/>
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>false</argument>
+            <argument />
         </service>
 
         <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">

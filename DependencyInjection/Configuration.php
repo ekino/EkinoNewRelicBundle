@@ -68,6 +68,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('transaction_naming_service')->defaultNull()->end()
+                ->scalarNode('using_symfony_cache')->defaultFalse()->end()
             ->end()
         ;
 

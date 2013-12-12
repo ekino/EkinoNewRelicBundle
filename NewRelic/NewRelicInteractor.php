@@ -100,4 +100,20 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     {
         newrelic_background_job(false);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function endTransaction()
+    {
+        newrelic_end_transaction(false);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function startTransaction($name)
+    {
+        newrelic_start_transaction($name);
+    }
 }

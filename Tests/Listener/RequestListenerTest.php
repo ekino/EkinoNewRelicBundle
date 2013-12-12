@@ -41,6 +41,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
         $interactor->expects($this->once())->method('setTransactionName');
 
+
         $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
 
         $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
@@ -49,6 +50,38 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
+        $listener->onCoreRequest($event);
+    }
+
+    public function testSymfonyCacheEnabled()
+    {
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('startTransaction');
+
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = new Request();
+
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, true);
+        $listener->onCoreRequest($event);
+    }
+
+    public function testSymfonyCacheDisabled()
+    {
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->never())->method('startTransaction');
+
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = new Request();
+
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, false);
         $listener->onCoreRequest($event);
     }
 }

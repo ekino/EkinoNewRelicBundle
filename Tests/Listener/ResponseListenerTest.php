@@ -60,6 +60,32 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
         $object->onCoreResponse($event);
     }
 
+    public function testSymfonyCacheEnabled()
+    {
+        $this->setupNoCustomMetricsOrParameters();
+
+        $this->interactor->expects($this->once())->method('endTransaction');
+
+        $request = $this->createRequestMock(false);
+        $event = $this->createFilterResponseEventMock($request, null);
+
+        $object = new ResponseListener($this->newRelic, $this->interactor, false, true);
+        $object->onCoreResponse($event);
+    }
+
+    public function testSymfonyCacheDisabled()
+    {
+        $this->setupNoCustomMetricsOrParameters();
+
+        $this->interactor->expects($this->never())->method('endTransaction');
+
+        $request = $this->createRequestMock(false);
+        $event = $this->createFilterResponseEventMock($request, null);
+
+        $object = new ResponseListener($this->newRelic, $this->interactor, false, false);
+        $object->onCoreResponse($event);
+    }
+
     /**
      * @dataProvider providerOnCoreResponseOnlyInstrumentHTMLResponses
      */

@@ -110,6 +110,7 @@ ekino_new_relic:
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
     log_exceptions: false                 # If true, sends exceptions to New Relic
     log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only)
+    using_symfony_cache: false            # Symfony HTTP cache (see below)
     transaction_naming: route             # route, controller or service (see below)
     transaction_naming_service: ~         # Transaction naming service (see below)
 ```
@@ -127,6 +128,13 @@ If enhanced RUM instrumentation is enabled, you can *disable* instrumentation fo
 The bundle comes with two built-in transaction naming strategies. ```route``` and ```controller```, naming the New Relic transaction after the route or controller respectively. However, the bundle supports custom transaction naming strategies through the ```service``` configuration option. If you have selected the ```service``` configuration option, you must pass the name of your own transaction naming service as the ```transaction_naming_service``` configuration option.
 
 The transaction naming service class must implement the ```Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface``` interface. For more information on creating your own services, see the Symfony documentation on [Creating/Configuring Services in the Container](http://symfony.com/doc/current/book/service_container.html#creating-configuring-services-in-the-container).
+
+## Symfony HTTP Cache
+
+When you are using Symfony's HTTP cache your `app/AppCache.php` will build up a response with your Edge Side Includes (ESI). This will look like one transaction in New Relic. When you set `using_symfony_cache: true` will these ESI request be separate transaction which improves the statistics. If you are using some other reverse proxy cache or no cache at all, leave this to false.
+
+If true is required to set the `application_name`.
+
 
 ## Deployment notification
 

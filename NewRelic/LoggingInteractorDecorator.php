@@ -154,4 +154,22 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         $this->log('Disabling New Relic background job');
         $this->interactor->enableBackgroundJob();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function endTransaction()
+    {
+        $this->log('Ending a New Relic transaction');
+        newrelic_end_transaction(false);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function startTransaction($name)
+    {
+        $this->log(sprintf('Starting a new New Relic transaction for app "%s"', $name));
+        newrelic_start_transaction($name);
+    }
 }
