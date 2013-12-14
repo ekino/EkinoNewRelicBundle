@@ -36,7 +36,7 @@ class EkinoNewRelicExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $interactor = $config['enabled'] && function_exists('newrelic_name_transaction')
+        $interactor = $config['enabled'] && extension_loaded('newrelic')
             ? 'ekino.new_relic.interactor.real'
             : 'ekino.new_relic.interactor.blackhole';
 
