@@ -36,7 +36,7 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-        $app['new_relic.enabled'] = function_exists('newrelic_name_transaction');
+        $app['new_relic.enabled'] = extension_loaded('newrelic');
         $app['new_relic.application_name'] = 'Silex Application';
         $app['new_relic.api_key'] = null;
         $app['new_relic.logging'] = false;
