@@ -28,9 +28,10 @@ class NewRelic
     protected $customParameters;
 
     /**
-     * @param string $name
-     * @param string $apiKey
-     * @param string $licenseKey
+     * @param string  $name
+     * @param string  $apiKey
+     * @param string  $licenseKey
+     * @param boolean $xmit
      */
     public function __construct($name, $apiKey, $licenseKey = null, $xmit = false)
     {

@@ -91,4 +91,18 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     public function disableBackgroundJob()
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function startTransaction($name)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function endTransaction()
+    {
+    }
 }

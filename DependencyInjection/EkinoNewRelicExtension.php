@@ -52,7 +52,8 @@ class EkinoNewRelicExtension extends Extension
         }
 
         $container->getDefinition('ekino.new_relic.response_listener')
-            ->replaceArgument(2, $config['instrument']);
+            ->replaceArgument(2, $config['instrument'])
+            ->replaceArgument(3, $config['using_symfony_cache'])
         ;
 
         if (!$config['log_exceptions'])
@@ -93,6 +94,7 @@ class EkinoNewRelicExtension extends Extension
 
         $container->getDefinition('ekino.new_relic.request_listener')
             ->replaceArgument(4, $transaction_naming_service)
+            ->replaceArgument(5, $config['using_symfony_cache'])
         ;
     }
 }
