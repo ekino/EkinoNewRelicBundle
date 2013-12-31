@@ -22,8 +22,6 @@ class EkinoNewRelicBundle extends Bundle
      */
     public function registerCommands(Application $application)
     {
-        parent::registerCommands($application);
-
         $container = $application->getKernel()->getContainer();
 
         if ($container->has('ekino.new_relic')) {
