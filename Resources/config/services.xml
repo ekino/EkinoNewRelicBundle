@@ -58,6 +58,7 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
+            <argument type="collection">%ekino.new_relic.request_listener.ignored_commands%</argument>
         </service>
 
         <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />

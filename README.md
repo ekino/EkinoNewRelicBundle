@@ -115,6 +115,7 @@ ekino_new_relic:
     transaction_naming_service: ~         # Transaction naming service (see below)
     ignored_routes: []                    # No transaction recorded for this routes
     ignored_paths: []                     # No transaction recorded for this paths
+    ignored_commands: []                  # No transaction recorded for this commands (background tasks)
 ```
 
 ## Enhanced RUM instrumentation

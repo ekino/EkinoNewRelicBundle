@@ -46,4 +46,24 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('/ignored/path'), $ignoredPathsNode->normalize('/ignored/path'));
         $this->assertEquals(array('/ignored/path1', '/ignored/path2'), $ignoredPathsNode->merge(array('/ignored/path1'), array('/ignored/path2')));
     }
+
+    public function testIgnoredCommands ()
+    {
+        $configuration = new Configuration();
+        $rootNode = $configuration->getConfigTreeBuilder()
+            ->buildTree();
+        $children = $rootNode->getChildren();
+
+        /** @var PrototypedArrayNode $ignoredCommandsNode */
+        $ignoredCommandsNode = $children['ignored_commands'];
+
+
+        $this->assertInstanceOf('\Symfony\Component\Config\Definition\PrototypedArrayNode', $ignoredCommandsNode);
+        $this->assertFalse($ignoredCommandsNode->isRequired());
+        $this->assertEmpty($ignoredCommandsNode->getDefaultValue());
+
+        $this->assertEquals(array('test:ignored-command1', 'test:ignored-command2'), $ignoredCommandsNode->normalize(array('test:ignored-command1', 'test:ignored-command2')));
+        $this->assertEquals(array('test:ignored-command'), $ignoredCommandsNode->normalize('test:ignored-command'));
+        $this->assertEquals(array('test:ignored-command1', 'test:ignored-command2'), $ignoredCommandsNode->merge(array('test:ignored-command1'), array('test:ignored-command2')));
+    }
 }

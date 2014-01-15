@@ -58,7 +58,26 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor);
+        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array());
+        $listener->onConsoleCommand($event);
+    }
+
+    public function testIgnoreBackgroundJob ()
+    {
+        if (!class_exists('Symfony\Component\Console\Event\ConsoleCommandEvent')) {
+            $this->markTestSkipped('Console Events is only available from Symfony 2.3');
+        }
+
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+
+        $command = new Command('test:ignored-commnand');
+        $input = new ArrayInput(array(), new InputDefinition(array()));
+
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $event = new ConsoleCommandEvent($command, $input, $output);
+
+        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array('test:ignored-command'));
         $listener->onConsoleCommand($event);
     }
 }
