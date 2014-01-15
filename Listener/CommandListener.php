@@ -24,13 +24,18 @@ class CommandListener
 
     protected $newRelic;
 
+    protected $ignoredCommands;
+
     /**
+     * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
+     * @param array                       $ignoredCommands
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoredCommands)
     {
         $this->interactor = $interactor;
         $this->newRelic = $newRelic;
+        $this->ignoredCommands = $ignoredCommands;
     }
 
     /**
@@ -40,6 +45,11 @@ class CommandListener
     {
         $command = $event->getCommand();
         $input = $event->getInput();
+
+        if (in_array($command->getName(), $this->ignoredCommands)) {
+            $this->interactor->ignoreTransaction();
+        }
+
         if ($this->newRelic->getName()) {
             $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
         }

@@ -75,6 +75,15 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function ignoreTransaction ()
+    {
+        $this->log('Ignoring transaction');
+        $this->interactor->ignoreTransaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
         $this->log(sprintf('Adding custom New Relic metric %s: %s', $name, $value));

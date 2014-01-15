@@ -30,6 +30,13 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function ignoreTransaction ()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
     }
