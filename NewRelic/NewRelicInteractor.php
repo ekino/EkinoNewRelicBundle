@@ -32,6 +32,14 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function ignoreTransaction ()
+    {
+        newrelic_ignore_transaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
         newrelic_custom_metric((string) $name, (double) $value);

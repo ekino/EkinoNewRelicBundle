@@ -53,6 +53,40 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onCoreRequest($event);
     }
 
+    public function testPathIsIgnored ()
+    {
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('ignoreTransaction');
+
+
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = new Request(array(), array(), array(), array(), array(), array('REQUEST_URI' => '/ignored_path'));
+
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array('/ignored_path'), $namingStrategy);
+        $listener->onCoreRequest($event);
+    }
+
+    public function testRouteIsIgnored ()
+    {
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('ignoreTransaction');
+
+
+        $namingStrategy = $this->getMock('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface');
+
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $request = new Request(array(), array(), array('_route' => 'ignored_route'));
+
+        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array('ignored_route'), array(), $namingStrategy);
+        $listener->onCoreRequest($event);
+    }
+
     public function testSymfonyCacheEnabled()
     {
         $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');

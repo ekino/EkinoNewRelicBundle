@@ -19,9 +19,9 @@ use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrat
 
 class RequestListener
 {
-    protected $ignoreRoutes;
+    protected $ignoredRoutes;
 
-    protected $ignoreUrls;
+    protected $ignoredPaths;
 
     protected $newRelic;
 
@@ -35,18 +35,19 @@ class RequestListener
     protected $symfonyCache;
 
     /**
-     * @param NewRelic                    $newRelic
-     * @param NewRelicInteractorInterface $interactor
-     * @param array                       $ignoreRoutes
-     * @param array                       $ignoreUrls
-     * @param boolean                     $symfonyCache
+     * @param NewRelic                           $newRelic
+     * @param NewRelicInteractorInterface        $interactor
+     * @param array                              $ignoreRoutes
+     * @param array                              $ignoredPaths
+     * @param TransactionNamingStrategyInterface $transactionNamingStrategy
+     * @param boolean                            $symfonyCache
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoreUrls, TransactionNamingStrategyInterface $transactionNamingStrategy, $symfonyCache = false)
+    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoredPaths, TransactionNamingStrategyInterface $transactionNamingStrategy, $symfonyCache = false)
     {
-        $this->interactor   = $interactor;
-        $this->newRelic     = $newRelic;
-        $this->ignoreRoutes = $ignoreRoutes;
-        $this->ignoreUrls   = $ignoreUrls;
+        $this->interactor    = $interactor;
+        $this->newRelic      = $newRelic;
+        $this->ignoredRoutes = $ignoreRoutes;
+        $this->ignoredPaths  = $ignoredPaths;
         $this->transactionNamingStrategy = $transactionNamingStrategy;
         $this->symfonyCache      = $symfonyCache;
     }
@@ -56,11 +57,19 @@ class RequestListener
      */
     public function onCoreRequest(GetResponseEvent $event)
     {
+        $request = $event->getRequest();
+
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
+        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
+            $this->interactor->ignoreTransaction();
+        }
+        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
+            $this->interactor->ignoreTransaction();
+        }
 
-        $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
 
         if ($this->newRelic->getName()) {
             if ($this->symfonyCache) {
