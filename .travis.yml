@@ -17,6 +17,6 @@ env:
   - SYMFONY_VERSION=dev-master
 
 install:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION}
+  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
 
 script: phpunit
