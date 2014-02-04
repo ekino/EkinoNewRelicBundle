@@ -170,7 +170,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function endTransaction()
     {
         $this->log('Ending a New Relic transaction');
-        newrelic_end_transaction(false);
+        $this->interactor->endTransaction();
     }
 
     /**
@@ -179,6 +179,6 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function startTransaction($name)
     {
         $this->log(sprintf('Starting a new New Relic transaction for app "%s"', $name));
-        newrelic_start_transaction($name);
+        $this->interactor->startTransaction($name);
     }
 }
