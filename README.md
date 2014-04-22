@@ -158,3 +158,50 @@ Options:
 ```
 
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
+
+## Integration in SonataAdminBundle
+
+### Step 0: Install SonataAdminBundle
+
+Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/reference/installation.html)
+
+### Step 1:
+
+Create your block for Sonata configuration:
+
+``` yaml
+# app/config/config.yml
+
+sonata_block:
+    blocks:
+        ekino.newrelic.block.service.stats:
+...
+
+sonata_admin:
+    ...
+    dashboard:
+        blocks:
+            - {
+                position: left,
+                type: ekino.newrelic.block.service.stats,
+                settings: {
+                    height: 400,                                              # Default is 300
+                    width: 600,                                               # Default is 500
+                    url: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts
+                }
+              }
+```
+
+More details for [configuration](http://sonata-project.org/bundles/admin/master/doc/reference/configuration.html) SonataAdminBundle
+
+### Step 2: Declare the block as a service
+
+``` xml
+<!-- NewRelicBundle/Resources/config/block.xml -->
+
+<service id="ekino.newrelic.block.service.stats" class="Ekino\Bundle\NewRelicBundle\Block\NewRelicBlockService">
+    <tag name="sonata.block" />
+    <argument>ekino.newrelic.block.service.stats</argument>
+    <argument type="service" id="templating" />
+</service>
+```

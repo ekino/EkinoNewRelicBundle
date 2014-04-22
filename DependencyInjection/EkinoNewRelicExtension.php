@@ -25,6 +25,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class EkinoNewRelicExtension extends Extension
 {
+    const SONATA_BLOCK_BUNDLE = 'Sonata\BlockBundle\SonataBlockBundle';
+
     /**
      * {@inheritDoc}
      */
@@ -35,6 +37,10 @@ class EkinoNewRelicExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        if (in_array(self::SONATA_BLOCK_BUNDLE, $container->getParameter('kernel.bundles'))) {
+            $loader->load('block.xml');
+        }
 
         $container->setParameter('ekino.new_relic.request_listener.ignored_routes', $config['ignored_routes']);
         $container->setParameter('ekino.new_relic.request_listener.ignored_paths', $config['ignored_paths']);

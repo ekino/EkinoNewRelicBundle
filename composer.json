@@ -17,6 +17,9 @@
         "symfony/framework-bundle": "~2.2",
         "symfony/console": "~2.2"
     },
+    "suggest": {
+        "sonata-project/admin-bundle": "dev-master"
+    },
     "autoload": {
         "psr-0": { "Ekino\\Bundle\\NewRelicBundle": "" }
     },
