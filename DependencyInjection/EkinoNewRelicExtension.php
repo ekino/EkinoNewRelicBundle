@@ -25,8 +25,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class EkinoNewRelicExtension extends Extension
 {
-    const SONATA_BLOCK_BUNDLE = 'Sonata\BlockBundle\SonataBlockBundle';
-
     /**
      * {@inheritDoc}
      */
@@ -38,7 +36,7 @@ class EkinoNewRelicExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (in_array(self::SONATA_BLOCK_BUNDLE, $container->getParameter('kernel.bundles'))) {
+        if (in_array('Sonata\BlockBundle\SonataBlockBundle', $container->getParameter('kernel.bundles'))) {
             $loader->load('block.xml');
         }
 

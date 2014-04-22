@@ -159,49 +159,54 @@ Options:
 
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
 
-## Integration in SonataAdminBundle
+## Integration with SonataBlockBundle
 
-### Step 0: Install SonataAdminBundle
+### Step 0: Install SonataBlockBundle
 
-Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/reference/installation.html)
+Review [SonataBlockBundle](http://sonata-project.org/bundles/block/master/doc/reference/installation.html)
 
-### Step 1:
-
-Create your block for Sonata configuration:
+### Step 1: Create your block for SonataBlockBundle configuration:
 
 ``` yaml
 # app/config/config.yml
 
 sonata_block:
     blocks:
-        ekino.newrelic.block.service.stats:
-...
+        ekino.newrelic.block:
+```
 
+## Integration with SonataAdminBundle
+
+### Step 0: Install SonataBlockBundle
+
+Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/index.html)
+
+### Step 1: Create your block for SonataAdminBundle configuration:
+
+``` yaml
+# app/config/config.yml
+sonata_block:
+    blocks:
+        ekino.newrelic.block:
+...
 sonata_admin:
     ...
     dashboard:
         blocks:
             - {
                 position: left,
-                type: ekino.newrelic.block.service.stats,
+                type: ekino.newrelic.block,
                 settings: {
-                    height: 400,                                              # Default is 300
-                    width: 600,                                               # Default is 500
-                    url: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts
+                    url: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
                 }
               }
 ```
 
 More details for [configuration](http://sonata-project.org/bundles/admin/master/doc/reference/configuration.html) SonataAdminBundle
 
-### Step 2: Declare the block as a service
+## Integration with Twig
 
-``` xml
-<!-- NewRelicBundle/Resources/config/block.xml -->
-
-<service id="ekino.newrelic.block.service.stats" class="Ekino\Bundle\NewRelicBundle\Block\NewRelicBlockService">
-    <tag name="sonata.block" />
-    <argument>ekino.newrelic.block.service.stats</argument>
-    <argument type="service" id="templating" />
-</service>
+``` twig
+{{ sonata_block_render({ 'type': 'ekino.newrelic.block' }) }}
 ```
+More details for [Twig extension](http://sonata-project.org/bundles/block/master/doc/reference/twig_helpers.html)

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Ekino New Relic bundle.
+ *
+ * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Ekino\Bundle\NewRelicBundle\Block;
 
 use Sonata\BlockBundle\Block\BaseBlockService;
@@ -22,10 +31,10 @@ class NewRelicBlockService extends BaseBlockService
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'url'      => false,
-            'height'   => 300,
-            'width'    => 500,
-            'template' => 'EkinoNewRelicBundle:Block:block_core_new_relic.html.twig',
+            'reference' => false,
+            'height'    => '300px',
+            'width'     => '100%',
+            'template'  => 'EkinoNewRelicBundle:Block:block_core_new_relic.html.twig',
           ));
     }
 
@@ -34,12 +43,18 @@ class NewRelicBlockService extends BaseBlockService
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
+        $reference = $blockContext->getSetting('reference');
+
+        if ("https" != substr($reference, 0, 5)) {
+            $reference = sprintf('https://rpm.newrelic.com/public/charts/%s', $reference);
+        }
+
         $content = $this->getTemplating()->render('EkinoNewRelicBundle:Block:block_core_new_relic.html.twig', array(
-            'url'    => $blockContext->getSetting('url'),
-            'width'  => $blockContext->getSetting('width'),
-            'height' => $blockContext->getSetting('height'),
+            'reference' => $reference,
+            'width'     => $blockContext->getSetting('width'),
+            'height'    => $blockContext->getSetting('height'),
         ));
 
         return new Response($content);
     }
-} 
+}
