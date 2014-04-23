@@ -165,7 +165,7 @@ The bundle provide a [Capifony](http://capifony.org) recipe to automate the depl
 
 Review [SonataBlockBundle](http://sonata-project.org/bundles/block/master/doc/reference/installation.html)
 
-### Step 1: Create your block for SonataBlockBundle configuration:
+### Step 1: Enable your block:
 
 ``` yaml
 # app/config/config.yml
@@ -179,9 +179,13 @@ sonata_block:
 
 ### Step 0: Install SonataBlockBundle
 
-Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/index.html)
+Review preview section
 
-### Step 1: Create your block for SonataAdminBundle configuration:
+### Step 1: Install SonataAdminBundle
+
+Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/index.html) installation
+
+### Step 1: Enable your block:
 
 ``` yaml
 # app/config/config.yml
@@ -197,7 +201,7 @@ sonata_admin:
                 position: left,
                 type: ekino.newrelic.block,
                 settings: {
-                    url: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
+                    reference: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
                 }
               }
 ```
@@ -207,6 +211,8 @@ More details for [configuration](http://sonata-project.org/bundles/admin/master/
 ## Integration with Twig
 
 ``` twig
-{{ sonata_block_render({ 'type': 'ekino.newrelic.block' }) }}
+{{ sonata_block_render({ 'type': 'ekino.newrelic.block' }, {
+    'reference': '3Y5rCib3JmH'
+}) }}
 ```
 More details for [Twig extension](http://sonata-project.org/bundles/block/master/doc/reference/twig_helpers.html)

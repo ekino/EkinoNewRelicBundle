@@ -49,12 +49,10 @@ class NewRelicBlockService extends BaseBlockService
             $reference = sprintf('https://rpm.newrelic.com/public/charts/%s', $reference);
         }
 
-        $content = $this->getTemplating()->render('EkinoNewRelicBundle:Block:block_core_new_relic.html.twig', array(
+        return $this->renderResponse('EkinoNewRelicBundle:Block:block_core_new_relic.html.twig', array(
             'reference' => $reference,
             'width'     => $blockContext->getSetting('width'),
             'height'    => $blockContext->getSetting('height'),
         ));
-
-        return new Response($content);
     }
 }
