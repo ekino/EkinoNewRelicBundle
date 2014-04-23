@@ -18,12 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-/**
- * Class NewRelicBlockService
- *
- * @author Ilan Benichou <ibenichou@ekino.com>
- */
-class NewRelicBlockService extends BaseBlockService
+class NewRelicTabsBlockService extends BaseBlockService
 {
     /**
      * {@inheritdoc}
@@ -32,9 +27,11 @@ class NewRelicBlockService extends BaseBlockService
     {
         $resolver->setDefaults(array(
             'reference' => false,
-            'height'    => '300px',
+            'tabs'      => array(),
+            'title'     => 'NewRelic Metrics',
+            'height'    => '250px',
             'width'     => '100%',
-            'template'  => 'EkinoNewRelicBundle:Block:block_core_new_relic.html.twig',
+            'template'  => 'EkinoNewRelicBundle:Block:block_core_new_relic_tabs.html.twig',
           ));
     }
 
@@ -43,16 +40,20 @@ class NewRelicBlockService extends BaseBlockService
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $reference = $blockContext->getSetting('reference');
+        $tabs = $blockContext->getSetting('tabs');
 
-        if ("https" != substr($reference, 0, 5)) {
-            $reference = sprintf('https://rpm.newrelic.com/public/charts/%s', $reference);
+        foreach ($tabs as $pos => $tab) {
+            $tabs[$pos] = array_merge(array(
+                'title'     => 'NR Metric',
+                'reference' => false
+            ), $tab);
         }
 
-        return $this->renderResponse('EkinoNewRelicBundle:Block:block_core_new_relic.html.twig', array(
-            'reference' => $reference,
-            'width'     => $blockContext->getSetting('width'),
-            'height'    => $blockContext->getSetting('height'),
+        return $this->renderResponse('EkinoNewRelicBundle:Block:tabs.html.twig', array(
+            'tabs'      => $tabs,
+            'settings'  => $blockContext->getSettings(),
+            'block'     => $blockContext->getBlock(),
+            'context'   => $blockContext
         ));
     }
 }

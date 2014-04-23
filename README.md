@@ -172,7 +172,8 @@ Review [SonataBlockBundle](http://sonata-project.org/bundles/block/master/doc/re
 
 sonata_block:
     blocks:
-        ekino.newrelic.block:
+        ekino.newrelic.block.simple:
+        ekino.newrelic.block.tabs:
 ```
 
 ## Integration with SonataAdminBundle
@@ -199,9 +200,9 @@ sonata_admin:
         blocks:
             - {
                 position: left,
-                type: ekino.newrelic.block,
+                type: ekino.newrelic.block.simple,
                 settings: {
-                    reference: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
+                    reference: 3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
                 }
               }
 ```
@@ -211,7 +212,7 @@ More details for [configuration](http://sonata-project.org/bundles/admin/master/
 ## Integration with Twig
 
 ``` twig
-{{ sonata_block_render({ 'type': 'ekino.newrelic.block' }, {
+{{ sonata_block_render({ 'type': 'ekino.newrelic.block.simple' }, {
     'reference': '3Y5rCib3JmH'
 }) }}
 ```

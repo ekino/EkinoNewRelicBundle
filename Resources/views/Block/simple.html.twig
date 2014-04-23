@@ -1,0 +1,13 @@
+{% extends sonata_block.templates.block_base %}
+
+{% block block %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+           <h3 class="panel-title"><i class="fa fa-stethoscope"></i> {{ settings.title }}</h3>
+        </div>
+
+        <div class="panel-body">
+            <iframe src="https://rpm.newrelic.com/public/charts/{{ settings.reference }}" scrolling="no"  width="{{ settings.width }}" height="{{ settings.height }}" frameborder="no"></iframe>
+        </div>
+    </div>
+{% endblock %}

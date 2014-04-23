@@ -1,0 +1,36 @@
+{% extends sonata_block.templates.block_base %}
+
+{% block block %}
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs pull-right" id="tab-nav-{{ block.id }}">
+            {% for pos, tab in tabs %}
+                <li class="{% if loop.first %}active{% endif %}"><a data-toggle="tab" href="#{{ block.id }}-{{ pos }}" data-src="https://rpm.newrelic.com/public/charts/{{ tab.reference }}">{{ tab.title }}</a></li>
+            {% endfor %}
+
+            <li class="pull-left header"><i class="fa fa-stethoscope"></i> {{ settings.title }}</li>
+        </ul>
+        <div class="tab-content" id="tab-content-{{ block.id }}" style="width:{{ settings.width }}; height:{{ settings.height }};">
+            {% for pos, tab in tabs %}
+                {% if loop.first %}
+                    <iframe src="https://rpm.newrelic.com/public/charts/{{ tab.reference }}" scrolling="no"  width="{{ settings.width }}" height="{{ settings.height }}" frameborder="no"></iframe>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <script type="text/javascript">
+        jQuery(document).ready(function() {
+
+            jQuery('#tab-nav-{{ block.id }} a').click(function (e) {
+                e.preventDefault()
+
+                jQuery(this).tab('show')
+
+                jQuery("#tab-content-{{ block.id }}").html('<iframe src="' + jQuery(e.target).attr('data-src') + '" scrolling="no"  width="{{ settings.width }}" height="{{ settings.height }}" frameborder="no"></iframe>');
+            })
+        });
+        </script>
+    </div>
+{% endblock %}
+
+
