@@ -158,3 +158,61 @@ Options:
 ```
 
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
+
+## Integration with SonataBlockBundle
+
+### Step 0: Install SonataBlockBundle
+
+Review [SonataBlockBundle](http://sonata-project.org/bundles/block/master/doc/reference/installation.html)
+
+### Step 1: Enable your block:
+
+``` yaml
+# app/config/config.yml
+
+sonata_block:
+    blocks:
+        ekino.newrelic.block:
+```
+
+## Integration with SonataAdminBundle
+
+### Step 0: Install SonataBlockBundle
+
+Review preview section
+
+### Step 1: Install SonataAdminBundle
+
+Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/index.html) installation
+
+### Step 1: Enable your block:
+
+``` yaml
+# app/config/config.yml
+sonata_block:
+    blocks:
+        ekino.newrelic.block:
+...
+sonata_admin:
+    ...
+    dashboard:
+        blocks:
+            - {
+                position: left,
+                type: ekino.newrelic.block,
+                settings: {
+                    reference: https://rpm.newrelic.com/public/charts/3Y5rCib3JmH   # Url charts (https://... or 3Y5rCib3JmH)
+                }
+              }
+```
+
+More details for [configuration](http://sonata-project.org/bundles/admin/master/doc/reference/configuration.html) SonataAdminBundle
+
+## Integration with Twig
+
+``` twig
+{{ sonata_block_render({ 'type': 'ekino.newrelic.block' }, {
+    'reference': '3Y5rCib3JmH'
+}) }}
+```
+More details for [Twig extension](http://sonata-project.org/bundles/block/master/doc/reference/twig_helpers.html)

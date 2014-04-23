@@ -36,6 +36,10 @@ class EkinoNewRelicExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        if (in_array('Sonata\BlockBundle\SonataBlockBundle', $container->getParameter('kernel.bundles'))) {
+            $loader->load('block.xml');
+        }
+
         $container->setParameter('ekino.new_relic.request_listener.ignored_routes', $config['ignored_routes']);
         $container->setParameter('ekino.new_relic.request_listener.ignored_paths', $config['ignored_paths']);
         $container->setParameter('ekino.new_relic.request_listener.ignored_commands', $config['ignored_commands']);

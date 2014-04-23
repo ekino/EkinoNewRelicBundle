@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ekino.newrelic.block" class="Ekino\Bundle\NewRelicBundle\Block\NewRelicBlockService">
+            <tag name="sonata.block" />
+            <argument>ekino.newrelic.block</argument>
+            <argument type="service" id="templating" />
+        </service>
+    </services>
+</container>
