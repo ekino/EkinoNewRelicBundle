@@ -120,9 +120,9 @@ ekino_new_relic:
 
 ## Enhanced RUM instrumentation
 
-The bundle comes with an option for enhanced real user monitoring. Ordinarily the New Relic extension (unless disabled by configuration) automatically adds a tracking code for RUM instrumentation to all HTML responses. Using enhanced RUM instrumentation, the bundle allows you to selectivly disable instrumentation on certain requests.
+The bundle comes with an option for enhanced real user monitoring. Ordinarily the New Relic extension (unless disabled by configuration) automatically adds a tracking code for RUM instrumentation to all HTML responses. Using enhanced RUM instrumentation, the bundle allows you to selectively disable instrumentation on certain requests.
 
-This can be useful if, e.g. you're returing HTML verbatim for an HTML editor.
+This can be useful if, e.g. you're returning HTML verbatim for an HTML editor.
 
 If enhanced RUM instrumentation is enabled, you can *disable* instrumentation for a given request by passing along a ```_instrument``` request parameter, and setting it to ```false```. This can be done e.g. through the routing configuration.
 
