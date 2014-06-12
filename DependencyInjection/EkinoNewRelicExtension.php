@@ -73,11 +73,16 @@ class EkinoNewRelicExtension extends Extension
             $container->removeDefinition('ekino.new_relic.command_listener');
         }
 
+        if (!$config['deployment_names']) {
+            $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'])));
+        }
+
         $container->getDefinition('ekino.new_relic')
             ->replaceArgument(0, $config['application_name'])
             ->replaceArgument(1, $config['api_key'])
             ->replaceArgument(2, $config['license_key'])
             ->replaceArgument(3, $config['xmit'])
+            ->replaceArgument(4, $config['deployment_names'])
         ;
 
         switch ($config['transaction_naming'])

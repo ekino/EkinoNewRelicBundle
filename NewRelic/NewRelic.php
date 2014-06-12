@@ -27,18 +27,22 @@ class NewRelic
 
     protected $customParameters;
 
+    protected $deploymentNames;
+
     /**
      * @param string  $name
      * @param string  $apiKey
      * @param string  $licenseKey
      * @param boolean $xmit
+     * @param array   $deploymentNames
      */
-    public function __construct($name, $apiKey, $licenseKey = null, $xmit = false)
+    public function __construct($name, $apiKey, $licenseKey = null, $xmit = false, array $deploymentNames = array())
     {
         $this->name             = $name ?: ini_get('newrelic.appname');
         $this->apiKey           = $apiKey;
         $this->licenseKey       = $licenseKey ?: ini_get('newrelic.license');
         $this->xmit             = $xmit;
+        $this->deploymentNames  = $deploymentNames;
         $this->customMetrics    = array();
         $this->customParameters = array();
     }
@@ -119,6 +123,14 @@ class NewRelic
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDeploymentNames()
+    {
+        return $this->deploymentNames;
     }
 
     /**

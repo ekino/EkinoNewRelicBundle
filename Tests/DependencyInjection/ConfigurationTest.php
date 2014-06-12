@@ -80,6 +80,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $config['ignored_paths']);
         $this->assertEmpty($config['ignored_commands']);
         $this->assertInternalType('array', $config['ignored_commands']);
+        $this->assertEmpty($config['deployment_names']);
+        $this->assertInternalType('array', $config['deployment_names']);
     }
 
     public static function ignoredRoutesProvider ()
@@ -107,6 +109,29 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             array(array('single:ignored:command'), array('single:ignored:command')),
             array(array('ignored:command1', 'ignored:command2'), array('ignored:command1', 'ignored:command2'))
         );
+    }
+
+    public static function deploymentNamesProvider()
+    {
+        return array(
+            array('App1', array('App1')),
+            array(array('App1'), array('App1')),
+            array(array('App1', 'App2'), array('App1', 'App2')),
+        );
+    }
+
+    /**
+     * @dataProvider deploymentNamesProvider
+     */
+    public function testDeploymentNames($deploymentNameConfig, $expected)
+    {
+        $processor = new Processor();
+
+        $config1 = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('deployment_name' => $deploymentNameConfig)));
+        $config2 = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('deployment_names' => $deploymentNameConfig)));
+
+        $this->assertEquals($expected, $config1['deployment_names']);
+        $this->assertEquals($expected, $config2['deployment_names']);
     }
 
     /**

@@ -26,11 +26,20 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('ekino_new_relic');
 
         $rootNode
+            ->fixXmlConfig('deployment_name')
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->scalarNode('api_key')->defaultValue(false)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
                 ->scalarNode('application_name')->defaultValue(null)->end()
+                ->arrayNode('deployment_names')
+                    ->prototype('scalar')
+                    ->end()
+                    ->beforeNormalization()
+                        ->ifTrue(function ($v) { return !is_array($v); })
+                        ->then(function ($v) { return array_values(array_filter(explode(';', $v))); })
+                    ->end()
+                ->end()
                 ->scalarNode('xmit')->defaultValue(false)->end()
                 ->scalarNode('logging')
                     ->defaultFalse()
