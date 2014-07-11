@@ -2,7 +2,7 @@ namespace :newrelic do
 
   # on all deployments, notify New Relic
   desc "Record a deployment in New Relic (newrelic.com)"
-  task :notice_deployment, :roles => :app, :except => {:no_release => true } do
+  task :notice_deployment, :roles => :app, :only => { :primary => true }, :except => { :no_release => true } do
     begin
       # allow overrides to be defined for revision, description, changelog
       rev = fetch(:newrelic_revision) if exists?(:newrelic_revision)
