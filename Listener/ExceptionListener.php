@@ -16,13 +16,18 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-
+/**
+ * Notices the interactor on exception
+ */
 class ExceptionListener
 {
+    /**
+     * @var NewRelicInteractorInterface
+     */
     protected $interactor;
 
     /**
-     * @param NewRelic $newRelic
+     * @param NewRelicInteractorInterface $interactor
      */
     public function __construct(NewRelicInteractorInterface $interactor)
     {

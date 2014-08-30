@@ -15,7 +15,8 @@
     "require-dev": {
         "silex/silex": "~1.0",
         "symfony/framework-bundle": "~2.2",
-        "symfony/console": "~2.2"
+        "symfony/console": "~2.2",
+        "twig/twig": "1.*"
     },
     "suggest": {
         "sonata-project/block-bundle": "2.2.*@dev"

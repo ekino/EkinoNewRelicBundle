@@ -19,6 +19,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->newRelic = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic', array('getCustomMetrics', 'getCustomParameters'), array(), '', false);
         $this->interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $this->extension = $this->getMock('Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension', array('isHeaderCalled', 'isFooterCalled', 'isUsed'), array(), '', false);
     }
 
     public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
@@ -125,6 +126,69 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
             // with charset
             array('<head><title /></head><body><div /></body>', '<head>__Timing_Header__<title /></head><body><div />__Timing_Feader__</body>', 'text/html; charset=UTF-8'),
         );
+    }
+
+    public function testInteractionWithTwigExtensionHeader()
+    {
+        $this->newRelic->expects($this->never())->method('getCustomMetrics');
+        $this->newRelic->expects($this->never())->method('getCustomParameters');
+
+        $this->interactor->expects($this->never())->method('disableAutoRUM');
+        $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
+        $this->interactor->expects($this->once())->method('getBrowserTimingFooter')->will($this->returnValue('__Timing_Feader__'));
+
+        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
+        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(true));
+        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(false));
+
+        $request = $this->createRequestMock(true);
+        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $event = $this->createFilterResponseEventMock($request, $response);
+
+        $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
+        $object->onCoreResponse($event);
+    }
+
+    public function testInteractionWithTwigExtensionFooter()
+    {
+        $this->newRelic->expects($this->never())->method('getCustomMetrics');
+        $this->newRelic->expects($this->never())->method('getCustomParameters');
+
+        $this->interactor->expects($this->never())->method('disableAutoRUM');
+        $this->interactor->expects($this->once())->method('getBrowserTimingHeader')->will($this->returnValue('__Timing_Feader__'));
+        $this->interactor->expects($this->never())->method('getBrowserTimingFooter');
+
+        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
+        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(false));
+        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(true));
+
+        $request = $this->createRequestMock(true);
+        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $event = $this->createFilterResponseEventMock($request, $response);
+
+        $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
+        $object->onCoreResponse($event);
+    }
+
+    public function testInteractionWithTwigExtensionHeaderFooter()
+    {
+        $this->newRelic->expects($this->never())->method('getCustomMetrics');
+        $this->newRelic->expects($this->never())->method('getCustomParameters');
+
+        $this->interactor->expects($this->never())->method('disableAutoRUM');
+        $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
+        $this->interactor->expects($this->never())->method('getBrowserTimingFooter');
+
+        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
+        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(true));
+        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(true));
+
+        $request = $this->createRequestMock(true);
+        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $event = $this->createFilterResponseEventMock($request, $response);
+
+        $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
+        $object->onCoreResponse($event);
     }
 
     private function setUpNoCustomMetricsOrParameters()

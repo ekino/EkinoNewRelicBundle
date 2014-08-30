@@ -51,6 +51,7 @@
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>false</argument>
             <argument />
+            <argument type="service" id="ekino.new_relic.twig.new_relic_extension" />
         </service>
 
         <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">
@@ -60,6 +61,12 @@
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>%ekino.new_relic.request_listener.ignored_commands%</argument>
+        </service>
+
+        <service id="ekino.new_relic.twig.new_relic_extension" class="Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension">
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
+            <argument>false</argument>
         </service>
 
         <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />

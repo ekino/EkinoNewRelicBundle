@@ -12,8 +12,9 @@
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 /**
  * Newrelic response listener
@@ -41,19 +42,31 @@ class ResponseListener
     protected $symfonyCache;
 
     /**
+     * @var NewRelicExtension
+     */
+    protected $newRelicTwigExtension;
+
+    /**
      * Constructor
      *
      * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
-     * @param boolean                     $instrument
-     * @param boolean                     $symfonyCache
+     * @param bool                        $instrument
+     * @param bool                        $symfonyCache
+     * @param NewRelicExtension           $newRelicTwigExtension
      */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, $instrument = false, $symfonyCache = false)
-    {
-        $this->newRelic     = $newRelic;
-        $this->interactor   = $interactor;
-        $this->instrument   = $instrument;
-        $this->symfonyCache = $symfonyCache;
+    public function __construct(
+        NewRelic $newRelic,
+        NewRelicInteractorInterface $interactor,
+        $instrument = false,
+        $symfonyCache = false,
+        NewRelicExtension $newRelicTwigExtension = null
+    ) {
+        $this->newRelic              = $newRelic;
+        $this->interactor            = $interactor;
+        $this->instrument            = $instrument;
+        $this->symfonyCache          = $symfonyCache;
+        $this->newRelicTwigExtension = $newRelicTwigExtension;
     }
 
     /**
@@ -63,16 +76,20 @@ class ResponseListener
      */
     public function onCoreResponse(FilterResponseEvent $event)
     {
-        foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
-            $this->interactor->addCustomMetric($name, $value);
-        }
+        if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isUsed()) {
+            foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
+                $this->interactor->addCustomMetric($name, $value);
+            }
 
-        foreach ($this->newRelic->getCustomParameters() as $name => $value) {
-            $this->interactor->addCustomParameter($name, $value);
+            foreach ($this->newRelic->getCustomParameters() as $name => $value) {
+                $this->interactor->addCustomParameter($name, $value);
+            }
         }
 
         if ($this->instrument) {
-            $this->interactor->disableAutoRUM();
+            if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isUsed()) {
+                $this->interactor->disableAutoRUM();
+            }
 
             // Some requests might not want to get instrumented
             if ($event->getRequest()->attributes->get('_instrument', true)) {
@@ -82,8 +99,13 @@ class ResponseListener
                 if (substr($response->headers->get('Content-Type'), 0, 9) == 'text/html') {
                     $responseContent = $response->getContent();
 
-                    $responseContent = preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
-                    $responseContent = preg_replace('/<\s*\/\s*body\s*>/', $this->interactor->getBrowserTimingFooter().'$0', $responseContent);
+                    if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isHeaderCalled()) {
+                        $responseContent = preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
+                    }
+
+                    if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isFooterCalled()) {
+                        $responseContent = preg_replace('/<\s*\/\s*body\s*>/', $this->interactor->getBrowserTimingFooter().'$0', $responseContent);
+                    }
 
                     if ($responseContent) {
                         $response->setContent($responseContent);
