@@ -14,6 +14,7 @@ namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -79,5 +80,24 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array('test:ignored-command'));
         $listener->onConsoleCommand($event);
+    }
+
+    public function testConsoleExceptions()
+    {
+        $exception = new \Exception;
+
+        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('noticeException')->with($exception);
+
+        $command = new Command('test:exception');
+
+        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $event = new ConsoleExceptionEvent($command, $input, $output, $exception, 1);
+
+        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener->onConsoleException($event);
     }
 }
