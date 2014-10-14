@@ -12,6 +12,7 @@
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 
@@ -77,5 +78,14 @@ class CommandListener
                 $this->interactor->addCustomParameter($key, $value);
             }
         }
+    }
+
+    /**
+     * @param ConsoleExceptionEvent $event
+     */
+    public function onConsoleException(ConsoleExceptionEvent $event)
+    {
+        $exception = $event->getException();
+        $this->interactor->noticeException($exception);
     }
 }
