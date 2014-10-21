@@ -14,7 +14,7 @@ namespace :newrelic do
         logger.debug "Getting log of changes for New Relic Deployment details"
         from_revision = source.local.next_revision(current_revision)
         if scm == :git
-          log_command = "git log --no-color --pretty=format:'  * %an: %s' --abbrev-commit --no-merges #{previous_revision}..#{real_revision}"
+          log_command = "git log --no-color --pretty=format:'  * [%ai] %an: %s' --abbrev-commit --no-merges #{previous_revision}..#{real_revision}"
         else
           log_command = "#{source.local.log(from_revision)}"
         end
