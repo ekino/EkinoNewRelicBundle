@@ -13,7 +13,12 @@
 
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
-            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="1"/>
+            <!--
+                Priority set to 31 because it should be lower than 32 RouterListener::onKernelRequest and greater
+                than 8 Firewall::onKernelRequest. Otherwise the transactions will not be tracked on the right
+                New Relic application or the route name will not be still available
+            -->
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="31"/>
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
