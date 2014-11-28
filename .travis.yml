@@ -16,7 +16,12 @@ env:
   - SYMFONY_VERSION=2.4.*
   - SYMFONY_VERSION=dev-master
 
+before_install:
+  - composer self-update    
+
 install:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
 
-script: make test
+script:
+  - make test
+
