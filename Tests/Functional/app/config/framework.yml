@@ -1,0 +1,8 @@
+framework:
+    secret: test
+    session:
+        storage_id: session.storage.filesystem
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+    templating:
+        engines: ['twig']

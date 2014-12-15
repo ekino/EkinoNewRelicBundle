@@ -1,0 +1,22 @@
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    toni: { password: test, roles: [ROLE_FOO] }
+
+    role_hierarchy:
+        ROLE_FOO: [ROLE_BAR]
+
+    encoders:
+        Symfony\Component\Security\Core\User\UserInterface: plaintext
+
+    firewalls:
+        secured_area:
+            pattern:   ^/
+            anonymous: ~
+            form_login: ~
+
+    access_control:
+        - { path: ^/authentication,    roles: ROLE_FOO }
+        - { path: ^/no-authentication, roles: IS_AUTHENTICATED_ANONYMOUSLY }
