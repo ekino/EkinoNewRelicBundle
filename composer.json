@@ -1,5 +1,5 @@
 {
-    "name": "ekino/newrelic-bundle",
+    "name": "anjalirana/newrelic-bundle",
     "type": "symfony-bundle",
     "description": "Integrate New Relic into Symfony2 with ignore transactions update",
     "keywords": ["metric", "performance", "monitoring"],
