@@ -1,15 +1,20 @@
 {
     "name": "ekino/newrelic-bundle",
     "type": "symfony-bundle",
-    "description": "Integrate New Relic into Symfony2",
+    "description": "Integrate New Relic into Symfony2 with ignore transactions update",
     "keywords": ["metric", "performance", "monitoring"],
-    "homepage": "https://github.com/ekino/EkinoNewRelicBundle",
+    "homepage": "https://github.com/anjalirana/EkinoNewRelicBundle",
     "license": "MIT",
     "authors": [
         {
             "name": "Thomas Rabaix",
             "email": "thomas.rabaix@ekino.com",
             "homepage": "http://ekino.com"
+        },
+        {
+            "name": "Anjali Rana",
+            "email": "anjali.rana@temando.com",
+            "homepage": "https://github.com/anjalirana"
         }
     ],
     "require-dev": {
