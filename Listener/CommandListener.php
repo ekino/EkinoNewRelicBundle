@@ -46,7 +46,7 @@ class CommandListener
     {
         $command = $event->getCommand();
         $input = $event->getInput();
-        $ignoreParam = false;
+        $ignoreParam = null;
 
         if (in_array($command->getName(), $this->ignoredCommands)) {
             $this->interactor->ignoreTransaction();
