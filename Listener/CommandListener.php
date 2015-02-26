@@ -46,13 +46,15 @@ class CommandListener
     {
         $command = $event->getCommand();
         $input = $event->getInput();
+        $ignoreParam = false;
 
         if (in_array($command->getName(), $this->ignoredCommands)) {
             $this->interactor->ignoreTransaction();
+            $ignoreParam = true;
         }
 
         if ($this->newRelic->getName()) {
-            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit(), $ignoreParam);
         }
         $this->interactor->setTransactionName($command->getName());
         $this->interactor->enableBackgroundJob();

@@ -17,7 +17,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      * {@inheritdoc}
      * @param $ignoreParam = "" by default because i don't want to set it false if it is not true
      */
-    public function setApplicationName($name, $key = null, $xmit = false, $ignoreParam = "")
+    public function setApplicationName($name, $key = null, $xmit = false, $ignoreParam = null)
     {
         if(true === $ignoreParam) {
             newrelic_set_appname($name, $key, $xmit, $ignore_transaction = true);

@@ -58,7 +58,7 @@ class RequestListener
     public function onCoreRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        $ignoreParam = "";
+        $ignoreParam = null;
 
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
