@@ -73,8 +73,8 @@ class NewRelicExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'getNewrelicBrowserTimingHeader' => new \Twig_Function_Method($this, 'ekino_newrelice_browser_timing_header'),
-            'getNewrelicBrowserTimingFooter' => new \Twig_Function_Method($this, 'ekino_newrelice_browser_timing_footer'),
+            'ekino_newrelice_browser_timing_header' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingHeader'),
+            'ekino_newrelice_browser_timing_footer' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingFooter'),
         );
     }
 
