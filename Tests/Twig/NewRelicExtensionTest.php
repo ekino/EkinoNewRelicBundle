@@ -63,8 +63,8 @@ class NewRelicExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\RuntimeException');
 
-        $extension->getBrowserTimingHeader();
-        $extension->getBrowserTimingHeader();
+        $extension->getNewrelicBrowserTimingHeader();
+        $extension->getNewrelicBrowserTimingHeader();
     }
 
     public function testFooterException()
@@ -84,8 +84,8 @@ class NewRelicExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\RuntimeException');
 
-        $extension->getBrowserTimingFooter();
-        $extension->getBrowserTimingFooter();
+        $extension->getNewrelicBrowserTimingHeader();
+        $extension->getNewrelicBrowserTimingHeader();
     }
 
     public function testPreparingOfInteractor()
@@ -124,18 +124,18 @@ class NewRelicExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('addCustomParameter');
 
         $this->interactor->expects($this->once())
-            ->method('getBrowserTimingHeader')
+            ->method('getNewrelicBrowserTimingHeader')
             ->will($this->returnValue($headerValue));
 
         $this->interactor->expects($this->once())
-            ->method('getBrowserTimingFooter')
+            ->method('getNewrelicBrowserTimingHeader')
             ->will($this->returnValue($footerValue));
 
-        $this->assertEquals($headerValue, $extension->getBrowserTimingHeader());
+        $this->assertEquals($headerValue, $extension->getNewrelicBrowserTimingHeader());
         $this->assertTrue($extension->isHeaderCalled());
         $this->assertFalse($extension->isFooterCalled());
 
-        $this->assertEquals($footerValue, $extension->getBrowserTimingFooter());
+        $this->assertEquals($footerValue, $extension->getNewrelicBrowserTimingFooter());
         $this->assertTrue($extension->isHeaderCalled());
         $this->assertTrue($extension->isFooterCalled());
     }
