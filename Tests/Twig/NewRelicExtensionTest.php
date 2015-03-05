@@ -128,7 +128,7 @@ class NewRelicExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($headerValue));
 
         $this->interactor->expects($this->once())
-            ->method('getNewrelicBrowserTimingHeader')
+            ->method('getNewrelicBrowserTimingFooter')
             ->will($this->returnValue($footerValue));
 
         $this->assertEquals($headerValue, $extension->getNewrelicBrowserTimingHeader());
