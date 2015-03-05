@@ -83,7 +83,7 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @throws \RuntimeException
      */
-    public function getBrowserTimingHeader()
+    public function getNewrelicBrowserTimingHeader()
     {
         if ($this->isHeaderCalled()) {
             throw new \RuntimeException('Function "ekino_newrelice_browser_timing_header" has already been called');
@@ -101,7 +101,7 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @throws \RuntimeException
      */
-    public function getBrowserTimingFooter()
+    public function getNewrelicBrowserTimingFooter()
     {
         if ($this->isFooterCalled()) {
             throw new \RuntimeException('Function "ekino_newrelice_browser_timing_footer" has already been called');
