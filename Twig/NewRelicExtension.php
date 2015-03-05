@@ -73,8 +73,8 @@ class NewRelicExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'ekino_newrelice_browser_timing_header' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingHeader'),
-            'ekino_newrelice_browser_timing_footer' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingFooter'),
+            'ekino_newrelic_browser_timing_header' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingHeader', array('is_safe' => array('html'))),
+            'ekino_newrelic_browser_timing_footer' => new \Twig_Function_Method($this, 'getNewrelicBrowserTimingFooter', array('is_safe' => array('html'))),
         );
     }
 
@@ -83,10 +83,10 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @throws \RuntimeException
      */
-    public function getBrowserTimingHeader()
+    public function getNewrelicBrowserTimingHeader()
     {
         if ($this->isHeaderCalled()) {
-            throw new \RuntimeException('Function "ekino_newrelice_browser_timing_header" has already been called');
+            throw new \RuntimeException('Function "ekino_newrelic_browser_timing_header" has already been called');
         }
 
         $this->prepareInteractor();
@@ -101,10 +101,10 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @throws \RuntimeException
      */
-    public function getBrowserTimingFooter()
+    public function getNewrelicBrowserTimingFooter()
     {
         if ($this->isFooterCalled()) {
-            throw new \RuntimeException('Function "ekino_newrelice_browser_timing_footer" has already been called');
+            throw new \RuntimeException('Function "ekino_newrelic_browser_timing_footer" has already been called');
         }
 
         if (false === $this->isHeaderCalled()) {

@@ -66,6 +66,7 @@
         <service id="ekino.new_relic.twig.new_relic_extension" class="Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension">
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
+            <tag name="twig.extension"/>
             <argument>false</argument>
         </service>
 
