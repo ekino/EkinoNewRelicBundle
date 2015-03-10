@@ -1,9 +1,9 @@
 {
-    "name": "anjalirana/newrelic-bundle",
+    "name": "temando/newrelic-bundle",
     "type": "symfony-bundle",
     "description": "Integrate New Relic into Symfony2 with ignore transactions update",
     "keywords": ["metric", "performance", "monitoring"],
-    "homepage": "https://github.com/anjalirana/EkinoNewRelicBundle",
+    "homepage": "https://github.com/temando/EkinoNewRelicBundle",
     "license": "MIT",
     "authors": [
         {
