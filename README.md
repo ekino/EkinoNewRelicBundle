@@ -101,10 +101,9 @@ $bundles = array(
 
 ekino_new_relic:
     enabled: true                         # Defaults to true
-    application_name: Awesome Application # default value in newrelic is "PHP Application", or whatever is set
-                                          # as php ini-value
+    application_name: Awesome Application # Application name (optional, default value is read from php.ini)
     api_key:                              # New Relic API
-    license_key:                          # New Relic license key
+    license_key:                          # New Relic license key (optional, default value is read from php.ini)
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true
     logging: false                        # If true, logs all New Relic interactions to the Symfony log
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
