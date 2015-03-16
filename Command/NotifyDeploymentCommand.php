@@ -73,22 +73,14 @@ class NotifyDeploymentCommand extends Command
     {
         $newrelic = $this->newrelic;
 
-        $status = $this->performRequest($newrelic->getApiKey(), $this->createPayload($newrelic, $input));
+        $response = $this->performRequest($newrelic->getApiKey(), $this->createPayload($newrelic, $input));
 
-        switch($status)
-        {
-            case 200:
-            case 201:
-                $output->writeLn(sprintf("Recorded deployment to '%s' (%s)", $newrelic->getName(), ($input->getOption('description') ? $input->getOption('description') : date('r'))));
-                break;
-            case 403:
-                $output->writeLn("<error>Deployment not recorded: API key invalid</error>");
-                break;
-            case null:
-                $output->writeLn("<error>Deployment not recorded: Did not understand response</error>");
-                break;
-            default:
-                $output->writeLn(sprintf("<error>Deployment not recorded: Received HTTP status %d</error>", $status));
+        if (empty($response)) {
+            $output->writeLn("<error>Deployment not recorded: Did not understand response</error>");
+        } elseif (!in_array($response['status'], array(200, 201))) {
+            $output->writeLn(sprintf('<error>Deployment not recorded. Received "%d - %s"</error>', $response['status'], $response['error']));
+        } else {
+            $output->writeLn(sprintf('<info>Recorded deployment to "%s" (%s)</info>', $newrelic->getName(), ($input->getOption('description') ? $input->getOption('description') : date('r'))));
         }
     }
 
@@ -116,17 +108,28 @@ class NotifyDeploymentCommand extends Command
             throw new \RuntimeException($error['message']);
         }
 
-        if (isset($http_response_header[0]))
-        {
+        $response = array(
+            'status' => null,
+            'error' => null,
+        );
+
+        if (isset($http_response_header[0])) {
             preg_match('/^HTTP\/1.\d (\d+)/', $http_response_header[0], $matches);
 
-            if (isset($matches[1]))
-            {
-                return $matches[1];
+            if (isset($matches[1])) {
+                $status = $matches[1];
+
+                $response['status'] = $status;
+
+                preg_match('/<error>(.*?)<\/error>/', $content, $matches);
+
+                if (isset($matches[1])) {
+                    $response['error'] = $matches[1];
+                }
             }
         }
 
-        return null;
+        return $response;
     }
 
     protected function createPayload(NewRelic $newrelic, InputInterface $input)
