@@ -35,9 +35,9 @@ class NewRelic
      */
     public function __construct($name, $apiKey, $licenseKey = null, $xmit = false)
     {
-        $this->name             = $name;
+        $this->name             = $name ?: ini_get('newrelic.appname');
         $this->apiKey           = $apiKey;
-        $this->licenseKey       = $licenseKey;
+        $this->licenseKey       = $licenseKey ?: ini_get('newrelic.license');
         $this->xmit             = $xmit;
         $this->customMetrics    = array();
         $this->customParameters = array();

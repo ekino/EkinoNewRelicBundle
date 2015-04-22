@@ -44,4 +44,15 @@ class NewRelicTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $newRelic->getCustomParameters());
     }
+
+    public function testDefaults()
+    {
+        $newRelic = new NewRelic(null, null);
+
+        $this->assertNotNull($newRelic->getName());
+        $this->assertEquals(ini_get('newrelic.appname'), $newRelic->getName());
+
+        $this->assertNotNull($newRelic->getLicenseKey());
+        $this->assertEquals(ini_get('newrelic.license'), $newRelic->getLicenseKey());
+    }
 }
