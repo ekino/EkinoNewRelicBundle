@@ -3,13 +3,37 @@ Ekino NewRelic Bundle
 
 [![Build Status](https://secure.travis-ci.org/ekino/EkinoNewRelicBundle.png?branch=master)](http://travis-ci.org/ekino/EkinoNewRelicBundle)
 
-This bundle integrates the NewRelic PHP API into Symfony2. For more information about NewRelic, please visit http://newrelic.com.
+This bundle integrates the NewRelic PHP API into Symfony2. For more information about NewRelic, please visit http://newrelic.com. The built-in New Relic agent doesn't add as much Symfony2 integration as it claims.  This bundle adds a lot more essentials. Here's a quick list:
 
-The bundle can use either the route name or the controller name as the transaction name. For CLI commands the transaction name is the command name.
+1. **Better transaction naming strategy**: Your transaction traces can be named accurately by route names, the controller name or you can decide on a custom naming strategy via a seamless interface that uses any naming convention you deem fit. While running console commands, it also sets the transaction name as the command name.
 
-## Result
+2. **Console Commands Enhancements**: While running console commands, its sets the options and arguments passed via the CLI as custom parameters to the transaction trace for easier debugging.
+
+3. **Exception Listening**: It also captures all Symfony2 exceptions in web requests and console commands and sends them to New Relic (something new relic doesn't do too well itself as symfony2 aggressively catches all exceptions/errors). It also ensures all HTTP Exceptions (4xx codes) are logged as notices in New Relic and not exceptions to reduce the noise in New Relic.
+
+4. **Interactor Service**: It provides you the New Relic PHP Agent API via a Service class `ekino.newrelic.interactor` so in my code, I can inject it into any class, controller, service and do stuff like - 
+
+    ```php
+    // Bundle
+    $this->newRelic->addCustomParameter('name', 'john');
+    
+    // Extension
+    if (extension_loaded('newrelic')) {
+        \newrelic_add_custom_parameter('name', 'john');
+    }
+    ```
+
+5. **Logging Support**: In development, you are unlikely to have New Relic setup. There's a configuration to enable logging which outputs all New Relic actions to your Symfony2 log, hence emulating what it would actually do in production.
+
+6. **Ignored Routes, Paths, Commands**: You can configure a list of route name, url paths and console commands to be ignored from New Relic traces.
+
+    ![image](https://cloud.githubusercontent.com/assets/670655/5153003/5c956c1e-7235-11e4-9eb2-d203fa42420b.png)
+
+7. **Misc**: There are other useful configuration like your New Relic API Key, explicitly defining your app name instead of php.ini, notifying New Relic about new deployments via capifony, etc.
+
 
 ![Ekino NewRelicBundle](https://dl.dropbox.com/s/bufb6f8o0end5xo/ekino_newrelic_bundle.png "Ekino NewRelicBundle")
+
 
 
 ## Installation
