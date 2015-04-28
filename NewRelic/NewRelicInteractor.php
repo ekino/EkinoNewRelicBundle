@@ -18,7 +18,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function setApplicationName($name, $key = null, $xmit = false)
     {
-        newrelic_set_appname($name, $key, $xmit);
+        if (extension_loaded('newrelic') && function_exists('newrelic_set_appname')) {
+            newrelic_set_appname($name, $key, $xmit);
+        }
     }
 
     /**
@@ -26,7 +28,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function setTransactionName($name)
     {
-        newrelic_name_transaction($name);
+        if (extension_loaded('newrelic') && function_exists('newrelic_name_transaction')) {
+            newrelic_name_transaction($name);
+        }
     }
 
     /**
@@ -34,7 +38,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function ignoreTransaction ()
     {
-        newrelic_ignore_transaction();
+        if (extension_loaded('newrelic') && function_exists('newrelic_ignore_transaction')) {
+            newrelic_ignore_transaction();
+        }
     }
 
     /**
@@ -42,7 +48,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function addCustomMetric($name, $value)
     {
-        newrelic_custom_metric((string) $name, (double) $value);
+        if (extension_loaded('newrelic') && function_exists('newrelic_custom_metric')) {
+            newrelic_custom_metric((string)$name, (double)$value);
+        }
     }
 
     /**
@@ -50,7 +58,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function addCustomParameter($name, $value)
     {
-        newrelic_add_custom_parameter((string) $name, (string) $value);
+        if (extension_loaded('newrelic') && function_exists('newrelic_add_custom_parameter')) {
+            newrelic_add_custom_parameter((string)$name, (string)$value);
+        }
     }
 
     /**
@@ -58,7 +68,10 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingHeader()
     {
-        return newrelic_get_browser_timing_header();
+        if (extension_loaded('newrelic') && function_exists('newrelic_get_browser_timing_header')) {
+            return newrelic_get_browser_timing_header();
+        }
+        return '';
     }
 
     /**
@@ -66,7 +79,10 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingFooter()
     {
-        return newrelic_get_browser_timing_footer();
+        if (extension_loaded('newrelic') && function_exists('newrelic_get_browser_timing_footer')) {
+            return newrelic_get_browser_timing_footer();
+        }
+        return '';
     }
 
     /**
@@ -74,7 +90,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function disableAutoRUM()
     {
-        newrelic_disable_autorum();
+        if (extension_loaded('newrelic') && function_exists('newrelic_disable_autorum')) {
+            newrelic_disable_autorum();
+        }
     }
 
     /**
@@ -82,7 +100,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function noticeError($msg)
     {
-        newrelic_notice_error($msg);
+        if (extension_loaded('newrelic') && function_exists('newrelic_notice_error')) {
+            newrelic_notice_error($msg);
+        }
     }
 
     /**
@@ -90,7 +110,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function noticeException(\Exception $e)
     {
-        newrelic_notice_error(null, $e);
+        if (extension_loaded('newrelic') && function_exists('newrelic_notice_error')) {
+            newrelic_notice_error(null, $e);
+        }
     }
 
     /**
@@ -98,7 +120,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function enableBackgroundJob()
     {
-        newrelic_background_job(true);
+        if (extension_loaded('newrelic') && function_exists('newrelic_background_job')) {
+            newrelic_background_job(true);
+        }
     }
 
     /**
@@ -106,7 +130,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function disableBackgroundJob()
     {
-        newrelic_background_job(false);
+        if (extension_loaded('newrelic') && function_exists('newrelic_background_job')) {
+            newrelic_background_job(false);
+        }
     }
 
     /**
@@ -114,7 +140,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function endTransaction()
     {
-        newrelic_end_transaction(false);
+        if (extension_loaded('newrelic') && function_exists('newrelic_end_transaction')) {
+            newrelic_end_transaction(false);
+        }
     }
 
     /**
@@ -122,6 +150,8 @@ class NewRelicInteractor implements NewRelicInteractorInterface
      */
     public function startTransaction($name)
     {
-        newrelic_start_transaction($name);
+        if (extension_loaded('newrelic') && function_exists('newrelic_start_transaction')) {
+            newrelic_start_transaction($name);
+        }
     }
 }
