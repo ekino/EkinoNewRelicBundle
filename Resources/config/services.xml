@@ -42,6 +42,7 @@
             <argument />
             <argument />
             <argument />
+            <argument type="collection" />
         </service>
 
         <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">

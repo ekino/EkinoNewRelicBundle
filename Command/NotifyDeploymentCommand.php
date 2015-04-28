@@ -21,6 +21,10 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 
 class NotifyDeploymentCommand extends Command
 {
+    const EXIT_NO_APP_NAMES = 1;
+    const EXIT_UNAUTHORIZED = 2;
+    const EXIT_HTTP_ERROR   = 3;
+
     /**
      * @var NewRelic
      */
@@ -73,17 +77,46 @@ class NotifyDeploymentCommand extends Command
     {
         $newrelic = $this->newrelic;
 
-        $response = $this->performRequest($newrelic->getApiKey(), $this->createPayload($newrelic, $input));
+        $appNames = $newrelic->getDeploymentNames();
 
-        if (empty($response)) {
-            $output->writeLn("<error>Deployment not recorded: Did not understand response</error>");
-        } elseif (!in_array($response['status'], array(200, 201))) {
-            $output->writeLn(sprintf('<error>Deployment not recorded. Received "%d - %s"</error>', $response['status'], $response['error']));
-        } else {
-            $output->writeLn(sprintf('<info>Recorded deployment to "%s" (%s)</info>', $newrelic->getName(), ($input->getOption('description') ? $input->getOption('description') : date('r'))));
+        if (!$appNames) {
+            $output->writeLn("<error>No deployment application configured.</error>");
+            return self::EXIT_NO_APP_NAMES;
         }
+
+        $exitCode = 0;
+
+        foreach ($appNames as $appName) {
+            $status = $this->performRequest($newrelic->getApiKey(), $this->createPayload($appName, $input));
+
+            switch($status)
+            {
+                case 200:
+                case 201:
+                    $output->writeLn(sprintf("Recorded deployment to '%s' (%s)", $appName, ($input->getOption('description') ? $input->getOption('description') : date('r'))));
+                    break;
+                case 403:
+                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': API key invalid</error>", $appName));
+                    $exitCode = self::EXIT_UNAUTHORIZED;
+                    break;
+                case null:
+                    $output->writeLn(strintf("<error>Deployment not recorded to '%s': Did not understand response</error>", $appName));
+                    $exitCode = self::EXIT_HTTP_ERROR;
+                    break;
+                default:
+                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Received HTTP status %d</error>", $appName, $status));
+                    $exitCode = self::EXIT_HTTP_ERROR;
+                    break;
+            }
+        }
+
+        return $exitCode;
     }
 
+    /**
+     * @param string $api_key
+     * @param string $payload
+     */
     public function performRequest($api_key, $payload)
     {
         $headers = array(
@@ -132,10 +165,16 @@ class NotifyDeploymentCommand extends Command
         return $response;
     }
 
-    protected function createPayload(NewRelic $newrelic, InputInterface $input)
+    /**
+     * @param string $appName
+     * @param InputInterface $input
+     *
+     * @return string
+     */
+    protected function createPayload($appName, InputInterface $input)
     {
         $content_array = array(
-            'deployment[app_name]' => $newrelic->getName()
+            'deployment[app_name]' => $appName
         );
 
         if (($user = $input->getOption('user')))

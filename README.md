@@ -11,12 +11,12 @@ This bundle integrates the NewRelic PHP API into Symfony2. For more information 
 
 3. **Exception Listening**: It also captures all Symfony2 exceptions in web requests and console commands and sends them to New Relic (something new relic doesn't do too well itself as symfony2 aggressively catches all exceptions/errors). It also ensures all HTTP Exceptions (4xx codes) are logged as notices in New Relic and not exceptions to reduce the noise in New Relic.
 
-4. **Interactor Service**: It provides you the New Relic PHP Agent API via a Service class `ekino.newrelic.interactor` so in my code, I can inject it into any class, controller, service and do stuff like - 
+4. **Interactor Service**: It provides you the New Relic PHP Agent API via a Service class `ekino.newrelic.interactor` so in my code, I can inject it into any class, controller, service and do stuff like -
 
     ```php
     // Bundle
     $this->newRelic->addCustomParameter('name', 'john');
-    
+
     // Extension
     if (extension_loaded('newrelic')) {
         \newrelic_add_custom_parameter('name', 'john');
@@ -120,12 +120,14 @@ $bundles = array(
 
 ### Step 3 : Configure the bundle
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 ekino_new_relic:
     enabled: true                         # Defaults to true
-    application_name: Awesome Application # Application name (optional, default value is read from php.ini)
+    application_name: Awesome Application # default value in newrelic is "PHP Application", or whatever is set
+                                          # as php ini-value
+    deployment_names: ~                   # default value is 'application_name', supports string array or semi-colon separated string
     api_key:                              # New Relic API
     license_key:                          # New Relic license key (optional, default value is read from php.ini)
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true
@@ -182,6 +184,8 @@ Options:
 
 The bundle provide a [Capifony](http://capifony.org) recipe to automate the deployment notifications (see `Resources/recipes/newrelic.rb`).
 
+It makes one request per `app_name`, due roll-up names are not supported by Data REST API.
+
 ## Integration with SonataBlockBundle
 
 ### Step 0: Install SonataBlockBundle
@@ -190,7 +194,7 @@ Review [SonataBlockBundle](http://sonata-project.org/bundles/block/master/doc/re
 
 ### Step 1: Enable your block:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 sonata_block:
@@ -211,7 +215,7 @@ Review [SonataAdminBundle](http://sonata-project.org/bundles/admin/master/doc/in
 
 ### Step 1: Enable your block:
 
-``` yaml
+```yaml
 # app/config/config.yml
 sonata_block:
     blocks:
