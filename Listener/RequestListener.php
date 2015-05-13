@@ -57,19 +57,9 @@ class RequestListener
      */
     public function onCoreRequest(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-
-        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+        if (null === $request = $this->validateRequest($event)) {
             return;
         }
-        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
-            $this->interactor->ignoreTransaction();
-        }
-        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
-            $this->interactor->ignoreTransaction();
-        }
-
-        $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
 
         if ($this->newRelic->getName()) {
             if ($this->symfonyCache) {
@@ -78,7 +68,47 @@ class RequestListener
 
             $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
         }
+    }
+
+    /**
+     * Set the name of the transaction
+     *
+     * @param GetResponseEvent $event
+     */
+    public function setTransactionName(GetResponseEvent $event)
+    {
+        if (null === $request = $this->validateRequest($event)) {
+            return;
+        }
+
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
 
         $this->interactor->setTransactionName($transactionName);
+    }
+
+    /**
+     * Make sure that it is not a subrequest and that we ignore paths that should be ignored
+     *
+     * @param GetResponseEvent $event
+     *
+     * @return \Symfony\Component\HttpFoundation\Request|null Return a Request or null iff it is not a master request
+     */
+    protected function validateRequest(GetResponseEvent $event)
+    {
+        $request = $event->getRequest();
+
+        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+            return;
+        }
+
+        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
+            $this->interactor->ignoreTransaction();
+        }
+
+        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
+            $this->interactor->ignoreTransaction();
+        }
+
+        return $request;
     }
 }

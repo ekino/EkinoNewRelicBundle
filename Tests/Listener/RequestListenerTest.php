@@ -51,6 +51,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
         $listener->onCoreRequest($event);
+        $listener->setTransactionName($event);
     }
 
     public function testPathIsIgnored ()

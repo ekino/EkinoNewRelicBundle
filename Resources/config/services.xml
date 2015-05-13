@@ -13,7 +13,8 @@
 
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
-            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="1"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onCoreRequest" priority="31"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="setTransactionName" priority="-10"/>
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
