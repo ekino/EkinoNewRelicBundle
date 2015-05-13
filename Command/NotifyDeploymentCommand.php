@@ -100,7 +100,7 @@ class NotifyDeploymentCommand extends Command
                     $exitCode = self::EXIT_UNAUTHORIZED;
                     break;
                 case null:
-                    $output->writeLn(strintf("<error>Deployment not recorded to '%s': Did not understand response</error>", $appName));
+                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Did not understand response</error>", $appName));
                     $exitCode = self::EXIT_HTTP_ERROR;
                     break;
                 default:
