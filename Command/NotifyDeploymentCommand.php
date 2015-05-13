@@ -87,9 +87,9 @@ class NotifyDeploymentCommand extends Command
         $exitCode = 0;
 
         foreach ($appNames as $appName) {
-            $status = $this->performRequest($newrelic->getApiKey(), $this->createPayload($appName, $input));
+            $response = $this->performRequest($newrelic->getApiKey(), $this->createPayload($appName, $input));
 
-            switch($status)
+            switch($response['status'])
             {
                 case 200:
                 case 201:
@@ -104,7 +104,7 @@ class NotifyDeploymentCommand extends Command
                     $exitCode = self::EXIT_HTTP_ERROR;
                     break;
                 default:
-                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Received HTTP status %d</error>", $appName, $status));
+                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Received HTTP status %d</error>", $appName, $response['status']));
                     $exitCode = self::EXIT_HTTP_ERROR;
                     break;
             }
