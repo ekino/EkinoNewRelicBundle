@@ -28,7 +28,7 @@ before_install:
   - composer self-update
 
 install:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
+  - composer require symfony/framework-bundle:${SYMFONY_VERSION} symfony/security-bundle:${SYMFONY_VERSION} symfony/twig-bundle:${SYMFONY_VERSION} --prefer-source
 
 script:
   - make test

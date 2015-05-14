@@ -1,0 +1,6 @@
+no_authentication:
+    path:     /no-authentication
+    defaults: { _controller: AppBundle:Foo:foo }
+
+authentication:
+    path:     /authentication
