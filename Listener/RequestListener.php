@@ -58,15 +58,18 @@ class RequestListener
     public function onCoreRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        $ignoreParam = null;
 
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
         if (in_array($request->get('_route'), $this->ignoredRoutes)) {
             $this->interactor->ignoreTransaction();
+            $ignoreParam = true;
         }
         if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
             $this->interactor->ignoreTransaction();
+            $ignoreParam = true;
         }
 
         $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
@@ -76,7 +79,7 @@ class RequestListener
                 $this->interactor->startTransaction($this->newRelic->getName());
             }
 
-            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit(), $ignoreParam);
         }
 
         $this->interactor->setTransactionName($transactionName);
