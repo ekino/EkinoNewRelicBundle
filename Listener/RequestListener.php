@@ -11,6 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
@@ -57,7 +58,8 @@ class RequestListener
      */
     public function onCoreRequest(GetResponseEvent $event)
     {
-        if (null === $request = $this->validateRequest($event)) {
+        $request = $event->getRequest();
+        if (!$this->validateRequest($request, $event->getRequestType())) {
             return;
         }
 
@@ -77,7 +79,8 @@ class RequestListener
      */
     public function setTransactionName(GetResponseEvent $event)
     {
-        if (null === $request = $this->validateRequest($event)) {
+        $request = $event->getRequest();
+        if (!$this->validateRequest($request, $event->getRequestType())) {
             return;
         }
 
@@ -89,16 +92,15 @@ class RequestListener
     /**
      * Make sure that it is not a subrequest and that we ignore paths that should be ignored
      *
-     * @param GetResponseEvent $event
+     * @param Request $request
+     * @param integer $requestType
      *
-     * @return \Symfony\Component\HttpFoundation\Request|null Return a Request or null iff it is not a master request
+     * @return bool
      */
-    protected function validateRequest(GetResponseEvent $event)
+    protected function validateRequest(Request $request, $requestType)
     {
-        $request = $event->getRequest();
-
-        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
-            return;
+        if ($requestType !== HttpKernelInterface::MASTER_REQUEST) {
+            return false;
         }
 
         if (in_array($request->get('_route'), $this->ignoredRoutes)) {
@@ -109,6 +111,6 @@ class RequestListener
             $this->interactor->ignoreTransaction();
         }
 
-        return $request;
+        return true;
     }
 }
