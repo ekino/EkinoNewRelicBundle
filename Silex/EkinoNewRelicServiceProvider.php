@@ -94,7 +94,8 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
             return;
         }
 
-        $app['dispatcher']->addListener(KernelEvents::REQUEST, array($app['new_relic.request_listener'], 'onCoreRequest'), -1);
+        $app['dispatcher']->addListener(KernelEvents::REQUEST, array($app['new_relic.request_listener'], 'setApplicationName'), -1);
+        $app['dispatcher']->addListener(KernelEvents::REQUEST, array($app['new_relic.request_listener'], 'setIgnoreTransaction'), -1);
         $app['dispatcher']->addListener(KernelEvents::REQUEST, array($app['new_relic.request_listener'], 'setTransactionName'), -1);
 
         $app['dispatcher']->addListener(KernelEvents::RESPONSE, array($app['new_relic.response_listener'], 'onCoreResponse'), -1);

@@ -54,12 +54,13 @@ class RequestListener
     }
 
     /**
+     * Set the name of the application
+     *
      * @param GetResponseEvent $event
      */
-    public function onCoreRequest(GetResponseEvent $event)
+    public function setApplicationName(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-        if (!$this->validateRequest($request, $event->getRequestType())) {
+        if (!$this->validateEvent($event)) {
             return;
         }
 
@@ -79,30 +80,25 @@ class RequestListener
      */
     public function setTransactionName(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-        if (!$this->validateRequest($request, $event->getRequestType())) {
+        if (!$this->validateEvent($event)) {
             return;
         }
 
-        $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
         $this->interactor->setTransactionName($transactionName);
     }
 
     /**
-     * Make sure that it is not a subrequest and that we ignore paths that should be ignored
-     *
-     * @param Request $request
-     * @param integer $requestType
-     *
-     * @return bool
+     * @param GetResponseEvent $event
      */
-    protected function validateRequest(Request $request, $requestType)
+    public function setIgnoreTransaction(GetResponseEvent $event)
     {
-        if ($requestType !== HttpKernelInterface::MASTER_REQUEST) {
-            return false;
+        if (!$this->validateEvent($event)) {
+            return;
         }
 
+        $request = $event->getRequest();
         if (in_array($request->get('_route'), $this->ignoredRoutes)) {
             $this->interactor->ignoreTransaction();
         }
@@ -110,7 +106,17 @@ class RequestListener
         if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
             $this->interactor->ignoreTransaction();
         }
+    }
 
-        return true;
+    /**
+     * Make sure we should consider this event. Example: make sure it is a master request
+     *
+     * @param GetResponseEvent $event
+     *
+     * @return bool
+     */
+    protected function validateEvent(GetResponseEvent $event)
+    {
+        return $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST;
     }
 }
