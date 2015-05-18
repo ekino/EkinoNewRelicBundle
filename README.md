@@ -186,11 +186,11 @@ The bundle provide a [Capifony](http://capifony.org) recipe to automate the depl
 
 It makes one request per `app_name`, due roll-up names are not supported by Data REST API.
 
-## The flow of the Request
+## Flow of the Request
 
-1. A request comes in and the first thing we do is to `setApplicaitonName` so that we use the correct license key and name.
+1. A request comes in and the first thing we do is to `setApplicationName` so that we use the correct license key and name.
 2. The `RouterListener` might throw a 404 or add routing values to the request.
-3. If no 404 was thrown we `setIgnoreTransaction` which means that we call `$this->interactor->ignoreTransaction();` if we have configured to ignore the route.
+3. If no 404 was thrown we `setIgnoreTransaction` which means that we call `NewRelicInteractorInterface::ignoreTransaction()` if we have configured to ignore the route.
 4. The Firewall is the next interesting thing that will happen. It could change the controller or throw a 403.
 5. The developer might have configured many more request listeners that will now execute and possibly add stuff to the request.
 6. We will execute `setTransactionName` to use our `TransactionNamingStrategyInterface` to set a nice name. 
