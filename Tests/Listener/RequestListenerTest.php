@@ -33,7 +33,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
-        $listener->onCoreRequest($event);
+        $listener->setApplicationName($event);
     }
 
     public function testMasterRequest()
@@ -50,7 +50,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
-        $listener->onCoreRequest($event);
+        $listener->setTransactionName($event);
     }
 
     public function testPathIsIgnored ()
@@ -67,7 +67,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array('/ignored_path'), $namingStrategy);
-        $listener->onCoreRequest($event);
+        $listener->setIgnoreTransaction($event);
     }
 
     public function testRouteIsIgnored ()
@@ -84,7 +84,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array('ignored_route'), array(), $namingStrategy);
-        $listener->onCoreRequest($event);
+        $listener->setIgnoreTransaction($event);
     }
 
     public function testSymfonyCacheEnabled()
@@ -100,7 +100,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, true);
-        $listener->onCoreRequest($event);
+        $listener->setApplicationName($event);
     }
 
     public function testSymfonyCacheDisabled()
@@ -116,6 +116,6 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, false);
-        $listener->onCoreRequest($event);
+        $listener->setApplicationName($event);
     }
 }

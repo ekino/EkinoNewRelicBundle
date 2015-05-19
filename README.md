@@ -186,6 +186,20 @@ The bundle provide a [Capifony](http://capifony.org) recipe to automate the depl
 
 It makes one request per `app_name`, due roll-up names are not supported by Data REST API.
 
+## Flow of the Request
+
+1. A request comes in and the first thing we do is to `setApplicationName` so that we use the correct license key and name.
+2. The `RouterListener` might throw a 404 or add routing values to the request.
+3. If no 404 was thrown we `setIgnoreTransaction` which means that we call `NewRelicInteractorInterface::ignoreTransaction()` if we have configured to ignore the route.
+4. The Firewall is the next interesting thing that will happen. It could change the controller or throw a 403.
+5. The developer might have configured many more request listeners that will now execute and possibly add stuff to the request.
+6. We will execute `setTransactionName` to use our `TransactionNamingStrategyInterface` to set a nice name. 
+
+All 6 steps will be executed for a normal request. Exceptions to this is 404 and 403 responses that will be created in 
+step 2 and step 4 respectively. If an exception to these step occurs (I'm not talking about `\Exception`) you will have 
+the transaction logged with the correct license key but you do not have the proper transaction name. The `setTransactionName` may
+have dependencies on data set by other listeners that is why it has such low priority. 
+
 ## Integration with SonataBlockBundle
 
 ### Step 0: Install SonataBlockBundle

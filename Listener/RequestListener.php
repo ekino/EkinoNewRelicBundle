@@ -11,6 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
@@ -53,23 +54,15 @@ class RequestListener
     }
 
     /**
+     * Set the name of the application
+     *
      * @param GetResponseEvent $event
      */
-    public function onCoreRequest(GetResponseEvent $event)
+    public function setApplicationName(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-
-        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+        if (!$this->validateEvent($event)) {
             return;
         }
-        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
-            $this->interactor->ignoreTransaction();
-        }
-        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
-            $this->interactor->ignoreTransaction();
-        }
-
-        $transactionName = $this->transactionNamingStrategy->getTransactionName($request);
 
         if ($this->newRelic->getName()) {
             if ($this->symfonyCache) {
@@ -78,7 +71,52 @@ class RequestListener
 
             $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
         }
+    }
+
+    /**
+     * Set the name of the transaction
+     *
+     * @param GetResponseEvent $event
+     */
+    public function setTransactionName(GetResponseEvent $event)
+    {
+        if (!$this->validateEvent($event)) {
+            return;
+        }
+
+        $transactionName = $this->transactionNamingStrategy->getTransactionName($event->getRequest());
 
         $this->interactor->setTransactionName($transactionName);
+    }
+
+    /**
+     * @param GetResponseEvent $event
+     */
+    public function setIgnoreTransaction(GetResponseEvent $event)
+    {
+        if (!$this->validateEvent($event)) {
+            return;
+        }
+
+        $request = $event->getRequest();
+        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
+            $this->interactor->ignoreTransaction();
+        }
+
+        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
+            $this->interactor->ignoreTransaction();
+        }
+    }
+
+    /**
+     * Make sure we should consider this event. Example: make sure it is a master request
+     *
+     * @param GetResponseEvent $event
+     *
+     * @return bool
+     */
+    protected function validateEvent(GetResponseEvent $event)
+    {
+        return $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST;
     }
 }
