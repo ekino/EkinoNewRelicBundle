@@ -64,12 +64,17 @@ class RequestListener
             return;
         }
 
-        if ($this->newRelic->getName()) {
+        $appName = $this->newRelic->getName();
+
+        if ($appName) {
             if ($this->symfonyCache) {
-                $this->interactor->startTransaction($this->newRelic->getName());
+                $this->interactor->startTransaction($appName);
             }
 
-            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+            // Set application name if different from ini configuration
+            if ($appName !== ini_get('newrelic.appname')) {
+                $this->interactor->setApplicationName($appName, $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+            }
         }
     }
 
