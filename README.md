@@ -120,7 +120,7 @@ $bundles = array(
 
 ### Step 3 : Configure the bundle
 
-In New Relic's web interface, make sure to get a valid (REST) API Key, not to be confused with your License key : New Relic Dashboard > Account settings > Integration > Data Sharing > REST API key 
+In New Relic's web interface, make sure to get a valid (REST) API Key, not to be confused with your License key : New Relic Dashboard > Account settings > Integration > API Keys
 
 ```yaml
 # app/config/config.yml
