@@ -16,6 +16,8 @@ Parameters
 * **new_relic.enabled**: Check if the newrelic extension is installed by default.
 * **new_relic.application_name**: .
 * **new_relic.api_key**: New Relic API for the deploy command.
+* **new_relic.license_key**: New Relic license key (optional).
+* **new_relic.xmit**: # If true, records the metric data up to the point newrelic_set_appname is called (default false).
 * **new_relic.logging**: If true, logs all New Relic interactions to the logger service.
 * **new_relic.log_exceptions**: If true, sends exceptions to New Relic.
 * **new_relic.log_commands**: If true, logs CLI commands to New Relic as Background jobs (symfony 2.3+ only).

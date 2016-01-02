@@ -39,12 +39,14 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
         $app['new_relic.enabled'] = extension_loaded('newrelic');
         $app['new_relic.application_name'] = 'Silex Application';
         $app['new_relic.api_key'] = null;
+        $app['new_relic.license_key'] = null;
+        $app['new_relic.xmit'] = false;
         $app['new_relic.logging'] = false;
         $app['new_relic.log_exceptions'] = false;
         $app['new_relic.log_commands'] = class_exists('Symfony\\Component\\Console\\ConsoleEvents');
 
         $app['new_relic'] = $app->share(function ($app) {
-            return new NewRelic($app['new_relic.application_name'], $app['new_relic.api_key']);
+            return new NewRelic($app['new_relic.application_name'], $app['new_relic.api_key'], $app['new_relic.license_key'], $app['new_relic.xmit']);
         });
 
         $app['new_relic.transaction_naming_strategy'] = $app->share(function ($app) {
