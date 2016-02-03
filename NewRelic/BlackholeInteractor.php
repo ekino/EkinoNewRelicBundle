@@ -112,4 +112,11 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     public function endTransaction()
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function excludeFromApdex()
+    {
+    }
 }
