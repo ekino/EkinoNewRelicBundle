@@ -124,4 +124,12 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     {
         newrelic_start_transaction($name);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function excludeFromApdex()
+    {
+        newrelic_ignore_apdex();
+    }
 }
