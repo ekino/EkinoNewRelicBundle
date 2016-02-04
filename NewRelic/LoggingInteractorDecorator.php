@@ -187,7 +187,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
      */
     public function excludeFromApdex()
     {
-        $this->log("Excluding current transaction from Apdex");
+        $this->log("Excluding current transaction from New Relic Apdex score");
         $this->interactor->excludeFromApdex();
     }
 }
