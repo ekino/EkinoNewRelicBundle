@@ -132,12 +132,12 @@ ekino_new_relic:
     deployment_names: ~                   # default value is 'application_name', supports string array or semi-colon separated string
     api_key:                              # New Relic API
     license_key:                          # New Relic license key (optional, default value is read from php.ini)
-    xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true
-    logging: false                        # If true, logs all New Relic interactions to the Symfony log
-    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below)
-    log_exceptions: false                 # If true, sends exceptions to New Relic
-    log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only)
-    using_symfony_cache: false            # Symfony HTTP cache (see below)
+    xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true (default: false)
+    logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
+    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
+    log_exceptions: false                 # If true, sends exceptions to New Relic (default: false)
+    log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
+    using_symfony_cache: false            # Symfony HTTP cache (see below) (default: false)
     transaction_naming: route             # route, controller or service (see below)
     transaction_naming_service: ~         # Transaction naming service (see below)
     ignored_routes: []                    # No transaction recorded for this routes
