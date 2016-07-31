@@ -40,6 +40,14 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function addCustomEvent($name, array $attributes)
+    {
+        newrelic_record_custom_event((string) $name, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
         newrelic_custom_metric((string) $name, $value);

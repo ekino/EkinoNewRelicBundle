@@ -84,6 +84,15 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function addCustomEvent($name, array $attributes)
+    {
+        $this->log(sprintf('Adding custom New Relic event %s', $name), $attributes);
+        $this->interactor->addCustomEvent($name, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
         $this->log(sprintf('Adding custom New Relic metric %s: %s', $name, $value));

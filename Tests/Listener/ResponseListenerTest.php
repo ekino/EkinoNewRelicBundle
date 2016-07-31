@@ -17,13 +17,26 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->newRelic = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic', array('getCustomMetrics', 'getCustomParameters'), array(), '', false);
+        $this->newRelic = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic', array('getCustomEvents', 'getCustomMetrics', 'getCustomParameters'), array(), '', false);
         $this->interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
         $this->extension = $this->getMock('Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension', array('isHeaderCalled', 'isFooterCalled', 'isUsed'), array(), '', false);
     }
 
     public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
     {
+        $events = array(
+            'WidgetSale' => array(
+                array(
+                    'color' => 'red',
+                    'weight' => 12.5,
+                ),
+                array(
+                    'color' => 'blue',
+                    'weight' => 12.5,
+                ),
+            ),
+        );
+
         $metrics = array(
             'foo_a' => 'bar_a',
             'foo_b' => 'bar_b',
@@ -34,6 +47,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
             'foo_2' => 'bar_2',
         );
 
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue($events));
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue($metrics));
         $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue($parameters));
 
@@ -41,6 +55,15 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
         $this->interactor->expects($this->at(1))->method('addCustomMetric')->with('foo_b', 'bar_b');
         $this->interactor->expects($this->at(2))->method('addCustomParameter')->with('foo_1', 'bar_1');
         $this->interactor->expects($this->at(3))->method('addCustomParameter')->with('foo_2', 'bar_2');
+
+        $this->interactor->expects($this->at(4))->method('addCustomEvent')->with('WidgetSale', array(
+            'color' => 'red',
+            'weight' => 12.5,
+        ));
+        $this->interactor->expects($this->at(5))->method('addCustomEvent')->with('WidgetSale', array(
+            'color' => 'blue',
+            'weight' => 12.5,
+        ));
 
         $event = $this->createFilterResponseEventMock();
 
@@ -132,6 +155,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
@@ -153,6 +177,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->once())->method('getBrowserTimingHeader')->will($this->returnValue('__Timing_Feader__'));
@@ -174,6 +199,7 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
@@ -193,9 +219,11 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
 
     private function setUpNoCustomMetricsOrParameters()
     {
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue(array()));
         $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue(array()));
 
+        $this->interactor->expects($this->never())->method('addCustomEvent');
         $this->interactor->expects($this->never())->method('addCustomMetric');
         $this->interactor->expects($this->never())->method('addCustomParameter');
     }

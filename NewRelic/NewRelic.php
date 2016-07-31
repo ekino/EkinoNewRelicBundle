@@ -23,6 +23,8 @@ class NewRelic
 
     protected $framework;
 
+    protected $customEvents;
+
     protected $customMetrics;
 
     protected $customParameters;
@@ -43,8 +45,34 @@ class NewRelic
         $this->licenseKey       = $licenseKey ?: ini_get('newrelic.license');
         $this->xmit             = $xmit;
         $this->deploymentNames  = $deploymentNames;
+        $this->customEvents     = array();
         $this->customMetrics    = array();
         $this->customParameters = array();
+    }
+
+    /**
+     * @param array $customEvents
+     */
+    public function setCustomEvents(array $customEvents)
+    {
+        $this->customEvents = $customEvents;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomEvents()
+    {
+        return $this->customEvents;
+    }
+
+    /**
+     * @param string $name
+     * @param array  $attributes
+     */
+    public function addCustomEvent($name, array $attributes)
+    {
+        $this->customEvents[$name][] = $attributes;
     }
 
     /**

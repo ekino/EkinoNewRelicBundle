@@ -86,6 +86,12 @@ class ResponseListener
             }
         }
 
+        foreach ($this->newRelic->getCustomEvents() as $name => $events) {
+            foreach ($events as $attributes) {
+                $this->interactor->addCustomEvent($name, $attributes);
+            }
+        }
+
         if ($this->instrument) {
             if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isUsed()) {
                 $this->interactor->disableAutoRUM();
