@@ -47,14 +47,17 @@ class CommandListener
         $command = $event->getCommand();
         $input = $event->getInput();
 
-        if (in_array($command->getName(), $this->ignoredCommands)) {
-            $this->interactor->ignoreTransaction();
-        }
-
         if ($this->newRelic->getName()) {
             $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
         }
         $this->interactor->setTransactionName($command->getName());
+
+        // Due to newrelic's extension implementation, the method `ignoreTransaction` must be called after `setApplicationName`
+        // see https://discuss.newrelic.com/t/newrelic-ignore-transaction-not-being-honored/5450/5
+        if (in_array($command->getName(), $this->ignoredCommands)) {
+            $this->interactor->ignoreTransaction();
+        }
+
         $this->interactor->enableBackgroundJob();
 
         // send parameters to New Relic
