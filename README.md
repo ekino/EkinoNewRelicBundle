@@ -42,7 +42,7 @@ This bundle integrates the NewRelic PHP API into Symfony2. For more information 
 
 review http://newrelic.com ...
 
-### Step 1: Using Composer (recommended)
+### Step 1: add dependency
 
 Use `composer.phar`:
 
@@ -72,38 +72,7 @@ command from the directory where your ``composer.json`` file is located:
 $ php composer.phar update ekino/newrelic-bundle
 ```
 
-### Step 1 (alternative) : Using ``deps`` file (Symfony 2.0.x)
-
-First, checkout a copy of the code. Just add the following to the ``deps``
-file of your Symfony Standard Distribution:
-
-```ini
-[EkinoNewRelicBundle]
-    git=http://github.com/ekino/EkinoNewRelicBundle.git
-    target=/bundles/Ekino/Bundle/NewRelicBundle
-```
-
-Then, run
-
-```bash
-$ bin/vendors install
-```
-
-Make sure that you also register the namespace with the autoloader:
-
-```php
-<?php
-
-// app/autoload.php
-$loader->registerNamespaces(array(
-    // ...
-    'Ekino'              => __DIR__.'/../vendor/bundles',
-    // ...
-));
-```
-
 ### Step 2 : Register the bundle
-
 
 Then register the bundle with your kernel:
 
