@@ -1,40 +1,39 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - 7.1
   - nightly
 
 env:
-  - SYMFONY_VERSION=2.7.* COMPOSER_FLAGS="--prefer-source"
+  - SYMFONY_VERSION=3.0.* SYMFONY_CONSOLE_VERSION=3.3.*
 
 matrix:
   include:
-    - php: 5.3.3
+    - php: 5.3
       env: SYMFONY_VERSION=2.3.* COMPOSER_FLAGS="--prefer-lowest"
-    - php: 5.6
-      env: SYMFONY_VERSION=2.3.* COMPOSER_FLAGS="--prefer-source"
-    - php: 5.6
-      env: SYMFONY_VERSION=2.6.* COMPOSER_FLAGS="--prefer-source"
-    - php: 5.6
-      env: SYMFONY_VERSION=2.8.*@dev COMPOSER_FLAGS=""
-    - php: 5.6
-      env: SYMFONY_VERSION=3.0.*@dev COMPOSER_FLAGS=""
+    - php: 5.4
+      env: SYMFONY_VERSION=2.3.* COMPOSER_FLAGS=""
+    - php: 7.1
+      env: SYMFONY_VERSION=2.3.*
+    - php: 7.1
+      env: SYMFONY_VERSION=2.7.*
+    - php: 7.1
+      env: SYMFONY_VERSION=2.8.*
+    - php: 7.1
+      env: SYMFONY_VERSION=3.0.*
   allow_failures:
-    - env: SYMFONY_VERSION=2.8.*@dev COMPOSER_FLAGS=""
-    - env: SYMFONY_VERSION=3.0.*@dev COMPOSER_FLAGS=""
     - php: nightly
 
 before_install:
   - composer self-update
-  - if [ "$SYMFONY_VERSION" = "2.8.*@dev" ] || [ "$SYMFONY_VERSION" = "3.0.*@dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
 
 install:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
-  - composer require symfony/console:${SYMFONY_VERSION} --no-update
-  - composer update $COMPOSER_FLAGS
+  - composer require symfony/console:${SYMFONY_CONSOLE_VERSION:-${SYMFONY_VERSION}} --no-update
+  - composer update ${COMPOSER_FLAGS}
 
 script:
   - make test

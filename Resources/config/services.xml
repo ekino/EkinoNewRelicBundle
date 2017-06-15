@@ -58,8 +58,7 @@
         </service>
 
         <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">
-            <tag name="kernel.event_listener" event="console.command" method="onConsoleCommand" priority="0"/>
-            <tag name="kernel.event_listener" event="console.exception" method="onConsoleException" priority="0"/>
+            <tag name="kernel.event_subscriber"/>
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
