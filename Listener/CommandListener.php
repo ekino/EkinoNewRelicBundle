@@ -11,12 +11,16 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
+use Ekino\Bundle\NewRelicBundle\Exception\ThrowableException;
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Symfony\Component\Console\Event\ConsoleExceptionEvent;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Symfony\Component\Console\Event\ConsoleExceptionEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CommandListener
+class CommandListener implements EventSubscriberInterface
 {
     /**
      * @var NewRelicInteractorInterface
@@ -37,6 +41,22 @@ class CommandListener
         $this->interactor = $interactor;
         $this->newRelic = $newRelic;
         $this->ignoredCommands = $ignoredCommands;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        $events = array(
+            ConsoleEvents::COMMAND => array('onConsoleCommand', 0),
+        );
+
+        if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+            $events[ConsoleEvents::ERROR] = array('onConsoleError', 0);
+        } else {
+            // backward compatibility with Symfony < 3.3
+            $events[ConsoleEvents::EXCEPTION] = array('onConsoleException', 0);
+        }
+
+        return $events;
     }
 
     /**
@@ -89,6 +109,19 @@ class CommandListener
     public function onConsoleException(ConsoleExceptionEvent $event)
     {
         $exception = $event->getException();
+        $this->interactor->noticeException($exception);
+    }
+
+    /**
+     * @param ConsoleErrorEvent $event
+     */
+    public function onConsoleError(ConsoleErrorEvent $event)
+    {
+        $exception = $event->getError();
+        if (!$exception instanceof \Exception) {
+            // Encapsulate \Throwable into an exception to keep BC of NewRelicInteractorInterface::noticeException
+            $exception = new ThrowableException($exception);
+        }
         $this->interactor->noticeException($exception);
     }
 }

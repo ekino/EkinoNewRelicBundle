@@ -1,2 +1,2 @@
 test:
-	phpunit
+	./vendor/bin/phpunit

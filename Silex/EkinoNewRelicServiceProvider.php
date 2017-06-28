@@ -111,7 +111,7 @@ class EkinoNewRelicServiceProvider implements ServiceProviderInterface
         }
 
         if ($app['new_relic.log_exceptions'] && $app['new_relic.log_commands']) {
-            $app['dispatcher']->addListener(ConsoleEvents::EXCEPTION, array($app['new_relic.console_listener'], 'onConsoleException'), 0);
+            $app['dispatcher']->addSubscriber($app['new_relic.console_listener']);
         }
     }
 }

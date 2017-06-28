@@ -12,16 +12,15 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
 use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Output\OutputInterface;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 class CommandListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,7 +81,7 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onConsoleCommand($event);
     }
 
-    public function testConsoleExceptions()
+    public function testConsoleException()
     {
         $exception = new \Exception;
 
@@ -97,7 +96,57 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new ConsoleExceptionEvent($command, $input, $output, $exception, 1);
 
-        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array('test:ignored-command'));
         $listener->onConsoleException($event);
+    }
+
+    public function testConsoleError()
+    {
+        if (!class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+            $this->markTestSkipped('Console Error Events is only available from Symfony 3.3');
+        }
+
+        $exception = new \Exception('', 1);
+
+        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('noticeException')->with($exception);
+
+        $command = new Command('test:exception');
+
+        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+
+        $event = new ConsoleErrorEvent($input, $output, $exception, $command);
+
+        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener->onConsoleError($event);
+    }
+
+    public function testConsoleErrorsWithThrowable()
+    {
+        if (!class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+            $this->markTestSkipped('Console Error Events is only available from Symfony 3.3');
+        }
+        if (PHP_VERSION_ID < 70000) {
+            $this->markTestSkipped('Error are only testable with PHP 7');
+        }
+
+        $exception = new \Error();
+
+        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
+        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor->expects($this->once())->method('noticeException')->with($this->isInstanceOf('Ekino\Bundle\NewRelicBundle\Exception\ThrowableException'));
+
+        $command = new Command('test:exception');
+
+        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $event = new ConsoleErrorEvent($input, $output, $exception, $command);
+
+        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener->onConsoleError($event);
     }
 }
