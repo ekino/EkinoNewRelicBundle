@@ -71,7 +71,7 @@ interface NewRelicInteractorInterface
     function noticeError($msg);
 
     /**
-     * @param Exception $exception
+     * @param \Exception $e
      *
      * @return void
      */
