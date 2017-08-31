@@ -44,32 +44,8 @@ review http://newrelic.com ...
 
 ### Step 1: add dependency
 
-Use `composer.phar`:
-
 ```bash
-$ php composer.phar require ekino/newrelic-bundle
-```
-You just have to specify the version you want : `master-dev`.
-It will add the package in your `composer.json` file and install it.
-
-Or you can do it by yourself, first, add the following to your `composer.json` file:
-
-```js
-// composer.json
-{
-    // ...
-    require: {
-        // ...
-        "ekino/newrelic-bundle": "master-dev"
-    }
-}
-```
-
-Then, you can install the new dependencies by running Composer's ``update``
-command from the directory where your ``composer.json`` file is located:
-
-```bash
-$ php composer.phar update ekino/newrelic-bundle
+$ composer require ekino/newrelic-bundle
 ```
 
 ### Step 2 : Register the bundle
