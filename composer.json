@@ -13,10 +13,10 @@
         }
     ],
     "require-dev": {
-        "silex/silex": "~1.0",
-        "symfony/framework-bundle": "~2.2|~3.0",
-        "symfony/console": "~2.2|~3.0",
-        "twig/twig": "1.*",
+        "silex/silex": "^1.0",
+        "symfony/framework-bundle": "^2.7|^3.0|^4.0",
+        "symfony/console": "^2.7|^3.0|^4.0",
+        "twig/twig": "^1.26|^2.0",
         "phpunit/phpunit": "^4.8"
     },
     "suggest": {
