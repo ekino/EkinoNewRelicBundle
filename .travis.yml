@@ -24,8 +24,9 @@ matrix:
       env: SYMFONY_VERSION=2.8.*
     - php: 7.1
       env: SYMFONY_VERSION=3.0.*
+    # test the latest release (including beta releases)
     - php: 7.1
-      env: SYMFONY_VERSION=^4.0
+      env: DEPENDENCIES=beta
   allow_failures:
     - php: nightly
 
@@ -33,6 +34,7 @@ before_install:
   - composer self-update
 
 install:
+  - if [ "$DEPENDENCIES" = "beta" ]; then composer config minimum-stability beta; fi;
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
   - composer require symfony/console:${SYMFONY_CONSOLE_VERSION:-${SYMFONY_VERSION}} --no-update
   - composer update ${COMPOSER_FLAGS}
