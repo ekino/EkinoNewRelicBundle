@@ -12,23 +12,28 @@
             "homepage": "http://ekino.com"
         }
     ],
+    "require": {
+        "php": ">=5.3"
+    },
     "require-dev": {
-        "silex/silex": "~1.0",
-        "symfony/framework-bundle": "~2.2|~3.0",
-        "symfony/console": "~2.2|~3.0",
-        "twig/twig": "1.*",
+        "silex/silex": "^1.0",
+        "symfony/framework-bundle": "^2.7|^3.0",
+        "symfony/console": "^2.7|^3.0",
+        "twig/twig": "^1.26|^2.0",
         "phpunit/phpunit": "^4.8"
+    },
+    "conflict": {
+        "twig/twig": "<1.26"
     },
     "suggest": {
         "sonata-project/block-bundle": "2.2.*@dev"
     },
     "autoload": {
-        "psr-0": { "Ekino\\Bundle\\NewRelicBundle": "" }
+        "psr-4": { "Ekino\\Bundle\\NewRelicBundle\\": "" }
     },
-    "target-dir": "Ekino/Bundle/NewRelicBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3-dev"
+            "dev-master": "1.4-dev"
         }
     }
 }

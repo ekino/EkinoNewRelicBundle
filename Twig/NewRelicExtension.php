@@ -60,14 +60,6 @@ class NewRelicExtension extends \Twig_Extension
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'ekino_newrelic_extension';
-    }
-
-    /**
      * @return array
      */
     public function getFunctions()
