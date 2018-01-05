@@ -108,5 +108,9 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(4, $transaction_naming_service)
             ->replaceArgument(5, $config['using_symfony_cache'])
         ;
+
+        if (!$config['twig_enabled']) {
+            $container->removeDefinition('ekino.new_relic.twig.new_relic_extension');
+        }
     }
 }

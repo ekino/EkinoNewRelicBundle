@@ -88,6 +88,7 @@ ekino_new_relic:
     ignored_routes: []                    # No transaction recorded for this routes
     ignored_paths: []                     # No transaction recorded for this paths
     ignored_commands: []                  # No transaction recorded for this commands (background tasks)
+    twig_enabled: true                    # Allows you to disable twig integration
 ```
 
 ## Enhanced RUM instrumentation
