@@ -54,7 +54,7 @@
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>false</argument>
             <argument />
-            <argument type="service" id="ekino.new_relic.twig.new_relic_extension" />
+            <argument type="service" id="ekino.new_relic.twig.new_relic_extension" on-invalid="null" />
         </service>
 
         <service id="ekino.new_relic.command_listener" class="Ekino\Bundle\NewRelicBundle\Listener\CommandListener">

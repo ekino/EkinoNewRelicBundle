@@ -72,6 +72,10 @@ class EkinoNewRelicExtension extends Extension
             $container->removeDefinition('ekino.new_relic.command_listener');
         }
 
+        if (!$config['twig']) {
+            $container->removeDefinition('ekino.new_relic.twig.new_relic_extension');
+        }
+
         if (!$config['deployment_names']) {
             $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'])));
         }
