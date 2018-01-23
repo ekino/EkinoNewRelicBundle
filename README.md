@@ -78,6 +78,7 @@ ekino_new_relic:
     api_key:                              # New Relic API
     license_key:                          # New Relic license key (optional, default value is read from php.ini)
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true (default: false)
+    twig: true                            # If false, the NewRelicExtension for Twig will not be loaded
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
     log_exceptions: false                 # If true, sends exceptions to New Relic (default: false)
