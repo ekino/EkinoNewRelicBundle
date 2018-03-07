@@ -83,6 +83,10 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsoleException()
     {
+        if (!class_exists('Symfony\Component\Console\Event\ConsoleExceptionEvent')) {
+            $this->markTestSkipped('Console Exception Events is only available under Symfony 3.3');
+        }
+
         $exception = new \Exception;
 
         $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
