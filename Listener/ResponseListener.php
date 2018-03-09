@@ -76,6 +76,10 @@ class ResponseListener
      */
     public function onCoreResponse(FilterResponseEvent $event)
     {
+        if (!$event->isMasterRequest()) {
+            return;
+        }
+
         if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isUsed()) {
             foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
                 $this->interactor->addCustomMetric((string) $name, (float) $value);

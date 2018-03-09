@@ -33,6 +33,20 @@ class ResponseListenerTest extends TestCase
             ->getMock();
     }
 
+    public function testOnCoreResponseOnlyMasterRequestsAreProcessed()
+    {
+        $event = $this->getMockBuilder(FilterResponseEvent::class)
+            ->setMethods(['isMasterRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->method('isMasterRequest')->will($this->returnValue(false));
+
+        $object = new ResponseListener($this->newRelic, $this->interactor);
+        $object->onCoreResponse($event);
+
+        $this->newRelic->expects($this->never())->method('getCustomMetrics');
+    }
+
     public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
     {
         $events = array(
@@ -273,12 +287,13 @@ class ResponseListenerTest extends TestCase
     private function createFilterResponseEventMock($request = null, $response = null)
     {
         $event = $this->getMockBuilder(FilterResponseEvent::class)
-            ->setMethods(['getResponse', 'getRequest'])
+            ->setMethods(['getResponse', 'getRequest', 'isMasterRequest'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $event->expects($request ? $this->any() : $this->never())->method('getRequest')->will($this->returnValue($request));
         $event->expects($response ? $this->any() : $this->never())->method('getResponse')->will($this->returnValue($response));
+        $event->method('isMasterRequest')->will($this->returnValue(true));
 
         return $event;
     }
