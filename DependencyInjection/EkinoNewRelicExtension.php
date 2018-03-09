@@ -109,7 +109,7 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(5, $config['using_symfony_cache'])
         ;
 
-        if (!$config['twig_enabled']) {
+        if (!$config['twig'] || !class_exists(\Twig_Environment::class)) {
             $container->removeDefinition('ekino.new_relic.twig.new_relic_extension');
         }
     }
