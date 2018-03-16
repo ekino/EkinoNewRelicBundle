@@ -13,6 +13,7 @@ namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
+use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -23,12 +24,12 @@ class RequestListenerTest extends TestCase
 {
     public function testSubRequest()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('setTransactionName');
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
@@ -39,13 +40,13 @@ class RequestListenerTest extends TestCase
 
     public function testMasterRequest()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('setTransactionName');
 
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
@@ -56,12 +57,12 @@ class RequestListenerTest extends TestCase
 
     public function testPathIsIgnored ()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('ignoreTransaction');
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request(array(), array(), array(), array(), array(), array('REQUEST_URI' => '/ignored_path'));
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
@@ -72,12 +73,12 @@ class RequestListenerTest extends TestCase
 
     public function testRouteIsIgnored ()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('ignoreTransaction');
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request(array(), array(), array('_route' => 'ignored_route'));
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
@@ -88,12 +89,12 @@ class RequestListenerTest extends TestCase
 
     public function testSymfonyCacheEnabled()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('startTransaction');
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
@@ -104,12 +105,12 @@ class RequestListenerTest extends TestCase
 
     public function testSymfonyCacheDisabled()
     {
-        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('startTransaction');
 
-        $namingStrategy = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface')->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);

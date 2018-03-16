@@ -11,6 +11,8 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\Twig;
 
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
 
@@ -28,11 +30,11 @@ class NewRelicExtensionTest extends TestCase
 
     public function setUp()
     {
-        $this->newRelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')
+        $this->newRelic = $this->getMockBuilder(NewRelic::class)
         ->setMethods(['getCustomMetrics', 'getCustomParameters'])
         ->disableOriginalConstructor()
             ->getMock();
-        $this->interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
+        $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
     }
 
     /**
@@ -65,7 +67,7 @@ class NewRelicExtensionTest extends TestCase
             ->method('getCustomParameters')
             ->will($this->returnValue(array()));
 
-        $this->setExpectedException('\RuntimeException');
+        $this->expectException(\RuntimeException::class);
 
         $extension->getNewrelicBrowserTimingHeader();
         $extension->getNewrelicBrowserTimingHeader();
