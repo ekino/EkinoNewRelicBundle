@@ -68,11 +68,8 @@ class CommandListenerTest extends TestCase
 
     public function testIgnoreBackgroundJob ()
     {
-        if (!class_exists('Symfony\Component\Console\Event\ConsoleCommandEvent')) {
-            $this->markTestSkipped('Console Events is only available from Symfony 2.3');
-        }
-
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
+        $interactor->expects($this->never())->method('startTransaction');
 
         $command = new Command('test:ignored-commnand');
         $input = new ArrayInput(array(), new InputDefinition(array()));
@@ -85,35 +82,8 @@ class CommandListenerTest extends TestCase
         $listener->onConsoleCommand($event);
     }
 
-    public function testConsoleException()
-    {
-        if (!class_exists('Symfony\Component\Console\Event\ConsoleExceptionEvent')) {
-            $this->markTestSkipped('Console Exception Events is only available under Symfony 3.3');
-        }
-
-        $exception = new \Exception;
-
-        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
-        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
-        $interactor->expects($this->once())->method('noticeException')->with($exception);
-
-        $command = new Command('test:exception');
-
-        $input = new ArrayInput(array(), new InputDefinition(array()));
-        $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-
-        $event = new ConsoleExceptionEvent($command, $input, $output, $exception, 1);
-
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array('test:ignored-command'));
-        $listener->onConsoleException($event);
-    }
-
     public function testConsoleError()
     {
-        if (!class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
-            $this->markTestSkipped('Console Error Events is only available from Symfony 3.3');
-        }
-
         $exception = new \Exception('', 1);
 
         $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
