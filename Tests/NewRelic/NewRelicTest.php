@@ -12,8 +12,9 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\NewRelic;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use PHPUnit\Framework\TestCase;
 
-class NewRelicTest extends \PHPUnit_Framework_TestCase
+class NewRelicTest extends TestCase
 {
     public function testGeneric()
     {

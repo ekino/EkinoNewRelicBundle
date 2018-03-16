@@ -11,9 +11,10 @@
 
 namespace Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerNamingStrategyTest extends \PHPUnit_Framework_TestCase
+class ControllerNamingStrategyTest extends TestCase
 {
     public function testControllerAsString()
     {

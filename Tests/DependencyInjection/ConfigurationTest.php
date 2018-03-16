@@ -2,11 +2,12 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
 
 use Ekino\Bundle\NewRelicBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public function testIgnoredRoutes ()
     {

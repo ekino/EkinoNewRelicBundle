@@ -11,8 +11,11 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
+use Ekino\Bundle\NewRelicBundle\Exception\ThrowableException;
 use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -22,7 +25,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class CommandListenerTest extends \PHPUnit_Framework_TestCase
+class CommandListenerTest extends TestCase
 {
     public function testCommandMarkedAsBackgroundJob()
     {
@@ -42,7 +45,7 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
             new InputArgument('name', InputArgument::REQUIRED),
          ));
 
-        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
         $interactor->expects($this->once())->method('setTransactionName')->with($this->equalTo('test:newrelic'));
         $interactor->expects($this->once())->method('enableBackgroundJob');
 
@@ -54,7 +57,7 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
         $command = new Command('test:newrelic');
         $input = new ArrayInput($parameters, $definition);
 
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')->getMock();
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
@@ -68,12 +71,12 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Console Events is only available from Symfony 2.3');
         }
 
-        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
 
         $command = new Command('test:ignored-commnand');
         $input = new ArrayInput(array(), new InputDefinition(array()));
 
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')->getMock();
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
@@ -90,13 +93,13 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
         $exception = new \Exception;
 
         $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
-        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $interactor = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface')->getMock();
         $interactor->expects($this->once())->method('noticeException')->with($exception);
 
         $command = new Command('test:exception');
 
         $input = new ArrayInput(array(), new InputDefinition(array()));
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')->getMock();
 
         $event = new ConsoleExceptionEvent($command, $input, $output, $exception, 1);
 
@@ -112,14 +115,14 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
         $exception = new \Exception('', 1);
 
-        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
-        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
+        $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeException')->with($exception);
 
         $command = new Command('test:exception');
 
         $input = new ArrayInput(array(), new InputDefinition(array()));
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')->getMock();
 
 
         $event = new ConsoleErrorEvent($input, $output, $exception, $command);
@@ -139,14 +142,14 @@ class CommandListenerTest extends \PHPUnit_Framework_TestCase
 
         $exception = new \Error();
 
-        $newrelic = $this->getMockBuilder('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic')->disableOriginalConstructor()->getMock();
-        $interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
-        $interactor->expects($this->once())->method('noticeException')->with($this->isInstanceOf('Ekino\Bundle\NewRelicBundle\Exception\ThrowableException'));
+        $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
+        $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
+        $interactor->expects($this->once())->method('noticeException')->with($this->isInstanceOf(ThrowableException::class));
 
         $command = new Command('test:exception');
 
         $input = new ArrayInput(array(), new InputDefinition(array()));
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output = $this->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')->getMock();
 
         $event = new ConsoleErrorEvent($input, $output, $exception, $command);
 
