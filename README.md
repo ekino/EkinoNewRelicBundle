@@ -2,6 +2,8 @@ Ekino NewRelic Bundle
 =====================
 
 [![Build Status](https://secure.travis-ci.org/ekino/EkinoNewRelicBundle.png?branch=master)](http://travis-ci.org/ekino/EkinoNewRelicBundle)
+[![Latest Version](https://img.shields.io/github/release/ekino/EkinoNewRelicBundle.svg?style=flat-square)](https://github.com/ekino/EkinoNewRelicBundle/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/ekino/newrelic-bundle.svg?style=flat-square)](https://packagist.org/packages/ekino/newrelic-bundle)
 
 This bundle integrates the NewRelic PHP API into Symfony. For more information about NewRelic, please visit http://newrelic.com. The built-in New Relic agent doesn't add as much Symfony integration as it claims. This bundle adds a lot more essentials. Here's a quick list:
 
