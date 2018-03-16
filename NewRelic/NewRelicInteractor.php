@@ -32,9 +32,17 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function ignoreTransaction ()
+    public function ignoreTransaction()
     {
         newrelic_ignore_transaction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ignoreApdex()
+    {
+        newrelic_ignore_apdex();
     }
 
     /**
