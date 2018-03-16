@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('deployment_name')
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
-                ->booleanNode('twig')->default(class_exists(\Twig_Environment::class))->end()
+                ->booleanNode('twig')->defaultValue(class_exists(\Twig_Environment::class))->end()
                 ->scalarNode('api_key')->defaultValue(false)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
                 ->scalarNode('application_name')->defaultValue(null)->end()
