@@ -88,7 +88,7 @@ class NewRelicExtensionTest extends TestCase
             ->method('getCustomParameters')
             ->will($this->returnValue(array()));
 
-        $this->setExpectedException('\RuntimeException');
+        $this->expectException(\RuntimeException::class);
 
         $extension->getNewrelicBrowserTimingHeader();
         $extension->getNewrelicBrowserTimingHeader();
