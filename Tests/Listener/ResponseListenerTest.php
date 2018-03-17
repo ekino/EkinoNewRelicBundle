@@ -12,14 +12,25 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
 use Ekino\Bundle\NewRelicBundle\Listener\ResponseListener;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class ResponseListenerTest extends \PHPUnit_Framework_TestCase
+class ResponseListenerTest extends TestCase
 {
     public function setUp()
     {
-        $this->newRelic = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic', array('getCustomMetrics', 'getCustomParameters'), array(), '', false);
-        $this->interactor = $this->getMock('Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface');
-        $this->extension = $this->getMock('Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension', array('isHeaderCalled', 'isFooterCalled', 'isUsed'), array(), '', false);
+        $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
+        $this->newRelic = $this->getMockBuilder(NewRelic::class)
+            ->setMethods(['getCustomMetrics', 'getCustomParameters'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->extension = $this->getMockBuilder(NewRelicExtension::class)
+            ->setMethods(['isHeaderCalled', 'isFooterCalled', 'isUsed'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
@@ -202,7 +213,9 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createRequestMock($instrumentEnabled = true)
     {
-        $mock = $this->getMock('stdClass', array('get'));
+        $mock = $this->getMockBuilder('stdClass')
+            ->setMethods(['get'])
+            ->getMock();
         $mock->attributes = $mock;
 
         $mock->expects($this->any())->method('get')->will($this->returnValue($instrumentEnabled));
@@ -212,7 +225,9 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createResponseMock($content = null, $expectsSetContent = null, $contentType = 'text/html')
     {
-        $mock = $this->getMock('stdClass', array('get', 'getContent', 'setContent'));
+        $mock = $this->getMockBuilder('stdClass')
+            ->setMethods(['get', 'getContent', 'setContent'])
+            ->getMock();
         $mock->headers = $mock;
 
         $mock->expects($this->any())->method('get')->will($this->returnValue($contentType));
@@ -229,7 +244,10 @@ class ResponseListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createFilterResponseEventMock($request = null, $response = null)
     {
-        $event = $this->getMock('Symfony\Component\HttpKernel\Event\FilterResponseEvent', array('getResponse', 'getRequest'), array(), '', false);
+        $event = $this->getMockBuilder(FilterResponseEvent::class)
+            ->setMethods(['getResponse', 'getRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $event->expects($request ? $this->any() : $this->never())->method('getRequest')->will($this->returnValue($request));
         $event->expects($response ? $this->any() : $this->never())->method('getResponse')->will($this->returnValue($response));
