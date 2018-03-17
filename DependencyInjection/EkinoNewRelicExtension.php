@@ -54,8 +54,7 @@ class EkinoNewRelicExtension extends Extension
             $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
             $container->getDefinition('ekino.new_relic.interactor.logger')
                 ->replaceArgument(0, new Reference($interactor));
-        }
-        else {
+        } else {
             $container->setAlias('ekino.new_relic.interactor', $interactor);
         }
 
