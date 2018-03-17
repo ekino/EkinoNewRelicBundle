@@ -2,8 +2,16 @@
 
 ## v2.0.0
 
-### Changes
+### Addded
+
+- All functions provided by the NewRelic PHP extension are now supported in the `NewRelicInteractorInterface`.
+
+### Changed
 
 - Command Configuration explicit
-- Drop Silex support
-- Drop php <5.6 support
+
+### Removed
+
+- Support for Silex
+- Support for PHP < 7.1
+- Support for Symfony < 3.4

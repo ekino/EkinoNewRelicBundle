@@ -11,119 +11,99 @@
 
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
+/**
+ * Do not log anything.
+ */
 class BlackholeInteractor implements NewRelicInteractorInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function setApplicationName($name, $key = null, $xmit = false)
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setTransactionName($name)
+    public function setTransactionName(string $name): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ignoreTransaction ()
+    public function ignoreTransaction(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomEvent($name, array $attributes)
+    public function addCustomEvent(string $name, array $attributes): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomMetric($name, $value)
+    public function addCustomMetric(string $name, float $value): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomParameter($name, $value)
+    public function addCustomParameter(string $name, $value): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingHeader()
+    public function getBrowserTimingHeader(bool $includeTags): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingFooter()
+    public function getBrowserTimingFooter(bool $includeTags): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableAutoRUM()
+    public function disableAutoRUM(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeError($msg)
+    public function noticeThrowable(\Throwable $e, string $message = null): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeException(\Exception $e)
+    public function noticeError(
+        int $errno,
+        string $errstr,
+        string $errfile = null,
+        int $errline = null,
+        string $errcontext = null
+    ): void {
+    }
+
+    public function enableBackgroundJob(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function enableBackgroundJob()
+    public function disableBackgroundJob(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableBackgroundJob()
+    public function startTransaction(string $name, string $license = null): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function startTransaction($name)
+    public function endTransaction(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function endTransaction()
+    public function excludeFromApdex(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function excludeFromApdex()
+    public function addCustomTracer(string $name): void
+    {
+    }
+
+    public function setCaptureParams(bool $enabled): void
+    {
+    }
+
+    public function stopTransactionTiming(): void
+    {
+    }
+
+    public function recordDatastoreSegment(callable $func, array $parameters): void
+    {
+    }
+
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): void
     {
     }
 }
