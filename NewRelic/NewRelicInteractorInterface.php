@@ -11,6 +11,9 @@
 
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
+/**
+ * This is the service that talks to NewRelic.
+ */
 interface NewRelicInteractorInterface
 {
     /**
