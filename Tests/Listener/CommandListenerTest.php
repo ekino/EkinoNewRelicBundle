@@ -87,7 +87,7 @@ class CommandListenerTest extends TestCase
 
         $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
-        $interactor->expects($this->once())->method('noticeException')->with($exception);
+        $interactor->expects($this->once())->method('noticeThrowable')->with($exception);
 
         $command = new Command('test:exception');
 
@@ -103,19 +103,11 @@ class CommandListenerTest extends TestCase
 
     public function testConsoleErrorsWithThrowable()
     {
-        if (!class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
-            $this->markTestSkipped('Console Error Events is only available from Symfony 3.3');
-        }
-        if (PHP_VERSION_ID < 70000) {
-            $this->markTestSkipped('Error are only testable with PHP 7');
-        }
-
         $exception = new \Error();
 
         $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
-        $interactor->expects($this->once())->method('noticeException')->with($this->isInstanceOf(ThrowableException::class));
-
+        $interactor->expects($this->once())->method('noticeThrowable')->with($exception);
         $command = new Command('test:exception');
 
         $input = new ArrayInput(array(), new InputDefinition(array()));

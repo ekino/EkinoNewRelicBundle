@@ -18,17 +18,17 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setApplicationName(string $name, string $key = null, bool $xmit = false): void
+    public function setApplicationName(string $name, string $key = null, bool $xmit = false): bool
     {
-        newrelic_set_appname($name, $key, $xmit);
+        return newrelic_set_appname($name, $key, $xmit);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setTransactionName(string $name): void
+    public function setTransactionName(string $name): bool
     {
-        newrelic_name_transaction($name);
+        return newrelic_name_transaction($name);
     }
 
     /**
@@ -50,23 +50,23 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function addCustomMetric(string $name, float $value): void
+    public function addCustomMetric(string $name, float $value): bool
     {
-        newrelic_custom_metric($name, $value);
+        return newrelic_custom_metric($name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addCustomParameter(string $name, $value): void
+    public function addCustomParameter(string $name, $value): bool
     {
-        newrelic_add_custom_parameter((string) $name, $value);
+        return newrelic_add_custom_parameter((string) $name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBrowserTimingHeader(bool $includeTags): string
+    public function getBrowserTimingHeader(bool $includeTags = true): string
     {
         return newrelic_get_browser_timing_header($includeTags);
     }
@@ -74,7 +74,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function getBrowserTimingFooter(bool $includeTags): string
+    public function getBrowserTimingFooter(bool $includeTags = true): string
     {
         return newrelic_get_browser_timing_footer($includeTags);
     }
@@ -82,9 +82,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function disableAutoRUM(): void
+    public function disableAutoRUM(): bool
     {
-        newrelic_disable_autorum();
+        return newrelic_disable_autorum();
     }
 
     /**
@@ -122,17 +122,21 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function endTransaction(): void
+    public function endTransaction(bool $ignore = false): bool
     {
-        newrelic_end_transaction(false);
+        return newrelic_end_transaction($ignore);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function startTransaction(string $name, string $license = null): void
+    public function startTransaction(string $name = null, string $license = null): bool
     {
-        newrelic_start_transaction($name, $license);
+        if (null === $name) {
+            $name = ini_get('newrelic.appname');
+        }
+
+        return newrelic_start_transaction($name, $license);
     }
 
     /**
@@ -146,9 +150,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function addCustomTracer(string $name): void
+    public function addCustomTracer(string $name): bool
     {
-        newrelic_add_custom_tracer($name);
+        return newrelic_add_custom_tracer($name);
     }
 
     /**
@@ -170,16 +174,16 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function recordDatastoreSegment(callable $func, array $parameters): void
+    public function recordDatastoreSegment(callable $func, array $parameters)
     {
-        newrelic_record_datastore_segment($func, $parameters);
+        return newrelic_record_datastore_segment($func, $parameters);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): void
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
     {
-        newrelic_set_user_attributes($userValue, $accountValue, $productValue);
+        return newrelic_set_user_attributes($userValue, $accountValue, $productValue);
     }
 }

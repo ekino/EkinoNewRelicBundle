@@ -49,8 +49,8 @@ class ResponseListenerTest extends TestCase
         );
 
         $metrics = array(
-            'foo_a' => 'bar_a',
-            'foo_b' => 'bar_b',
+            'foo_a' => 4.7,
+            'foo_b' => 11,
         );
 
         $parameters = array(
@@ -62,8 +62,8 @@ class ResponseListenerTest extends TestCase
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue($metrics));
         $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue($parameters));
 
-        $this->interactor->expects($this->at(0))->method('addCustomMetric')->with('foo_a', 'bar_a');
-        $this->interactor->expects($this->at(1))->method('addCustomMetric')->with('foo_b', 'bar_b');
+        $this->interactor->expects($this->at(0))->method('addCustomMetric')->with('foo_a', 4.7);
+        $this->interactor->expects($this->at(1))->method('addCustomMetric')->with('foo_b', 11);
         $this->interactor->expects($this->at(2))->method('addCustomParameter')->with('foo_1', 'bar_1');
         $this->interactor->expects($this->at(3))->method('addCustomParameter')->with('foo_2', 'bar_2');
 

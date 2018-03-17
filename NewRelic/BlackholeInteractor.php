@@ -18,12 +18,14 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
  */
 class BlackholeInteractor implements NewRelicInteractorInterface
 {
-    public function setApplicationName(string $name, string $license = null, bool $xmit = false): void
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
     {
+        return true;
     }
 
-    public function setTransactionName(string $name): void
+    public function setTransactionName(string $name): bool
     {
+        return true;
     }
 
     public function ignoreTransaction(): void
@@ -34,26 +36,29 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     {
     }
 
-    public function addCustomMetric(string $name, float $value): void
+    public function addCustomMetric(string $name, float $value): bool
     {
+        return true;
     }
 
-    public function addCustomParameter(string $name, $value): void
+    public function addCustomParameter(string $name, $value): bool
     {
+        return true;
     }
 
-    public function getBrowserTimingHeader(bool $includeTags): string
+    public function getBrowserTimingHeader(bool $includeTags = true): string
     {
         return '';
     }
 
-    public function getBrowserTimingFooter(bool $includeTags): string
+    public function getBrowserTimingFooter(bool $includeTags = true): string
     {
         return '';
     }
 
-    public function disableAutoRUM(): void
+    public function disableAutoRUM(): bool
     {
+        return true;
     }
 
     public function noticeThrowable(\Throwable $e, string $message = null): void
@@ -77,20 +82,23 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     {
     }
 
-    public function startTransaction(string $name, string $license = null): void
+    public function startTransaction(string $name = null, string $license = null): bool
     {
+        return true;
     }
 
-    public function endTransaction(): void
+    public function endTransaction(bool $ignore = false): bool
     {
+        return true;
     }
 
     public function excludeFromApdex(): void
     {
     }
 
-    public function addCustomTracer(string $name): void
+    public function addCustomTracer(string $name): bool
     {
+        return true;
     }
 
     public function setCaptureParams(bool $enabled): void
@@ -101,11 +109,13 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     {
     }
 
-    public function recordDatastoreSegment(callable $func, array $parameters): void
+    public function recordDatastoreSegment(callable $func, array $parameters)
     {
+        return null;
     }
 
-    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): void
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
     {
+        return true;
     }
 }

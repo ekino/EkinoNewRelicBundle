@@ -46,11 +46,11 @@ class NewRelicTest extends TestCase
 
         $this->assertEquals($expected, $newRelic->getCustomEvents());
 
-        $newRelic->addCustomMetric('foo', 'bar');
+        $newRelic->addCustomMetric('foo', 4.2);
         $newRelic->addCustomMetric('asd', 1);
 
         $expected = array(
-            'foo' => 0,
+            'foo' => 4.2,
             'asd' => 1
         );
 

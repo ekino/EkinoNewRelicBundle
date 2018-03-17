@@ -20,14 +20,14 @@ interface NewRelicInteractorInterface
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_set_appname}
      */
-    public function setApplicationName(string $name, string $license = null, bool $xmit = false): void;
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool;
 
     /**
      * Set custom name for current transaction.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_name_transaction}
      */
-    public function setTransactionName(string $name): void;
+    public function setTransactionName(string $name): bool;
 
     /**
      * Do not instrument the current transaction.
@@ -48,35 +48,35 @@ interface NewRelicInteractorInterface
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newreliccustommetric-php-agent-api}
      */
-    public function addCustomMetric(string $name, float $value): void;
+    public function addCustomMetric(string $name, float $value): bool;
 
     /**
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_parameter}.
      *
      * @param string|integer|float $value should be a scalar
      */
-    public function addCustomParameter(string $name, $value): void;
+    public function addCustomParameter(string $name, $value): bool;
 
     /**
      * Returns a New Relic Browser snippet to inject in the head of your HTML output.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_get_browser_timing_header}
      */
-    public function getBrowserTimingHeader(bool $includeTags): string;
+    public function getBrowserTimingHeader(bool $includeTags = true): string;
 
     /**
      * Returns a New Relic Browser snippet to inject at the end of the HTML output.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_get_browser_timing_footer}
      */
-    public function getBrowserTimingFooter(bool $includeTags): string;
+    public function getBrowserTimingFooter(bool $includeTags = true): string;
 
     /**
      * Disable automatic injection of the New Relic Browser snippet on particular pages.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_disable_autorum}
      */
-    public function disableAutoRUM(): void;
+    public function disableAutoRUM(): bool;
 
     /**
      * Use these calls to collect errors that the PHP agent does not collect automatically and to set the callback for
@@ -106,14 +106,14 @@ interface NewRelicInteractorInterface
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_start_transaction}
      */
-    public function startTransaction(string $name, string $license = null): void;
+    public function startTransaction(string $name = null, string $license = null): bool;
 
     /**
      * Stop instrumenting the current transaction immediately.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_end_transaction}
      */
-    public function endTransaction(): void;
+    public function endTransaction(bool $ignore = false): bool;
 
     /**
      * Ignore the current transaction when calculating Apdex.
@@ -128,7 +128,7 @@ interface NewRelicInteractorInterface
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_tracer}
      */
-    public function addCustomTracer(string $name): void;
+    public function addCustomTracer(string $name): bool;
 
     /**
      * Enable or disable the capture of URL parameters.
@@ -148,13 +148,15 @@ interface NewRelicInteractorInterface
      * Records a datastore segment.
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_record_datastore_segment}
+     *
+     * @return bool|mixed The return value of $func is returned. If an error occurs, false is returned.
      */
-    public function recordDatastoreSegment(callable $func, array $parameters): void;
+    public function recordDatastoreSegment(callable $func, array $parameters);
 
     /**
      * Create user-related custom attributes. newrelic_add_custom_parameter is more flexible.
      *
-     * {@https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_set_user_attributes}
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_set_user_attributes}
      */
-    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): void;
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool;
 }

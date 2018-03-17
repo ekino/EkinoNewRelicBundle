@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -101,20 +103,16 @@ class NewRelic
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|integer|float $value or any scalar value
      */
-    public function addCustomParameter($name, $value)
+    public function addCustomParameter(string $name, $value)
     {
-        $this->customParameters[(string) $name] = (string) $value;
+        $this->customParameters[$name] = $value;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function addCustomMetric($name, $value)
+    public function addCustomMetric(string $name, float $value): void
     {
-        $this->customMetrics[(string) $name] = (double) $value;
+        $this->customMetrics[$name] = $value;
     }
 
     /**

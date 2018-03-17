@@ -47,14 +47,8 @@ class CommandListener implements EventSubscriberInterface
     {
         $events = array(
             ConsoleEvents::COMMAND => array('onConsoleCommand', 0),
+            ConsoleEvents::ERROR => array('onConsoleError', 0),
         );
-
-        if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
-            $events[ConsoleEvents::ERROR] = array('onConsoleError', 0);
-        } else {
-            // backward compatibility with Symfony < 3.3
-            $events[ConsoleEvents::EXCEPTION] = array('onConsoleException', 0);
-        }
 
         return $events;
     }
@@ -104,24 +98,10 @@ class CommandListener implements EventSubscriberInterface
     }
 
     /**
-     * @param ConsoleExceptionEvent $event
-     */
-    public function onConsoleException(ConsoleExceptionEvent $event)
-    {
-        $exception = $event->getException();
-        $this->interactor->noticeException($exception);
-    }
-
-    /**
      * @param ConsoleErrorEvent $event
      */
     public function onConsoleError(ConsoleErrorEvent $event)
     {
-        $exception = $event->getError();
-        if (!$exception instanceof \Exception) {
-            // Encapsulate \Throwable into an exception to keep BC of NewRelicInteractorInterface::noticeException
-            $exception = new ThrowableException($exception);
-        }
-        $this->interactor->noticeException($exception);
+        $this->interactor->noticeThrowable($event->getError());
     }
 }
