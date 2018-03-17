@@ -24,8 +24,27 @@ class NewRelicTest extends TestCase
         $this->assertEquals('Ekino', $newRelic->getName());
         $this->assertEquals('XXX', $newRelic->getApiKey());
 
+        $this->assertEmpty($newRelic->getCustomEvents());
         $this->assertEmpty($newRelic->getCustomMetrics());
         $this->assertEmpty($newRelic->getCustomParameters());
+
+        $newRelic->addCustomEvent('WidgetSale', array('color' => 'red', 'weight' => 12.5));
+        $newRelic->addCustomEvent('WidgetSale', array('color' => 'blue', 'weight' => 12.5));
+
+        $expected = array(
+            'WidgetSale' => array(
+                array(
+                    'color' => 'red',
+                    'weight' => 12.5,
+                ),
+                array(
+                    'color' => 'blue',
+                    'weight' => 12.5,
+                ),
+            ),
+        );
+
+        $this->assertEquals($expected, $newRelic->getCustomEvents());
 
         $newRelic->addCustomMetric('foo', 'bar');
         $newRelic->addCustomMetric('asd', 1);

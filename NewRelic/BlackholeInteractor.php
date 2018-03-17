@@ -37,6 +37,13 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
+    public function addCustomEvent($name, array $attributes)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addCustomMetric($name, $value)
     {
     }
