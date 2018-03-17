@@ -11,6 +11,9 @@
 
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
+/**
+ * This value object contains data and configuration that should be passed to the interactors.
+ */
 class NewRelic
 {
     protected $name;
