@@ -25,6 +25,8 @@ class NotifyDeploymentCommand extends Command
     const EXIT_UNAUTHORIZED = 2;
     const EXIT_HTTP_ERROR   = 3;
 
+    protected static $defaultName = 'newrelic:notify-deployment';
+
     /**
      * @var NewRelic
      */
@@ -47,7 +49,6 @@ class NotifyDeploymentCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('newrelic:notify-deployment')
             ->setDefinition(array(
                 new InputOption(
                     'user', null, InputOption::VALUE_OPTIONAL,
@@ -75,9 +76,7 @@ class NotifyDeploymentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $newrelic = $this->newrelic;
-
-        $appNames = $newrelic->getDeploymentNames();
+        $appNames = $this->newrelic->getDeploymentNames();
 
         if (!$appNames) {
             $output->writeLn("<error>No deployment application configured.</error>");
@@ -87,7 +86,7 @@ class NotifyDeploymentCommand extends Command
         $exitCode = 0;
 
         foreach ($appNames as $appName) {
-            $response = $this->performRequest($newrelic->getApiKey(), $this->createPayload($appName, $input));
+            $response = $this->performRequest($this->newrelic->getApiKey(), $this->createPayload($appName, $input));
 
             switch($response['status'])
             {

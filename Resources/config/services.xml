@@ -37,6 +37,8 @@
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
+        <!-- Help auto complete -->
+        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" alias="ekino.new_relic" />
         <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
             <argument />
             <argument />
@@ -76,7 +78,7 @@
 
         <service id="ekino.new_relic.command.notify_deployment" class="Ekino\Bundle\NewRelicBundle\Command\NotifyDeploymentCommand">
             <argument type="service" id="ekino.new_relic" />
-            <tag name="console.command"/>
+            <tag name="console.command" command="newrelic:notify-deployment" />
         </service>
     </services>
 </container>

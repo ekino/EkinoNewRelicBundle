@@ -12,7 +12,7 @@
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
 /**
- * This value object contains data that should be passed to the interactors.
+ * This value object contains data and configuration that should be passed to the interactors.
  */
 class NewRelic
 {
