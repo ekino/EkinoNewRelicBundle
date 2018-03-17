@@ -39,22 +39,23 @@ class EkinoNewRelicExtension extends Extension
             $loader->load('block.xml');
         }
 
-        $container->setParameter('ekino.new_relic.request_listener.ignored_routes', $config['ignored_routes']);
-        $container->setParameter('ekino.new_relic.request_listener.ignored_paths', $config['ignored_paths']);
-        $container->setParameter('ekino.new_relic.request_listener.ignored_commands', $config['ignored_commands']);
+        $container->getDefinition('ekino.new_relic.request_listener')
+            ->replaceArgument(2, $config['ignored_routes'])
+            ->replaceArgument(3, $config['ignored_paths']);
+
+        $container->getDefinition('ekino.new_relic.command_listener')
+            ->replaceArgument(2, $config['ignored_commands']);
 
         $interactor = $config['enabled'] && extension_loaded('newrelic')
             ? 'ekino.new_relic.interactor.real'
             : 'ekino.new_relic.interactor.blackhole';
 
-        if ($config['logging'])
-        {
+        if ($config['logging']) {
             $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
             $container->getDefinition('ekino.new_relic.interactor.logger')
                 ->replaceArgument(0, new Reference($interactor));
         }
-        else
-        {
+        else {
             $container->setAlias('ekino.new_relic.interactor', $interactor);
         }
 
@@ -63,8 +64,7 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(3, $config['using_symfony_cache'])
         ;
 
-        if (!$config['log_exceptions'])
-        {
+        if (!$config['log_exceptions']) {
             $container->removeDefinition('ekino.new_relic.exception_listener');
         }
 
@@ -84,8 +84,7 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(4, $config['deployment_names'])
         ;
 
-        switch ($config['transaction_naming'])
-        {
+        switch ($config['transaction_naming']) {
             case 'controller':
                 $transaction_naming_service = new Reference('ekino.new_relic.transaction_naming_strategy.controller');
                 break;

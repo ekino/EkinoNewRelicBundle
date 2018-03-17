@@ -4,13 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="ekino.new_relic.interactor.real.class">Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor</parameter>
-        <parameter key="ekino.new_relic.interactor.blackhole.class">Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor</parameter>
-        <parameter key="ekino.new_relic.request_listener.ignored_routes" type="collection" />
-        <parameter key="ekino.new_relic.request_listener.ignored_paths" type="collection" />
-    </parameters>
-
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
             <tag name="kernel.event_listener" event="kernel.request" method="setApplicationName" priority="255"/>
@@ -19,8 +12,8 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
-            <argument>%ekino.new_relic.request_listener.ignored_routes%</argument>
-            <argument>%ekino.new_relic.request_listener.ignored_paths%</argument>
+            <argument type="collection" />
+            <argument type="collection" />
             <argument />
             <argument />
         </service>
@@ -31,8 +24,13 @@
             <argument type="service" id="ekino.new_relic.interactor" />
         </service>
 
-        <service id="ekino.new_relic.interactor.real" class="%ekino.new_relic.interactor.real.class%" public="false" />
-        <service id="ekino.new_relic.interactor.blackhole" class="%ekino.new_relic.interactor.blackhole.class%" public="false" />
+        <service id="ekino.new_relic.interactor.real" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
+        <service id="ekino.new_relic.interactor.blackhole" class="Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
+
+        <!-- Default alias -->
+        <service id="ekino.new_relic.interactor" alias="ekino.new_relic.interactor.blackhole" />
+        <!-- Help auto complete -->
+        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
 
         <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
             <argument type="service" id="ekino.new_relic.interactor.real" />
@@ -62,7 +60,7 @@
 
             <argument type="service" id="ekino.new_relic" />
             <argument type="service" id="ekino.new_relic.interactor" />
-            <argument>%ekino.new_relic.request_listener.ignored_commands%</argument>
+            <argument type="collection" />
         </service>
 
         <service id="ekino.new_relic.twig.new_relic_extension" class="Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension">
