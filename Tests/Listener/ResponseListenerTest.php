@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class ResponseListenerTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $this->newRelic = $this->getMockBuilder(NewRelic::class)

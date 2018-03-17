@@ -28,7 +28,7 @@ class NewRelicExtensionTest extends TestCase
      */
     private $interactor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->newRelic = $this->getMockBuilder(NewRelic::class)
         ->setMethods(['getCustomMetrics', 'getCustomParameters'])
