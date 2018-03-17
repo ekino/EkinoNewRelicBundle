@@ -11,8 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
-
+namespace Ekino\Bundle\NewRelicBundle\Tests;
 
 use Ekino\Bundle\NewRelicBundle\EkinoNewRelicBundle;
 use Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor;
