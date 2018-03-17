@@ -34,6 +34,14 @@ interface NewRelicInteractorInterface
 
     /**
      * @param string $name
+     * @param array  $attributes
+     *
+     * @return void
+     */
+    public function addCustomEvent($name, array $attributes);
+
+    /**
+     * @param string $name
      * @param string $value
      *
      * @return void
