@@ -110,4 +110,11 @@ interface NewRelicInteractorInterface
      * @return void
      */
     public function endTransaction();
+
+    /**
+     * Exclude the current transaction from the Apdex
+     *
+     * @return void
+     */
+    public function excludeFromApdex();
 }

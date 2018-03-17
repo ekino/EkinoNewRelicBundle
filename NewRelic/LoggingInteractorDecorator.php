@@ -190,4 +190,13 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         $this->log(sprintf('Starting a new New Relic transaction for app "%s"', $name));
         $this->interactor->startTransaction($name);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function excludeFromApdex()
+    {
+        $this->log("Excluding current transaction from New Relic Apdex score");
+        $this->interactor->excludeFromApdex();
+    }
 }
