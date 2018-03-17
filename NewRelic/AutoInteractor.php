@@ -21,13 +21,25 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 class AutoInteractor implements NewRelicInteractorInterface
 {
     /**
+     * @var NewRelicInteractorInterface
+     */
+    private $interactor;
+
+    /**
+     * @param NewRelicInteractorInterface $interactor
+     */
+    public function __construct(NewRelicInteractorInterface $real, NewRelicInteractorInterface $fake)
+    {
+        $this->interactor = extension_loaded('newrelic') ? $real : $fake;
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function setApplicationName($name, $key = null, $xmit = false)
     {
-        if (function_exists('newrelic_set_appname')) {
-            newrelic_set_appname($name, $key, $xmit);
-        }
+        $this->interactor->setApplicationName($name, $key, $xmit);
     }
 
     /**
@@ -35,9 +47,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function setTransactionName($name)
     {
-        if (function_exists('newrelic_name_transaction')) {
-            newrelic_name_transaction($name);
-        }
+        $this->interactor->setTransactionName($name);
     }
 
     /**
@@ -45,9 +55,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function ignoreTransaction ()
     {
-        if (function_exists('newrelic_ignore_transaction')) {
-            newrelic_ignore_transaction();
-        }
+        $this->interactor->ignoreTransaction();
     }
 
     /**
@@ -55,9 +63,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function addCustomMetric($name, $value)
     {
-        if (function_exists('newrelic_custom_metric')) {
-            newrelic_custom_metric((string) $name, $value);
-        }
+        $this->interactor->addCustomMetric($name, $value);
     }
 
     /**
@@ -65,9 +71,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function addCustomParameter($name, $value)
     {
-        if (function_exists('newrelic_add_custom_parameter')) {
-            newrelic_add_custom_parameter((string) $name, $value);
-        }
+        $this->interactor->addCustomParameter($name, $value);
     }
 
     /**
@@ -75,9 +79,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingHeader()
     {
-        if (function_exists('newrelic_get_browser_timing_header')) {
-            return newrelic_get_browser_timing_header();
-        }
+        return $this->interactor->getBrowserTimingHeader();
     }
 
     /**
@@ -85,9 +87,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function getBrowserTimingFooter()
     {
-        if (function_exists('newrelic_get_browser_timing_footer')) {
-            return newrelic_get_browser_timing_footer();
-        }
+        return $this->interactor->getBrowserTimingFooter();
     }
 
     /**
@@ -95,9 +95,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function disableAutoRUM()
     {
-        if (function_exists('newrelic_disable_autorum')) {
-            return newrelic_disable_autorum();
-        }
+        $this->interactor->disableAutoRUM();
     }
 
     /**
@@ -105,9 +103,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function noticeError($msg)
     {
-        if (function_exists('newrelic_notice_error')) {
-            return newrelic_notice_error($msg);
-        }
+        $this->interactor->noticeError($msg);
     }
 
     /**
@@ -115,9 +111,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function noticeException(\Exception $e)
     {
-        if (function_exists('newrelic_notice_error')) {
-            return newrelic_notice_error(null, $e);
-        }
+        $this->interactor->noticeError($e);
     }
 
     /**
@@ -125,9 +119,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function enableBackgroundJob()
     {
-        if (function_exists('newrelic_background_job')) {
-            return newrelic_background_job(true);
-        }
+        $this->interactor->enableBackgroundJob();
     }
 
     /**
@@ -135,9 +127,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function disableBackgroundJob()
     {
-        if (function_exists('newrelic_background_job')) {
-            return newrelic_background_job(false);
-        }
+        $this->interactor->disableBackgroundJob();
     }
 
     /**
@@ -145,9 +135,7 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function endTransaction()
     {
-        if (function_exists('newrelic_end_transaction')) {
-            return newrelic_end_transaction(false);
-        }
+        $this->interactor->endTransaction();
     }
 
     /**
@@ -155,8 +143,6 @@ class AutoInteractor implements NewRelicInteractorInterface
      */
     public function startTransaction($name)
     {
-        if (function_exists('newrelic_start_transaction')) {
-            return newrelic_start_transaction($name);
-        }
+        $this->interactor->startTransaction($name);
     }
 }

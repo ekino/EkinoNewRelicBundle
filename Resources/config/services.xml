@@ -31,7 +31,10 @@
         <!-- Default alias -->
         <service id="ekino.new_relic.interactor" alias="ekino.new_relic.interactor.blackhole" />
         <!-- Help auto complete -->
-        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
+        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor">
+            <argument type="service" id="ekino.new_relic.interactor.real" />
+            <argument type="service" id="ekino.new_relic.interactor.blackhole" />
+        </service>
 
         <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
             <argument type="service" id="ekino.new_relic.interactor.real" />
