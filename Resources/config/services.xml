@@ -80,5 +80,9 @@
             <argument type="service" id="ekino.new_relic" />
             <tag name="console.command" command="newrelic:notify-deployment" />
         </service>
+
+        <service id="ekino.new_relic.deprecation_listener" class="Ekino\Bundle\NewRelicBundle\Listener\DeprecationListener" public="true">
+            <argument type="service" id="ekino.new_relic.interactor"/>
+        </service>
     </services>
 </container>
