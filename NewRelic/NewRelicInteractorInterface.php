@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -17,107 +19,147 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 interface NewRelicInteractorInterface
 {
     /**
-     * @param string $name
+     * Sets the New Relic app name, which controls data rollup.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_set_appname}
      */
-    function setApplicationName($name, $key = null, $xmit = false);
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool;
 
     /**
-     * @param string $name
+     * Set custom name for current transaction.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_name_transaction}
      */
-    function setTransactionName($name);
+    public function setTransactionName(string $name): bool;
 
     /**
-     * @return void
-     */
-    public function ignoreTransaction();
-
-    /**
-     * @param string $name
-     * @param array  $attributes
+     * Do not instrument the current transaction.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_ignore_transaction}
      */
-    public function addCustomEvent($name, array $attributes);
+    public function ignoreTransaction(): void;
 
     /**
-     * @param string $name
-     * @param string $value
+     * Record a custom event with the given name and attributes.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_record_custom_event}
      */
-    function addCustomMetric($name, $value);
+    public function addCustomEvent(string $name, array $attributes): void;
 
     /**
-     * @param string $name
-     * @param string $value
+     * Add a custom metric (in milliseconds) to time a component of your app not captured by default.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newreliccustommetric-php-agent-api}
      */
-    function addCustomParameter($name, $value);
+    public function addCustomMetric(string $name, float $value): bool;
 
     /**
-     * @return string
-     */
-    function getBrowserTimingHeader();
-
-    /**
-     * @return string
-     */
-    function getBrowserTimingFooter();
-
-    /**
-     * @return void
-     */
-    function disableAutoRUM();
-
-    /**
-     * @param string $msg
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_parameter}.
      *
-     * @return void
+     * @param string|integer|float $value should be a scalar
      */
-    function noticeError($msg);
+    public function addCustomParameter(string $name, $value): bool;
 
     /**
-     * @param \Exception $e
+     * Returns a New Relic Browser snippet to inject in the head of your HTML output.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_get_browser_timing_header}
      */
-    function noticeException(\Exception $e);
+    public function getBrowserTimingHeader(bool $includeTags = true): string;
 
     /**
-     * @return void
+     * Returns a New Relic Browser snippet to inject at the end of the HTML output.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_get_browser_timing_footer}
      */
-    function enableBackgroundJob();
+    public function getBrowserTimingFooter(bool $includeTags = true): string;
 
     /**
-     * @return void
+     * Disable automatic injection of the New Relic Browser snippet on particular pages.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_disable_autorum}
      */
-    function disableBackgroundJob();
+    public function disableAutoRUM(): bool;
+
+    /**
+     * Use these calls to collect errors that the PHP agent does not collect automatically and to set the callback for
+     * your own error and exception handler.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_notice_error}
+     */
+    public function noticeThrowable(\Throwable $e, string $message = null): void;
+
+    /**
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_notice_error}.
+     */
+    public function noticeError(int $errno, string $errstr, string $errfile = null, int $errline = null, string $errcontext = null): void;
+
+    /**
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_background_job}.
+     */
+    public function enableBackgroundJob(): void;
+
+    /**
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_background_job}.
+     */
+    public function disableBackgroundJob(): void;
 
     /**
      * If you previously ended a transaction you many want to start a new one.
      *
-     * @param string $name app name
-     *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_start_transaction}
      */
-    public function startTransaction($name);
+    public function startTransaction(string $name = null, string $license = null): bool;
 
     /**
-     * End a transaction now
+     * Stop instrumenting the current transaction immediately.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_end_transaction}
      */
-    public function endTransaction();
+    public function endTransaction(bool $ignore = false): bool;
 
     /**
-     * Exclude the current transaction from the Apdex
+     * Ignore the current transaction when calculating Apdex.
      *
-     * @return void
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_ignore_apdex}
      */
-    public function excludeFromApdex();
+    public function excludeFromApdex(): void;
+
+    /**
+     * Specify functions or methods for the agent to target for custom instrumentation. This is the API equivalent of
+     * the newrelic.transaction_tracer.custom setting.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_tracer}
+     */
+    public function addCustomTracer(string $name): bool;
+
+    /**
+     * Enable or disable the capture of URL parameters.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_capture_params}
+     */
+    public function setCaptureParams(bool $enabled): void;
+
+    /**
+     * Stop timing the current transaction, but continue instrumenting it.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_end_of_transaction}
+     */
+    public function stopTransactionTiming(): void;
+
+    /**
+     * Records a datastore segment.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_record_datastore_segment}
+     *
+     * @return bool|mixed The return value of $func is returned. If an error occurs, false is returned.
+     */
+    public function recordDatastoreSegment(callable $func, array $parameters);
+
+    /**
+     * Create user-related custom attributes. newrelic_add_custom_parameter is more flexible.
+     *
+     * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_set_user_attributes}
+     */
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool;
 }

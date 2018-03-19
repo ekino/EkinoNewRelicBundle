@@ -43,8 +43,10 @@ class RequestListenerTest extends TestCase
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('setTransactionName');
 
-
-        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
+        $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)
+            ->setMethods(['getTransactionName'])
+            ->getMock();
+        $namingStrategy->expects($this->once())->method('getTransactionName')->will($this->returnValue('foobar'));
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();

@@ -78,17 +78,17 @@ class ResponseListener
     {
         if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isUsed()) {
             foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
-                $this->interactor->addCustomMetric($name, $value);
+                $this->interactor->addCustomMetric((string) $name, (float) $value);
             }
 
             foreach ($this->newRelic->getCustomParameters() as $name => $value) {
-                $this->interactor->addCustomParameter($name, $value);
+                $this->interactor->addCustomParameter((string) $name, $value);
             }
         }
 
         foreach ($this->newRelic->getCustomEvents() as $name => $events) {
             foreach ($events as $attributes) {
-                $this->interactor->addCustomEvent($name, $attributes);
+                $this->interactor->addCustomEvent((string) $name, $attributes);
             }
         }
 

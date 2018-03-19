@@ -139,11 +139,11 @@ class NewRelicExtension extends \Twig_Extension
         }
 
         foreach ($this->newRelic->getCustomMetrics() as $name => $value) {
-            $this->interactor->addCustomMetric($name, $value);
+            $this->interactor->addCustomMetric((string) $name, (float) $value);
         }
 
         foreach ($this->newRelic->getCustomParameters() as $name => $value) {
-            $this->interactor->addCustomParameter($name, $value);
+            $this->interactor->addCustomParameter((string) $name, $value);
         }
     }
 }

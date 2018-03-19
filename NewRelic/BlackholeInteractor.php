@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,119 +13,109 @@
 
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
+/**
+ * Do not log anything.
+ */
 class BlackholeInteractor implements NewRelicInteractorInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function setApplicationName($name, $key = null, $xmit = false)
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
+    {
+        return true;
+    }
+
+    public function setTransactionName(string $name): bool
+    {
+        return true;
+    }
+
+    public function ignoreTransaction(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setTransactionName($name)
+    public function addCustomEvent(string $name, array $attributes): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ignoreTransaction ()
+    public function addCustomMetric(string $name, float $value): bool
     {
+        return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomEvent($name, array $attributes)
+    public function addCustomParameter(string $name, $value): bool
     {
+        return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomMetric($name, $value)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomParameter($name, $value)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingHeader()
+    public function getBrowserTimingHeader(bool $includeTags = true): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingFooter()
+    public function getBrowserTimingFooter(bool $includeTags = true): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableAutoRUM()
+    public function disableAutoRUM(): bool
+    {
+        return true;
+    }
+
+    public function noticeThrowable(\Throwable $e, string $message = null): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeError($msg)
+    public function noticeError(
+        int $errno,
+        string $errstr,
+        string $errfile = null,
+        int $errline = null,
+        string $errcontext = null
+    ): void {
+    }
+
+    public function enableBackgroundJob(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeException(\Exception $e)
+    public function disableBackgroundJob(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function enableBackgroundJob()
+    public function startTransaction(string $name = null, string $license = null): bool
+    {
+        return true;
+    }
+
+    public function endTransaction(bool $ignore = false): bool
+    {
+        return true;
+    }
+
+    public function excludeFromApdex(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableBackgroundJob()
+    public function addCustomTracer(string $name): bool
+    {
+        return true;
+    }
+
+    public function setCaptureParams(bool $enabled): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function startTransaction($name)
+    public function stopTransactionTiming(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function endTransaction()
+    public function recordDatastoreSegment(callable $func, array $parameters)
     {
+        return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function excludeFromApdex()
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
     {
+        return true;
     }
 }

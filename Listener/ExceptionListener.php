@@ -42,7 +42,7 @@ class ExceptionListener
         $exception = $event->getException();
         if (!$exception instanceOf HttpExceptionInterface)
         {
-            $this->interactor->noticeException($exception);
+            $this->interactor->noticeThrowable($exception);
         }
     }
 }
