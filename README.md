@@ -83,6 +83,7 @@ ekino_new_relic:
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
     log_exceptions: false                 # If true, sends exceptions to New Relic (default: false)
+    log_deprecations: false               # If true, reports deprecations to New Relic (default: false)
     log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
     using_symfony_cache: false            # Symfony HTTP cache (see below) (default: false)
     transaction_naming: route             # route, controller or service (see below)

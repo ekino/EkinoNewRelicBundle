@@ -5,6 +5,7 @@
 ### Addded
 
 - All functions provided by the NewRelic PHP extension are now supported in the `NewRelicInteractorInterface`.
+- Added a new `log_deprecations` parameter to logs `E_USER_DEPRECATED`. 
 
 ### Changed
 

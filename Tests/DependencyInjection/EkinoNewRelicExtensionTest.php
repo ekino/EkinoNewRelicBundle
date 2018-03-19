@@ -51,4 +51,11 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderNotHasService('ekino.new_relic.command_listener');
         $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
     }
+
+    public function testDeprecation()
+    {
+        $this->load();
+
+        $this->assertContainerBuilderHasParameter('ekino.new_relic.log_deprecations');
+    }
 }
