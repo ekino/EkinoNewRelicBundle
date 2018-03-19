@@ -11,6 +11,7 @@
 
 namespace  Ekino\Bundle\NewRelicBundle\DependencyInjection;
 
+use Monolog\Handler\NewRelicHandler;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -84,6 +85,23 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(3, $config['xmit'])
             ->replaceArgument(4, $config['deployment_names'])
         ;
+
+        if (!$config['enabled']) {
+            $config['log_logs']['enabled'] = false;
+        }
+        $container->setParameter('ekino.new_relic.log_logs', $config['log_logs']);
+        if ($config['log_logs']['enabled']) {
+            if (!class_exists(NewRelicHandler::class)) {
+                throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "log_logs" option.');
+            }
+
+            $container->setAlias('ekino.new_relic.logs_handler', $config['log_logs']['service']);
+
+            $level = $config['log_logs']['level'];
+            $container->findDefinition('ekino.new_relic.logs_handler')
+                ->replaceArgument(0, is_int($level) ? $level : constant('Monolog\Logger::'.strtoupper($level)))
+                ->replaceArgument(2, $config['application_name']);
+        }
 
         switch ($config['transaction_naming']) {
             case 'controller':

@@ -11,10 +11,19 @@
 
 namespace Ekino\Bundle\NewRelicBundle;
 
+use Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler\MonologHandlerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EkinoNewRelicBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new MonologHandlerPass());
+    }
+
     public function boot()
     {
         parent::boot();
@@ -24,3 +33,4 @@ class EkinoNewRelicBundle extends Bundle
         }
     }
 }
+
