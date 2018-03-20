@@ -33,116 +33,113 @@ class AutoInteractor implements NewRelicInteractorInterface
         $this->interactor = extension_loaded('newrelic') ? $real : $fake;
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setApplicationName($name, $key = null, $xmit = false)
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
     {
-        $this->interactor->setApplicationName($name, $key, $xmit);
+        return $this->interactor->setApplicationName($name, $license, $xmit);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setTransactionName($name)
+    public function setTransactionName(string $name): bool
     {
-        $this->interactor->setTransactionName($name);
+        return $this->interactor->setTransactionName($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function ignoreTransaction ()
+    public function ignoreTransaction(): void
     {
         $this->interactor->ignoreTransaction();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomMetric($name, $value)
+    public function addCustomEvent(string $name, array $attributes): void
     {
-        $this->interactor->addCustomMetric($name, $value);
+        $this->interactor->addCustomEvent($name, $attributes);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addCustomParameter($name, $value)
+    public function addCustomMetric(string $name, float $value): bool
     {
-        $this->interactor->addCustomParameter($name, $value);
+        return $this->interactor->addCustomMetric($name, $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingHeader()
+    public function addCustomParameter(string $name, $value): bool
     {
-        return $this->interactor->getBrowserTimingHeader();
+        return $this->interactor->addCustomParameter($name, $value);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBrowserTimingFooter()
+    public function getBrowserTimingHeader(bool $includeTags = true): string
     {
-        return $this->interactor->getBrowserTimingFooter();
+        return $this->interactor->getBrowserTimingHeader($includeTags);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableAutoRUM()
+    public function getBrowserTimingFooter(bool $includeTags = true): string
     {
-        $this->interactor->disableAutoRUM();
+        return $this->interactor->getBrowserTimingFooter($includeTags);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeError($msg)
+    public function disableAutoRUM(): bool
     {
-        $this->interactor->noticeError($msg);
+        return $this->interactor->disableAutoRUM();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function noticeException(\Exception $e)
+    public function noticeThrowable(\Throwable $e, string $message = null): void
     {
-        $this->interactor->noticeError($e);
+        $this->interactor->noticeThrowable($e, $message);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function enableBackgroundJob()
+    public function noticeError(
+        int $errno,
+        string $errstr,
+        string $errfile = null,
+        int $errline = null,
+        string $errcontext = null
+    ): void {
+        $this->interactor->noticeError($errno, $errstr, $errfile, $errline, $errcontext);
+    }
+
+    public function enableBackgroundJob(): void
     {
         $this->interactor->enableBackgroundJob();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function disableBackgroundJob()
+    public function disableBackgroundJob(): void
     {
         $this->interactor->disableBackgroundJob();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function endTransaction()
+    public function startTransaction(string $name = null, string $license = null): bool
     {
-        $this->interactor->endTransaction();
+        return $this->interactor->startTransaction($name, $license);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function startTransaction($name)
+    public function endTransaction(bool $ignore = false): bool
     {
-        $this->interactor->startTransaction($name);
+        return $this->interactor->endTransaction($ignore);
+    }
+
+    public function excludeFromApdex(): void
+    {
+        $this->interactor->excludeFromApdex();
+    }
+
+    public function addCustomTracer(string $name): bool
+    {
+        return $this->interactor->addCustomTracer($name);
+    }
+
+    public function setCaptureParams(bool $enabled): void
+    {
+        $this->interactor->setCaptureParams($enabled);
+    }
+
+    public function stopTransactionTiming(): void
+    {
+        $this->interactor->stopTransactionTiming();
+    }
+
+    public function recordDatastoreSegment(callable $func, array $parameters)
+    {
+        return $this->interactor->recordDatastoreSegment($func, $parameters);
+    }
+
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
+    {
+        return $this->interactor->setUserAttributes($userValue, $accountValue, $productValue);
     }
 }
