@@ -11,6 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\DependencyInjection;
 
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -27,6 +28,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->fixXmlConfig('deployment_name')
+            ->fixXmlConfig('log_log')
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->booleanNode('twig')->defaultValue(class_exists('\Twig_Environment'))->end()
@@ -56,6 +58,18 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('log_commands')
                     ->defaultTrue()
+                ->end()
+                ->arrayNode('log_logs')
+                    ->canBeEnabled()
+                    ->fixXmlConfig('channel')
+                    ->children()
+                        ->arrayNode('channels')
+                            ->prototype('scalar')->end()
+                            ->defaultValue(['app'])
+                        ->end()
+                        ->scalarNode('level')->defaultValue(LogLevel::ERROR)->end()
+                        ->scalarNode('service')->defaultValue('ekino.new_relic.logs_handler.real')->end()
+                    ->end()
                 ->end()
                 ->scalarNode('transaction_naming')
                     ->defaultValue('route')
