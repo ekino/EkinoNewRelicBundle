@@ -98,6 +98,7 @@ ekino_new_relic:
     ignored_routes: []                    # No transaction recorded for this routes
     ignored_paths: []                     # No transaction recorded for this paths
     ignored_commands: []                  # No transaction recorded for this commands (background tasks)
+    interactor: ~                         # The interactor service that is used. Setting enabled=false will override this value 
     twig: true                            # Allows you to disable twig integration (falls back to class_exists(\Twig_Environment::class))
 ```
 

@@ -26,6 +26,10 @@
 
         <service id="ekino.new_relic.interactor.real" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
         <service id="ekino.new_relic.interactor.blackhole" class="Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
+        <service id="ekino.new_relic.interactor.auto" class="Ekino\Bundle\NewRelicBundle\NewRelic\AutoInteractor" public="false">
+            <argument type="service" id="ekino.new_relic.interactor.real" />
+            <argument type="service" id="ekino.new_relic.interactor.blackhole" />
+        </service>
 
         <!-- Default alias -->
         <service id="ekino.new_relic.interactor" alias="ekino.new_relic.interactor.blackhole" />

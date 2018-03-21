@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('log_log')
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
+                ->scalarNode('interactor')->end()
                 ->booleanNode('twig')->defaultValue(class_exists('\Twig_Environment'))->end()
                 ->scalarNode('api_key')->defaultValue(false)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()

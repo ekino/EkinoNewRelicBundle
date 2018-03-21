@@ -67,4 +67,33 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('ekino.new_relic.logs_handler', 0, 400);
     }
+
+    public function testConfigDisabled()
+    {
+        $this->load([
+            'enabled' => false,
+        ]);
+
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.blackhole');
+    }
+
+    public function testConfigDisabledWithInteractor()
+    {
+        $this->load([
+            'enabled' => false,
+            'interactor' => 'ekino.new_relic.interactor.auto',
+        ]);
+
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.blackhole');
+    }
+
+    public function testConfigEnabledWithInteractor()
+    {
+        $this->load([
+            'enabled' => true,
+            'interactor' => 'ekino.new_relic.interactor.auto',
+        ]);
+
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.auto');
+    }
 }

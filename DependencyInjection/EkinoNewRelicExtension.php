@@ -47,9 +47,16 @@ class EkinoNewRelicExtension extends Extension
         $container->getDefinition('ekino.new_relic.command_listener')
             ->replaceArgument(2, $config['ignored_commands']);
 
-        $interactor = $config['enabled'] && extension_loaded('newrelic')
-            ? 'ekino.new_relic.interactor.real'
-            : 'ekino.new_relic.interactor.blackhole';
+        if (!$config['enabled']) {
+            $interactor = 'ekino.new_relic.interactor.blackhole';
+        } elseif (isset($config['interactor'])) {
+            $interactor = $config['interactor'];
+        } else {
+            // Fallback to see if the extension is loaded or not
+            $interactor = extension_loaded('newrelic')
+                ? 'ekino.new_relic.interactor.real'
+                : 'ekino.new_relic.interactor.blackhole';
+        }
 
         if ($config['logging']) {
             $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
