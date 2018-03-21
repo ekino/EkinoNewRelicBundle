@@ -15,6 +15,10 @@ class MonologHandlerPass implements CompilerPassInterface
         }
 
         $config = $container->getParameter('ekino.new_relic.log_logs');
+        if (!$config['enabled']) {
+            return;
+        }
+
         foreach ($config['channels'] as $channel) {
             $def = $container->getDefinition($channel === 'app' ? 'monolog.logger' : 'monolog.logger.'.$channel);
             $def->addMethodCall('pushHandler', array(new Reference('ekino.new_relic.logs_handler')));
