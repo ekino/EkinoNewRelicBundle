@@ -31,7 +31,6 @@
         "twig/twig": "<1.32"
     },
     "suggest": {
-        "sonata-project/block-bundle": "2.2.*@dev",
         "symfony/monolog-bundle": "^3.2"
     },
     "autoload": {
