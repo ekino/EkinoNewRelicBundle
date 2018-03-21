@@ -18,7 +18,7 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class AutoInteractor implements NewRelicInteractorInterface
+class AdaptiveInteractor implements NewRelicInteractorInterface
 {
     /**
      * @var NewRelicInteractorInterface

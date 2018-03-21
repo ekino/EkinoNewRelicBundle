@@ -14,7 +14,7 @@ namespace Ekino\Bundle\NewRelicBundle\Logging;
 use Monolog\Handler\NewRelicHandler;
 use Psr\Log\LogLevel;
 
-class AutoHandler extends NewRelicHandler
+class AdaptiveHandler extends NewRelicHandler
 {
     public function __construct(
         $level = LogLevel::ERROR,
