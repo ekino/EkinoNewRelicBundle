@@ -16,7 +16,7 @@ class MonologHandlerPassTest extends AbstractCompilerPassTestCase
 
     public function testProcessChannel()
     {
-        $this->container->setParameter('ekino.new_relic.log_logs', ['channels' => ['app', 'foo']]);
+        $this->container->setParameter('ekino.new_relic.log_logs', ['enabled' => true, 'channels' => ['app', 'foo']]);
         $this->registerService('monolog.logger', \Monolog\Logger::class);
         $this->registerService('monolog.logger.foo', \Monolog\Logger::class);
 
