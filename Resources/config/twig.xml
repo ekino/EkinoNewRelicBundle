@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ekino.new_relic.twig.new_relic_extension" class="Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension">
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
+            <tag name="twig.extension"/>
+            <argument>false</argument>
+        </service>
+    </services>
+</container>

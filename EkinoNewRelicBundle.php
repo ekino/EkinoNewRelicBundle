@@ -28,7 +28,7 @@ class EkinoNewRelicBundle extends Bundle
     {
         parent::boot();
 
-        if ($this->container->getParameter('ekino.new_relic.log_deprecations')) {
+        if ($this->container->has('ekino.new_relic.deprecation_listener')) {
             $this->container->get('ekino.new_relic.deprecation_listener')->register();
         }
     }

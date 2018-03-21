@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="setApplicationName" priority="255"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="setIgnoreTransaction" priority="31"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="setTransactionName" priority="-10"/>
+
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
+            <argument type="collection" />
+            <argument type="collection" />
+            <argument />
+            <argument />
+        </service>
+
+        <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
+            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-255"/>
+
+            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="ekino.new_relic.interactor" />
+            <argument>false</argument>
+            <argument />
+            <argument type="service" id="ekino.new_relic.twig.new_relic_extension" on-invalid="null" />
+        </service>
+    </services>
+</container>
