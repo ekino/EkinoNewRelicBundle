@@ -56,19 +56,21 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setApplicationName(string $name, string $key = null, bool $xmit = false): void
+    public function setApplicationName(string $name, string $key = null, bool $xmit = false): bool
     {
         $this->log(sprintf('Setting New Relic Application name to %s', $name));
-        $this->interactor->setApplicationName($name, $key, $xmit);
+
+        return $this->interactor->setApplicationName($name, $key, $xmit);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setTransactionName(string $name): void
+    public function setTransactionName(string $name): bool
     {
         $this->log(sprintf('Setting New Relic Transaction name to %s', $name));
-        $this->interactor->setTransactionName($name);
+
+        return $this->interactor->setTransactionName($name);
     }
 
     /**
@@ -92,25 +94,27 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function addCustomMetric(string $name, float $value): void
+    public function addCustomMetric(string $name, float $value): bool
     {
         $this->log(sprintf('Adding custom New Relic metric %s: %s', $name, $value));
-        $this->interactor->addCustomMetric($name, $value);
+
+        return $this->interactor->addCustomMetric($name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addCustomParameter(string $name, $value): void
+    public function addCustomParameter(string $name, $value): bool
     {
         $this->log(sprintf('Adding custom New Relic parameter %s: %s', $name, $value));
-        $this->interactor->addCustomParameter($name, $value);
+
+        return $this->interactor->addCustomParameter($name, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBrowserTimingHeader(bool $includeTags): string
+    public function getBrowserTimingHeader(bool $includeTags = true): string
     {
         $this->log('Getting New Relic RUM timing header');
 
@@ -120,7 +124,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function getBrowserTimingFooter(bool $includeTags): string
+    public function getBrowserTimingFooter(bool $includeTags = true): string
     {
         $this->log('Getting New Relic RUM timing footer');
 
@@ -130,10 +134,11 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function disableAutoRUM(): void
+    public function disableAutoRUM(): bool
     {
         $this->log('Disabling New Relic Auto-RUM');
-        $this->interactor->disableAutoRUM();
+
+        return $this->interactor->disableAutoRUM();
     }
 
     /**
@@ -175,19 +180,21 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function endTransaction(): void
+    public function endTransaction(bool $ignore = false): bool
     {
         $this->log('Ending a New Relic transaction');
-        $this->interactor->endTransaction();
+
+        return $this->interactor->endTransaction($ignore);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function startTransaction(string $name, string $license = null): void
+    public function startTransaction(string $name = null, string $license = null): bool
     {
         $this->log(sprintf('Starting a new New Relic transaction for app "%s"', $name));
-        $this->interactor->startTransaction($name, $license);
+
+        return $this->interactor->startTransaction($name, $license);
     }
 
     /**
@@ -202,10 +209,11 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function addCustomTracer(string $name): void
+    public function addCustomTracer(string $name): bool
     {
         $this->log('Adding custom New Relic tracer');
-        $this->interactor->addCustomTracer($name);
+
+        return $this->interactor->addCustomTracer($name);
     }
 
     /**
@@ -238,13 +246,14 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     /**
      * {@inheritdoc}
      */
-    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): void
+    public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
     {
         $this->log('Setting New Relic user attributes', [
             'user_value' => $userValue,
             'account_value' => $accountValue,
             'product_value' => $productValue,
         ]);
-        $this->interactor->setUserAttributes($userValue, $accountValue, $productValue);
+
+        return $this->interactor->setUserAttributes($userValue, $accountValue, $productValue);
     }
 }
