@@ -26,7 +26,7 @@
 
         <service id="ekino.new_relic.interactor.real" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
         <service id="ekino.new_relic.interactor.blackhole" class="Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
-        <service id="ekino.new_relic.interactor.auto" class="Ekino\Bundle\NewRelicBundle\NewRelic\AutoInteractor" public="false">
+        <service id="ekino.new_relic.interactor.adaptive" class="Ekino\Bundle\NewRelicBundle\NewRelic\AdaptiveInteractor" public="false">
             <argument type="service" id="ekino.new_relic.interactor.real" />
             <argument type="service" id="ekino.new_relic.interactor.blackhole" />
         </service>
@@ -90,7 +90,7 @@
         </service>
 
         <!-- Logging -->
-        <service id="ekino.new_relic.logs_handler.auto" class="Ekino\Bundle\NewRelicBundle\Logging\AutoHandler" public="false">
+        <service id="ekino.new_relic.logs_handler.adaptive" class="Ekino\Bundle\NewRelicBundle\Logging\AdaptiveHandler" public="false">
             <argument/> <!-- level -->
             <argument>true</argument>
             <argument/> <!-- app_name -->

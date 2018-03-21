@@ -81,7 +81,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load([
             'enabled' => false,
-            'interactor' => 'ekino.new_relic.interactor.auto',
+            'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
         $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.blackhole');
@@ -91,9 +91,9 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load([
             'enabled' => true,
-            'interactor' => 'ekino.new_relic.interactor.auto',
+            'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.auto');
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.adaptive');
     }
 }
