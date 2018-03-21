@@ -56,14 +56,14 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('ekino.new_relic.log_deprecations');
+        $this->assertContainerBuilderHasService('ekino.new_relic.deprecation_listener');
     }
 
     public function testLogs()
     {
         $this->load(['log_logs' => true]);
 
-        $this->assertContainerBuilderHasParameter('ekino.new_relic.log_logs');
+        $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog.channels');
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('ekino.new_relic.logs_handler', 0, 400);
     }

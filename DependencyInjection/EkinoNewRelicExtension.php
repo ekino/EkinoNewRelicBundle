@@ -11,7 +11,6 @@
 
 namespace  Ekino\Bundle\NewRelicBundle\DependencyInjection;
 
-use Monolog\Handler\NewRelicHandler;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -37,6 +36,7 @@ class EkinoNewRelicExtension extends Extension
         $loader->load('services.xml');
 
         if (!$config['enabled']) {
+            $config['log_logs']['enabled'] = false;
             $interactor = 'ekino.new_relic.interactor.blackhole';
         } elseif (isset($config['interactor'])) {
             $interactor = $config['interactor'];
@@ -55,7 +55,7 @@ class EkinoNewRelicExtension extends Extension
             $container->setAlias('ekino.new_relic.interactor', $interactor);
         }
 
-        if (!$config['deployment_names']) {
+        if (!empty($config['deployment_names'])) {
             $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'])));
         }
 
@@ -67,24 +67,17 @@ class EkinoNewRelicExtension extends Extension
             ->replaceArgument(4, $config['deployment_names'])
         ;
 
-        if (!$config['enabled']) {
-            $config['log_logs']['enabled'] = false;
-        }
-
         if ($config['http']['enabled']) {
             $loader->load('http_listener.xml');
             $container->getDefinition('ekino.new_relic.request_listener')
                 ->replaceArgument(2, $config['ignored_routes'])
                 ->replaceArgument(3, $config['ignored_paths'])
                 ->replaceArgument(4, $this->getTransactionNamingService($config))
-                ->replaceArgument(5, $config['using_symfony_cache'])
-;
-
+                ->replaceArgument(5, $config['using_symfony_cache']);
 
             $container->getDefinition('ekino.new_relic.response_listener')
                 ->replaceArgument(2, $config['instrument'])
-                ->replaceArgument(3, $config['using_symfony_cache'])
-            ;
+                ->replaceArgument(3, $config['using_symfony_cache']);
         }
 
         if ($config['log_commands']) {
@@ -97,21 +90,20 @@ class EkinoNewRelicExtension extends Extension
             $loader->load('exception_listener.xml');
         }
 
-        if ($config['log_deprecations']) {
+        if ($config['deprecations']['enabled']) {
             $loader->load('deprecation_listener.xml');
         }
 
-        if (!$config['twig']) {
+        if ($config['twig']) {
             $loader->load('twig.xml');
         }
 
-        $container->setParameter('ekino.new_relic.log_logs', $config['log_logs']);
         if ($config['log_logs']['enabled']) {
-            if (!class_exists(NewRelicHandler::class)) {
+            if (!class_exists(\Monolog\Handler\NewRelicHandler::class)) {
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "log_logs" option.');
             }
-
             $loader->load('monolog.xml');
+            $container->setParameter('ekino.new_relic.monolog.channels', $config['log_logs']['channels']);
             $container->setAlias('ekino.new_relic.logs_handler', $config['log_logs']['service']);
 
             $level = $config['log_logs']['level'];

@@ -85,7 +85,7 @@ ekino_new_relic:
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
     log_exceptions: false                 # If true, sends exceptions to New Relic (default: false)
-    log_deprecations: false               # If true, reports deprecations to New Relic (default: false)
+    deprecations: false               # If true, reports deprecations to New Relic (default: false)
     log_logs: true                        # When enabled, send application's logs to New Relic (default: disabled)
     # log_logs:                            # Advanced configuration is available
     #    channels: [app]                   # Channels to listen (default: app)
