@@ -36,20 +36,20 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasService('ekino.new_relic.twig.new_relic_extension');
         $this->assertContainerBuilderHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderNotHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
     }
 
     public function testAlternativeConfiguration()
     {
         $this->load([
-            'log_exceptions' => true,
-            'log_commands' => false,
+            'exceptions' => false,
+            'commands' => false,
             'twig' => false,
         ]);
 
         $this->assertContainerBuilderNotHasService('ekino.new_relic.twig.new_relic_extension');
         $this->assertContainerBuilderNotHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderNotHasService('ekino.new_relic.exception_listener');
     }
 
     public function testDeprecation()
@@ -61,7 +61,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 
     public function testLogs()
     {
-        $this->load(['log_logs' => true]);
+        $this->load(['monolog' => true]);
 
         $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog.channels');
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');

@@ -36,7 +36,7 @@ class EkinoNewRelicExtension extends Extension
         $loader->load('services.xml');
 
         if (!$config['enabled']) {
-            $config['log_logs']['enabled'] = false;
+            $config['monolog']['enabled'] = false;
             $interactor = 'ekino.new_relic.interactor.blackhole';
         } elseif (isset($config['interactor'])) {
             $interactor = $config['interactor'];
@@ -70,23 +70,23 @@ class EkinoNewRelicExtension extends Extension
         if ($config['http']['enabled']) {
             $loader->load('http_listener.xml');
             $container->getDefinition('ekino.new_relic.request_listener')
-                ->replaceArgument(2, $config['ignored_routes'])
-                ->replaceArgument(3, $config['ignored_paths'])
+                ->replaceArgument(2, $config['http']['ignored_routes'])
+                ->replaceArgument(3, $config['http']['ignored_paths'])
                 ->replaceArgument(4, $this->getTransactionNamingService($config))
-                ->replaceArgument(5, $config['using_symfony_cache']);
+                ->replaceArgument(5, $config['http']['using_symfony_cache']);
 
             $container->getDefinition('ekino.new_relic.response_listener')
-                ->replaceArgument(2, $config['instrument'])
-                ->replaceArgument(3, $config['using_symfony_cache']);
+                ->replaceArgument(2, $config['http']['instrument'])
+                ->replaceArgument(3, $config['http']['using_symfony_cache']);
         }
 
-        if ($config['log_commands']) {
+        if ($config['commands']['enabled']) {
             $loader->load('command_listener.xml');
             $container->getDefinition('ekino.new_relic.command_listener')
-                ->replaceArgument(2, $config['ignored_commands']);
+                ->replaceArgument(2, $config['commands']['ignored_commands']);
         }
 
-        if ($config['log_exceptions']) {
+        if ($config['exceptions']['enabled']) {
             $loader->load('exception_listener.xml');
         }
 
@@ -98,15 +98,15 @@ class EkinoNewRelicExtension extends Extension
             $loader->load('twig.xml');
         }
 
-        if ($config['log_logs']['enabled']) {
+        if ($config['monolog']['enabled']) {
             if (!class_exists(\Monolog\Handler\NewRelicHandler::class)) {
-                throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "log_logs" option.');
+                throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
             $loader->load('monolog.xml');
-            $container->setParameter('ekino.new_relic.monolog.channels', $config['log_logs']['channels']);
-            $container->setAlias('ekino.new_relic.logs_handler', $config['log_logs']['service']);
+            $container->setParameter('ekino.new_relic.monolog.channels', $config['monolog']['channels']);
+            $container->setAlias('ekino.new_relic.logs_handler', $config['monolog']['service']);
 
-            $level = $config['log_logs']['level'];
+            $level = $config['monolog']['level'];
             $container->findDefinition('ekino.new_relic.logs_handler')
                 ->replaceArgument(0, is_int($level) ? $level : constant('Monolog\Logger::'.strtoupper($level)))
                 ->replaceArgument(2, $config['application_name']);
@@ -115,7 +115,7 @@ class EkinoNewRelicExtension extends Extension
 
     private function getTransactionNamingService(array $config): string
     {
-        switch ($config['transaction_naming']) {
+        switch ($config['http']['transaction_naming']) {
             case 'controller':
                 $serviceId = new Reference('ekino.new_relic.transaction_naming_strategy.controller');
                 break;
@@ -123,19 +123,19 @@ class EkinoNewRelicExtension extends Extension
                 $serviceId = new Reference('ekino.new_relic.transaction_naming_strategy.route');
                 break;
             case 'service':
-                if (!isset($config['transaction_naming_service'])) {
+                if (!isset($config['http']['transaction_naming_service'])) {
                     throw new \LogicException(
                         'When using the "service", transaction naming scheme, the "transaction_naming_service" config parameter must be set.'
                     );
                 }
 
-                $serviceId = new Reference($config['transaction_naming_service']);
+                $serviceId = new Reference($config['http']['transaction_naming_service']);
                 break;
             default:
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Invalid transaction naming scheme "%s", must be "route", "controller" or "service".',
-                        $config['transaction_naming']
+                        $config['http']['transaction_naming']
                     )
                 );
         }
