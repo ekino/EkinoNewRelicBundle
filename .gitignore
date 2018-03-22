@@ -1,9 +1,6 @@
-.idea
-.DS_Store
+.php_cs.cache
 build
 phpunit.xml
-nbproject
 coverage
 composer.lock
 vendor
-composer.phar
