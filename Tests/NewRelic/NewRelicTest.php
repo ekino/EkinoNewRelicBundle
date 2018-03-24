@@ -18,51 +18,50 @@ class NewRelicTest extends TestCase
 {
     public function testGeneric()
     {
-
         $newRelic = new NewRelic('Ekino', 'XXX');
 
-        $this->assertEquals('Ekino', $newRelic->getName());
-        $this->assertEquals('XXX', $newRelic->getApiKey());
+        $this->assertSame('Ekino', $newRelic->getName());
+        $this->assertSame('XXX', $newRelic->getApiKey());
 
         $this->assertEmpty($newRelic->getCustomEvents());
         $this->assertEmpty($newRelic->getCustomMetrics());
         $this->assertEmpty($newRelic->getCustomParameters());
 
-        $newRelic->addCustomEvent('WidgetSale', array('color' => 'red', 'weight' => 12.5));
-        $newRelic->addCustomEvent('WidgetSale', array('color' => 'blue', 'weight' => 12.5));
+        $newRelic->addCustomEvent('WidgetSale', ['color' => 'red', 'weight' => 12.5]);
+        $newRelic->addCustomEvent('WidgetSale', ['color' => 'blue', 'weight' => 12.5]);
 
-        $expected = array(
-            'WidgetSale' => array(
-                array(
+        $expected = [
+            'WidgetSale' => [
+                [
                     'color' => 'red',
                     'weight' => 12.5,
-                ),
-                array(
+                ],
+                [
                     'color' => 'blue',
                     'weight' => 12.5,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $this->assertEquals($expected, $newRelic->getCustomEvents());
+        $this->assertSame($expected, $newRelic->getCustomEvents());
 
         $newRelic->addCustomMetric('foo', 4.2);
         $newRelic->addCustomMetric('asd', 1);
 
-        $expected = array(
+        $expected = [
             'foo' => 4.2,
-            'asd' => 1
-        );
+            'asd' => 1.0,
+        ];
 
-        $this->assertEquals($expected, $newRelic->getCustomMetrics());
+        $this->assertSame($expected, $newRelic->getCustomMetrics());
 
         $newRelic->addCustomParameter('param1', 1);
 
-        $expected = array(
-            'param1' => '1'
-        );
+        $expected = [
+            'param1' => 1,
+        ];
 
-        $this->assertEquals($expected, $newRelic->getCustomParameters());
+        $this->assertSame($expected, $newRelic->getCustomParameters());
     }
 
     public function testDefaults()
@@ -70,9 +69,9 @@ class NewRelicTest extends TestCase
         $newRelic = new NewRelic(null, null);
 
         $this->assertNotNull($newRelic->getName());
-        $this->assertEquals(ini_get('newrelic.appname'), $newRelic->getName());
+        $this->assertSame(ini_get('newrelic.appname'), $newRelic->getName());
 
         $this->assertNotNull($newRelic->getLicenseKey());
-        $this->assertEquals(ini_get('newrelic.license'), $newRelic->getLicenseKey());
+        $this->assertSame(ini_get('newrelic.license'), $newRelic->getLicenseKey());
     }
 }

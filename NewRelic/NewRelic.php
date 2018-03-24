@@ -37,22 +37,22 @@ class NewRelic
     protected $deploymentNames;
 
     /**
-     * @param string  $name
-     * @param string  $apiKey
-     * @param string  $licenseKey
-     * @param boolean $xmit
-     * @param array   $deploymentNames
+     * @param string $name
+     * @param string $apiKey
+     * @param string $licenseKey
+     * @param bool   $xmit
+     * @param array  $deploymentNames
      */
-    public function __construct($name, $apiKey, $licenseKey = null, $xmit = false, array $deploymentNames = array())
+    public function __construct($name, $apiKey, $licenseKey = null, $xmit = false, array $deploymentNames = [])
     {
-        $this->name             = $name ?: ini_get('newrelic.appname');
-        $this->apiKey           = $apiKey;
-        $this->licenseKey       = $licenseKey ?: ini_get('newrelic.license');
-        $this->xmit             = $xmit;
-        $this->deploymentNames  = $deploymentNames;
-        $this->customEvents     = array();
-        $this->customMetrics    = array();
-        $this->customParameters = array();
+        $this->name = $name ?: ini_get('newrelic.appname');
+        $this->apiKey = $apiKey;
+        $this->licenseKey = $licenseKey ?: ini_get('newrelic.license');
+        $this->xmit = $xmit;
+        $this->deploymentNames = $deploymentNames;
+        $this->customEvents = [];
+        $this->customMetrics = [];
+        $this->customParameters = [];
     }
 
     /**
@@ -105,8 +105,8 @@ class NewRelic
     }
 
     /**
-     * @param string $name
-     * @param string|integer|float $value or any scalar value
+     * @param string           $name
+     * @param string|int|float $value or any scalar value
      */
     public function addCustomParameter(string $name, $value)
     {
@@ -131,8 +131,8 @@ class NewRelic
      */
     public function setFramework($framework)
     {
-        if (!in_array($framework, self::getFrameworksList())) {
-            $framework = "no_framework";
+        if (!in_array($framework, self::getFrameworksList(), true)) {
+            $framework = 'no_framework';
         }
 
         $this->framework = $framework;
@@ -169,19 +169,19 @@ class NewRelic
      */
     public static function getFrameworksList()
     {
-        return array(
-            "cakephp",
-            "codeigniter",
-            "drupal",
-            "joomla",
-            "kohana",
-            "magento",
-            "mediawiki",
-            "symfony",
-            "wordpress",
-            "yii",
-            "zend",
-        );
+        return [
+            'cakephp',
+            'codeigniter',
+            'drupal',
+            'joomla',
+            'kohana',
+            'magento',
+            'mediawiki',
+            'symfony',
+            'wordpress',
+            'yii',
+            'zend',
+        ];
     }
 
     /**

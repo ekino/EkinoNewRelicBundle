@@ -38,7 +38,7 @@ class NewRelicExtensionTest extends TestCase
     }
 
     /**
-     * Tests the initial values returned by state methods
+     * Tests the initial values returned by state methods.
      */
     public function testInitialSetup()
     {
@@ -61,11 +61,11 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->expectException(\RuntimeException::class);
 
@@ -82,11 +82,11 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->expectException(\RuntimeException::class);
 
@@ -107,18 +107,18 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 'a' => 'b',
                 'c' => 'd',
-            )));
+            ]));
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 'e' => 'f',
                 'g' => 'h',
                 'i' => 'j',
-            )));
+            ]));
 
         $this->interactor->expects($this->once())
             ->method('disableAutoRum');
@@ -137,11 +137,11 @@ class NewRelicExtensionTest extends TestCase
             ->method('getBrowserTimingFooter')
             ->will($this->returnValue($footerValue));
 
-        $this->assertEquals($headerValue, $extension->getNewrelicBrowserTimingHeader());
+        $this->assertSame($headerValue, $extension->getNewrelicBrowserTimingHeader());
         $this->assertTrue($extension->isHeaderCalled());
         $this->assertFalse($extension->isFooterCalled());
 
-        $this->assertEquals($footerValue, $extension->getNewrelicBrowserTimingFooter());
+        $this->assertSame($footerValue, $extension->getNewrelicBrowserTimingFooter());
         $this->assertTrue($extension->isHeaderCalled());
         $this->assertTrue($extension->isFooterCalled());
     }

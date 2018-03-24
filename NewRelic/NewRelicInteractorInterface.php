@@ -56,7 +56,7 @@ interface NewRelicInteractorInterface
     /**
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_add_custom_parameter}.
      *
-     * @param string|integer|float $value should be a scalar
+     * @param string|int|float $value should be a scalar
      */
     public function addCustomParameter(string $name, $value): bool;
 

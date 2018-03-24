@@ -11,7 +11,6 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Exception\ThrowableException;
 use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
@@ -33,17 +32,17 @@ class CommandListenerTest extends TestCase
             $this->markTestSkipped('Console Events is only available from Symfony 2.3');
         }
 
-        $parameters = array(
+        $parameters = [
             '--foo' => true,
-            '--foobar' => array('baz', 'baz_2'),
+            '--foobar' => ['baz', 'baz_2'],
             'name' => 'bar',
-        );
+        ];
 
-        $definition = new InputDefinition(array(
+        $definition = new InputDefinition([
             new InputOption('foo'),
             new InputOption('foobar', 'fb', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),
             new InputArgument('name', InputArgument::REQUIRED),
-         ));
+         ]);
 
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('setTransactionName')->with($this->equalTo('test:newrelic'));
@@ -61,23 +60,23 @@ class CommandListenerTest extends TestCase
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array());
+        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, []);
         $listener->onConsoleCommand($event);
     }
 
-    public function testIgnoreBackgroundJob ()
+    public function testIgnoreBackgroundJob()
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('startTransaction');
 
         $command = new Command('test:ignored-commnand');
-        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $input = new ArrayInput([], new InputDefinition([]));
 
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, array('test:ignored-command'));
+        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, ['test:ignored-command']);
         $listener->onConsoleCommand($event);
     }
 
@@ -91,13 +90,12 @@ class CommandListenerTest extends TestCase
 
         $command = new Command('test:exception');
 
-        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $input = new ArrayInput([], new InputDefinition([]));
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
-
 
         $event = new ConsoleErrorEvent($input, $output, $exception, $command);
 
-        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener = new CommandListener($newrelic, $interactor, ['test:exception']);
         $listener->onConsoleError($event);
     }
 
@@ -110,12 +108,12 @@ class CommandListenerTest extends TestCase
         $interactor->expects($this->once())->method('noticeThrowable')->with($exception);
         $command = new Command('test:exception');
 
-        $input = new ArrayInput(array(), new InputDefinition(array()));
+        $input = new ArrayInput([], new InputDefinition([]));
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
 
         $event = new ConsoleErrorEvent($input, $output, $exception, $command);
 
-        $listener = new CommandListener($newrelic, $interactor, array('test:exception'));
+        $listener = new CommandListener($newrelic, $interactor, ['test:exception']);
         $listener->onConsoleError($event);
     }
 }

@@ -31,7 +31,7 @@ class DeprecationListener
         }
         $this->isRegistered = true;
 
-        $prevErrorHandler = set_error_handler(function ($type, $msg, $file, $line, $context = array()) use (&$prevErrorHandler) {
+        $prevErrorHandler = set_error_handler(function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler) {
             if (E_USER_DEPRECATED === $type) {
                 $this->interactor->noticeThrowable(new DeprecationException($msg, 0, $type, $file, $line));
             }

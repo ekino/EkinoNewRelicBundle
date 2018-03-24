@@ -15,7 +15,7 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 /**
- * Twig extension to manually include BrowserTimingHeader and BrowserTimingFooter into twig templates
+ * Twig extension to manually include BrowserTimingHeader and BrowserTimingFooter into twig templates.
  */
 class NewRelicExtension extends \Twig_Extension
 {
@@ -64,16 +64,16 @@ class NewRelicExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_header', array($this, 'getNewrelicBrowserTimingHeader'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_footer', array($this, 'getNewrelicBrowserTimingFooter'), array('is_safe' => array('html'))),
-        );
+        return [
+            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_header', [$this, 'getNewrelicBrowserTimingHeader'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_footer', [$this, 'getNewrelicBrowserTimingFooter'], ['is_safe' => ['html']]),
+        ];
     }
 
     /**
-     * @return string
-     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     public function getNewrelicBrowserTimingHeader()
     {
@@ -89,9 +89,9 @@ class NewRelicExtension extends \Twig_Extension
     }
 
     /**
-     * @return string
-     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     public function getNewrelicBrowserTimingFooter()
     {

@@ -11,12 +11,12 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
 {
@@ -31,7 +31,7 @@ class RequestListener
     protected $transactionNamingStrategy;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $symfonyCache;
 
@@ -41,20 +41,20 @@ class RequestListener
      * @param array                              $ignoreRoutes
      * @param array                              $ignoredPaths
      * @param TransactionNamingStrategyInterface $transactionNamingStrategy
-     * @param boolean                            $symfonyCache
+     * @param bool                               $symfonyCache
      */
     public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoredPaths, TransactionNamingStrategyInterface $transactionNamingStrategy, $symfonyCache = false)
     {
-        $this->interactor    = $interactor;
-        $this->newRelic      = $newRelic;
+        $this->interactor = $interactor;
+        $this->newRelic = $newRelic;
         $this->ignoredRoutes = $ignoreRoutes;
-        $this->ignoredPaths  = $ignoredPaths;
+        $this->ignoredPaths = $ignoredPaths;
         $this->transactionNamingStrategy = $transactionNamingStrategy;
-        $this->symfonyCache      = $symfonyCache;
+        $this->symfonyCache = $symfonyCache;
     }
 
     /**
-     * Set the name of the application
+     * Set the name of the application.
      *
      * @param GetResponseEvent $event
      */
@@ -79,7 +79,7 @@ class RequestListener
     }
 
     /**
-     * Set the name of the transaction
+     * Set the name of the transaction.
      *
      * @param GetResponseEvent $event
      */
@@ -104,17 +104,17 @@ class RequestListener
         }
 
         $request = $event->getRequest();
-        if (in_array($request->get('_route'), $this->ignoredRoutes)) {
+        if (in_array($request->get('_route'), $this->ignoredRoutes, true)) {
             $this->interactor->ignoreTransaction();
         }
 
-        if (in_array($request->getPathInfo(), $this->ignoredPaths)) {
+        if (in_array($request->getPathInfo(), $this->ignoredPaths, true)) {
             $this->interactor->ignoreTransaction();
         }
     }
 
     /**
-     * Make sure we should consider this event. Example: make sure it is a master request
+     * Make sure we should consider this event. Example: make sure it is a master request.
      *
      * @param GetResponseEvent $event
      *
@@ -122,6 +122,6 @@ class RequestListener
      */
     protected function validateEvent(GetResponseEvent $event)
     {
-        return $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST;
+        return HttpKernelInterface::MASTER_REQUEST === $event->getRequestType();
     }
 }

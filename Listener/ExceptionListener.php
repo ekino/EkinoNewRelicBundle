@@ -11,13 +11,12 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
- * Notices the interactor on exception
+ * Notices the interactor on exception.
  */
 class ExceptionListener
 {
@@ -40,8 +39,7 @@ class ExceptionListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
-        if (!$exception instanceOf HttpExceptionInterface)
-        {
+        if (!$exception instanceof HttpExceptionInterface) {
             $this->interactor->noticeThrowable($exception);
         }
     }

@@ -12,7 +12,7 @@
 namespace  Ekino\Bundle\NewRelicBundle\Exception;
 
 /**
- * Exception dedicated to report Deprecation
+ * Exception dedicated to report Deprecation.
  */
 class DeprecationException extends \ErrorException
 {

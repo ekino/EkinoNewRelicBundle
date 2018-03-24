@@ -1,9 +1,18 @@
 <?php
+
+/*
+ * This file is part of Ekino New Relic bundle.
+ *
+ * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
 
 use Ekino\Bundle\NewRelicBundle\DependencyInjection\Configuration;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
 
@@ -19,14 +28,13 @@ class ConfigurationTest extends TestCase
         /** @var PrototypedArrayNode $ignoredRoutesNode */
         $ignoredRoutesNode = $children['http']->getChildren()['ignored_routes'];
 
-
         $this->assertInstanceOf('\Symfony\Component\Config\Definition\PrototypedArrayNode', $ignoredRoutesNode);
         $this->assertFalse($ignoredRoutesNode->isRequired());
         $this->assertEmpty($ignoredRoutesNode->getDefaultValue());
 
-        $this->assertEquals(array('ignored_route1', 'ignored_route2'), $ignoredRoutesNode->normalize(array('ignored_route1', 'ignored_route2')));
-        $this->assertEquals(array('ignored_route'), $ignoredRoutesNode->normalize('ignored_route'));
-        $this->assertEquals(array('ignored_route1', 'ignored_route2'), $ignoredRoutesNode->merge(array('ignored_route1'), array('ignored_route2')));
+        $this->assertSame(['ignored_route1', 'ignored_route2'], $ignoredRoutesNode->normalize(['ignored_route1', 'ignored_route2']));
+        $this->assertSame(['ignored_route'], $ignoredRoutesNode->normalize('ignored_route'));
+        $this->assertSame(['ignored_route1', 'ignored_route2'], $ignoredRoutesNode->merge(['ignored_route1'], ['ignored_route2']));
     }
 
     public function testIgnoredPaths()
@@ -39,17 +47,16 @@ class ConfigurationTest extends TestCase
         /** @var PrototypedArrayNode $ignoredPathsNode */
         $ignoredPathsNode = $children['http']->getChildren()['ignored_paths'];
 
-
         $this->assertInstanceOf('\Symfony\Component\Config\Definition\PrototypedArrayNode', $ignoredPathsNode);
         $this->assertFalse($ignoredPathsNode->isRequired());
         $this->assertEmpty($ignoredPathsNode->getDefaultValue());
 
-        $this->assertEquals(array('/ignored/path1', '/ignored/path2'), $ignoredPathsNode->normalize(array('/ignored/path1', '/ignored/path2')));
-        $this->assertEquals(array('/ignored/path'), $ignoredPathsNode->normalize('/ignored/path'));
-        $this->assertEquals(array('/ignored/path1', '/ignored/path2'), $ignoredPathsNode->merge(array('/ignored/path1'), array('/ignored/path2')));
+        $this->assertSame(['/ignored/path1', '/ignored/path2'], $ignoredPathsNode->normalize(['/ignored/path1', '/ignored/path2']));
+        $this->assertSame(['/ignored/path'], $ignoredPathsNode->normalize('/ignored/path'));
+        $this->assertSame(['/ignored/path1', '/ignored/path2'], $ignoredPathsNode->merge(['/ignored/path1'], ['/ignored/path2']));
     }
 
-    public function testIgnoredCommands ()
+    public function testIgnoredCommands()
     {
         $configuration = new Configuration();
         $rootNode = $configuration->getConfigTreeBuilder()
@@ -59,21 +66,20 @@ class ConfigurationTest extends TestCase
         /** @var PrototypedArrayNode $ignoredCommandsNode */
         $ignoredCommandsNode = $children['commands']->getChildren()['ignored_commands'];
 
-
         $this->assertInstanceOf('\Symfony\Component\Config\Definition\PrototypedArrayNode', $ignoredCommandsNode);
         $this->assertFalse($ignoredCommandsNode->isRequired());
         $this->assertEmpty($ignoredCommandsNode->getDefaultValue());
 
-        $this->assertEquals(array('test:ignored-command1', 'test:ignored-command2'), $ignoredCommandsNode->normalize(array('test:ignored-command1', 'test:ignored-command2')));
-        $this->assertEquals(array('test:ignored-command'), $ignoredCommandsNode->normalize('test:ignored-command'));
-        $this->assertEquals(array('test:ignored-command1', 'test:ignored-command2'), $ignoredCommandsNode->merge(array('test:ignored-command1'), array('test:ignored-command2')));
+        $this->assertSame(['test:ignored-command1', 'test:ignored-command2'], $ignoredCommandsNode->normalize(['test:ignored-command1', 'test:ignored-command2']));
+        $this->assertSame(['test:ignored-command'], $ignoredCommandsNode->normalize('test:ignored-command'));
+        $this->assertSame(['test:ignored-command1', 'test:ignored-command2'], $ignoredCommandsNode->merge(['test:ignored-command1'], ['test:ignored-command2']));
     }
 
     public function testDefaults()
     {
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(), array());
+        $config = $processor->processConfiguration(new Configuration(), []);
 
         $this->assertEmpty($config['http']['ignored_routes']);
         $this->assertInternalType('array', $config['http']['ignored_routes']);
@@ -85,40 +91,40 @@ class ConfigurationTest extends TestCase
         $this->assertInternalType('array', $config['deployment_names']);
     }
 
-    public static function ignoredRoutesProvider ()
+    public static function ignoredRoutesProvider()
     {
-        return array(
-            array('single_ignored_route', array('single_ignored_route')),
-            array(array('single_ignored_route'), array('single_ignored_route')),
-            array(array('ignored_route1', 'ignored_route2'), array('ignored_route1', 'ignored_route2'))
-        );
+        return [
+            ['single_ignored_route', ['single_ignored_route']],
+            [['single_ignored_route'], ['single_ignored_route']],
+            [['ignored_route1', 'ignored_route2'], ['ignored_route1', 'ignored_route2']],
+        ];
     }
 
-    public static function ignoredPathsProvider ()
+    public static function ignoredPathsProvider()
     {
-        return array(
-            array('/single/ignored/path', array('/single/ignored/path')),
-            array(array('/single/ignored/path'), array('/single/ignored/path')),
-            array(array('/ignored/path1', '/ignored/path2'), array('/ignored/path1', '/ignored/path2'))
-        );
+        return [
+            ['/single/ignored/path', ['/single/ignored/path']],
+            [['/single/ignored/path'], ['/single/ignored/path']],
+            [['/ignored/path1', '/ignored/path2'], ['/ignored/path1', '/ignored/path2']],
+        ];
     }
 
-    public static function ignoredCommandsProvider ()
+    public static function ignoredCommandsProvider()
     {
-        return array(
-            array('single:ignored:command', array('single:ignored:command')),
-            array(array('single:ignored:command'), array('single:ignored:command')),
-            array(array('ignored:command1', 'ignored:command2'), array('ignored:command1', 'ignored:command2'))
-        );
+        return [
+            ['single:ignored:command', ['single:ignored:command']],
+            [['single:ignored:command'], ['single:ignored:command']],
+            [['ignored:command1', 'ignored:command2'], ['ignored:command1', 'ignored:command2']],
+        ];
     }
 
     public static function deploymentNamesProvider()
     {
-        return array(
-            array('App1', array('App1')),
-            array(array('App1'), array('App1')),
-            array(array('App1', 'App2'), array('App1', 'App2')),
-        );
+        return [
+            ['App1', ['App1']],
+            [['App1'], ['App1']],
+            [['App1', 'App2'], ['App1', 'App2']],
+        ];
     }
 
     /**
@@ -128,11 +134,11 @@ class ConfigurationTest extends TestCase
     {
         $processor = new Processor();
 
-        $config1 = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('deployment_name' => $deploymentNameConfig)));
-        $config2 = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('deployment_names' => $deploymentNameConfig)));
+        $config1 = $processor->processConfiguration(new Configuration(), ['ekino_new_relic' => ['deployment_name' => $deploymentNameConfig]]);
+        $config2 = $processor->processConfiguration(new Configuration(), ['ekino_new_relic' => ['deployment_names' => $deploymentNameConfig]]);
 
-        $this->assertEquals($expected, $config1['deployment_names']);
-        $this->assertEquals($expected, $config2['deployment_names']);
+        $this->assertSame($expected, $config1['deployment_names']);
+        $this->assertSame($expected, $config2['deployment_names']);
     }
 
     /**
@@ -142,9 +148,9 @@ class ConfigurationTest extends TestCase
     {
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('http'=>array('ignored_routes' => $ignoredRoutesConfig))));
+        $config = $processor->processConfiguration(new Configuration(), ['ekino_new_relic' => ['http' => ['ignored_routes' => $ignoredRoutesConfig]]]);
 
-        $this->assertEquals($expected, $config['http']['ignored_routes']);
+        $this->assertSame($expected, $config['http']['ignored_routes']);
     }
 
     /**
@@ -154,9 +160,9 @@ class ConfigurationTest extends TestCase
     {
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('http'=>array('ignored_paths' => $ignoredPathsConfig))));
+        $config = $processor->processConfiguration(new Configuration(), ['ekino_new_relic' => ['http' => ['ignored_paths' => $ignoredPathsConfig]]]);
 
-        $this->assertEquals($expected, $config['http']['ignored_paths']);
+        $this->assertSame($expected, $config['http']['ignored_paths']);
     }
 
     /**
@@ -166,8 +172,8 @@ class ConfigurationTest extends TestCase
     {
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(), array('ekino_new_relic' => array('commands'=>array('ignored_commands' => $ignoredCommandsConfig))));
+        $config = $processor->processConfiguration(new Configuration(), ['ekino_new_relic' => ['commands' => ['ignored_commands' => $ignoredCommandsConfig]]]);
 
-        $this->assertEquals($expected, $config['commands']['ignored_commands']);
+        $this->assertSame($expected, $config['commands']['ignored_commands']);
     }
 }

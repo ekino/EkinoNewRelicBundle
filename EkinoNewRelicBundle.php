@@ -33,4 +33,3 @@ class EkinoNewRelicBundle extends Bundle
         }
     }
 }
-
