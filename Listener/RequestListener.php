@@ -16,11 +16,13 @@ namespace Ekino\Bundle\NewRelicBundle\Listener;
 use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestListener
+class RequestListener implements EventSubscriberInterface
 {
     private $ignoredRoutes;
     private $ignoredPaths;
@@ -45,29 +47,42 @@ class RequestListener
         $this->symfonyCache = $symfonyCache;
     }
 
-    public function setApplicationName(GetResponseEvent $event)
+    public static function getSubscribedEvents(): array
     {
-        if (!$this->validateEvent($event)) {
+        return [
+            KernelEvents::REQUEST => [
+                 ['setApplicationName', 255],
+                 ['setIgnoreTransaction', 31],
+                 ['setTransactionName', -10],
+            ],
+        ];
+    }
+
+    public function setApplicationName(GetResponseEvent $event): void
+    {
+        if (!$this->isEventValid($event)) {
             return;
         }
 
         $appName = $this->config->getName();
 
-        if ($appName) {
-            if ($this->symfonyCache) {
-                $this->interactor->startTransaction($appName);
-            }
+        if (!$appName) {
+            return;
+        }
 
-            // Set application name if different from ini configuration
-            if ($appName !== ini_get('newrelic.appname')) {
-                $this->interactor->setApplicationName($appName, $this->config->getLicenseKey(), $this->config->getXmit());
-            }
+        if ($this->symfonyCache) {
+            $this->interactor->startTransaction($appName);
+        }
+
+        // Set application name if different from ini configuration
+        if ($appName !== ini_get('newrelic.appname')) {
+            $this->interactor->setApplicationName($appName, $this->config->getLicenseKey(), $this->config->getXmit());
         }
     }
 
-    public function setTransactionName(GetResponseEvent $event)
+    public function setTransactionName(GetResponseEvent $event): void
     {
-        if (!$this->validateEvent($event)) {
+        if (!$this->isEventValid($event)) {
             return;
         }
 
@@ -76,9 +91,9 @@ class RequestListener
         $this->interactor->setTransactionName($transactionName);
     }
 
-    public function setIgnoreTransaction(GetResponseEvent $event)
+    public function setIgnoreTransaction(GetResponseEvent $event): void
     {
-        if (!$this->validateEvent($event)) {
+        if (!$this->isEventValid($event)) {
             return;
         }
 
@@ -95,7 +110,7 @@ class RequestListener
     /**
      * Make sure we should consider this event. Example: make sure it is a master request.
      */
-    private function validateEvent(GetResponseEvent $event)
+    private function isEventValid(GetResponseEvent $event): bool
     {
         return HttpKernelInterface::MASTER_REQUEST === $event->getRequestType();
     }

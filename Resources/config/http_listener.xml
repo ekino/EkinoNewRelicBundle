@@ -6,9 +6,7 @@
 
     <services>
         <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
-            <tag name="kernel.event_listener" event="kernel.request" method="setApplicationName" priority="255"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="setIgnoreTransaction" priority="31"/>
-            <tag name="kernel.event_listener" event="kernel.request" method="setTransactionName" priority="-10"/>
+            <tag name="kernel.event_subscriber"/>
 
             <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
             <argument type="service" id="ekino.new_relic.interactor" />
@@ -19,7 +17,7 @@
         </service>
 
         <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
-            <tag name="kernel.event_listener" event="kernel.response" method="onCoreResponse" priority="-255"/>
+            <tag name="kernel.event_subscriber"/>
 
             <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
             <argument type="service" id="ekino.new_relic.interactor" />
