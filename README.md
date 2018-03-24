@@ -84,22 +84,25 @@ ekino_new_relic:
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true (default: false)
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
     instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
-    log_exceptions: false                 # If true, sends exceptions to New Relic (default: false)
-    deprecations: false               # If true, reports deprecations to New Relic (default: false)
-    log_logs: true                        # When enabled, send application's logs to New Relic (default: disabled)
-    # log_logs:                            # Advanced configuration is available
-    #    channels: [app]                   # Channels to listen (default: app)
-    #    level: error                      # Report only logs higher than this level (see \Psr\Log\LogLevel) (default: error)
-    #    service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.logs_handler.real)
-    log_commands: true                    # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
-    using_symfony_cache: false            # Symfony HTTP cache (see below) (default: false)
-    transaction_naming: route             # route, controller or service (see below)
-    transaction_naming_service: ~         # Transaction naming service (see below)
-    ignored_routes: []                    # No transaction recorded for this routes
-    ignored_paths: []                     # No transaction recorded for this paths
-    ignored_commands: []                  # No transaction recorded for this commands (background tasks)
     interactor: ~                         # The interactor service that is used. Setting enabled=false will override this value 
     twig: true                            # Allows you to disable twig integration (falls back to class_exists(\Twig_Environment::class))
+    exceptions: true                      # If true, sends exceptions to New Relic (default: true)
+    deprecations: true                    # If true, reports deprecations to New Relic (default: true)
+    http:
+        enabled: true
+        using_symfony_cache: false        # Symfony HTTP cache (see below) (default: false)
+        transaction_naming: route         # route, controller or service (see below)
+        transaction_naming_service: ~     # Transaction naming service (see below)
+        ignored_routes: []                # No transaction recorded for this routes
+        ignored_paths: []                 # No transaction recorded for this paths
+    monolog: 
+        enabled: false                    # When enabled, send application's logs to New Relic (default: disabled)
+        channels: [app]                   # Channels to listen (default: app)
+        level: error                      # Report only logs higher than this level (see \Psr\Log\LogLevel) (default: error)
+        service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.logs_handler.real)
+    commands: 
+        enabled: true                     # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
+        ignored_commands: []              # No transaction recorded for this commands (background tasks)
 ```
 
 ## Enhanced RUM instrumentation
