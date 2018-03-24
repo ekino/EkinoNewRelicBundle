@@ -22,7 +22,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CommandListener implements EventSubscriberInterface
 {
-
     private $interactor;
     private $config;
     private $ignoredCommands;
