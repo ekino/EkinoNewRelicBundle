@@ -15,6 +15,8 @@ namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
 
 use Ekino\Bundle\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\ContainerHasParameterConstraint;
+use PHPUnit\Framework\Constraint\LogicalNot;
 
 class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 {
@@ -36,36 +38,46 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasService('ekino.new_relic.twig.new_relic_extension');
         $this->assertContainerBuilderHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderNotHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
     }
 
     public function testAlternativeConfiguration()
     {
         $this->load([
-            'log_exceptions' => true,
-            'log_commands' => false,
+            'exceptions' => false,
+            'commands' => false,
             'twig' => false,
         ]);
 
         $this->assertContainerBuilderNotHasService('ekino.new_relic.twig.new_relic_extension');
         $this->assertContainerBuilderNotHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderNotHasService('ekino.new_relic.exception_listener');
     }
 
     public function testDeprecation()
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('ekino.new_relic.log_deprecations');
+        $this->assertContainerBuilderHasService('ekino.new_relic.deprecation_listener');
     }
 
-    public function testLogs()
+    public function testMonolog()
     {
-        $this->load(['log_logs' => true]);
+        $this->load(['monolog' => true]);
 
-        $this->assertContainerBuilderHasParameter('ekino.new_relic.log_logs');
+        $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog.channels');
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('ekino.new_relic.logs_handler', 0, 400);
+    }
+
+    public function testMonologDisabled()
+    {
+        $this->load(['monolog' => false]);
+
+        self::assertThat(
+            $this->container,
+            new LogicalNot(new ContainerHasParameterConstraint('ekino.new_relic.monolog.channels', null, false))
+        );
     }
 
     public function testConfigDisabled()
