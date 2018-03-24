@@ -167,7 +167,7 @@ class NotifyDeploymentCommand extends Command
      *
      * @return string
      */
-    protected function createPayload($appName, InputInterface $input)
+    private function createPayload($appName, InputInterface $input)
     {
         $content_array = [
             'deployment[app_name]' => $appName,

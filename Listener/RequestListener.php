@@ -112,7 +112,7 @@ class RequestListener
      *
      * @return bool
      */
-    protected function validateEvent(GetResponseEvent $event)
+    private function validateEvent(GetResponseEvent $event)
     {
         return HttpKernelInterface::MASTER_REQUEST === $event->getRequestType();
     }
