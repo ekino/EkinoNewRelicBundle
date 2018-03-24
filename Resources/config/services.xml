@@ -22,9 +22,7 @@
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
-        <!-- Help auto complete -->
-        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" alias="ekino.new_relic" />
-        <service id="ekino.new_relic" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic" >
+        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" >
             <argument />
             <argument />
             <argument />
@@ -36,7 +34,7 @@
         <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
 
         <service id="ekino.new_relic.command.notify_deployment" class="Ekino\Bundle\NewRelicBundle\Command\NotifyDeploymentCommand">
-            <argument type="service" id="ekino.new_relic" />
+            <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
             <tag name="console.command" command="newrelic:notify-deployment" />
         </service>
     </services>

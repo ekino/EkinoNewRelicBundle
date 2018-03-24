@@ -11,7 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\Twig;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class NewRelicExtensionTest extends TestCase
 {
     /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic
+     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\Config
      */
     private $newRelic;
 
@@ -30,7 +30,7 @@ class NewRelicExtensionTest extends TestCase
 
     protected function setUp()
     {
-        $this->newRelic = $this->getMockBuilder(NewRelic::class)
+        $this->newRelic = $this->getMockBuilder(Config::class)
         ->setMethods(['getCustomMetrics', 'getCustomParameters'])
         ->disableOriginalConstructor()
             ->getMock();

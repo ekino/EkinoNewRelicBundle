@@ -11,7 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Twig;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 /**
@@ -20,7 +20,7 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 class NewRelicExtension extends \Twig_Extension
 {
     /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic
+     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\Config
      */
     protected $newRelic;
 
@@ -45,12 +45,12 @@ class NewRelicExtension extends \Twig_Extension
     protected $footerCalled = false;
 
     /**
-     * @param NewRelic                    $newRelic
+     * @param Config                    $newRelic
      * @param NewRelicInteractorInterface $interactor
      * @param bool                        $instrument
      */
     public function __construct(
-        NewRelic $newRelic,
+        Config $newRelic,
         NewRelicInteractorInterface $interactor,
         $instrument = false
     ) {

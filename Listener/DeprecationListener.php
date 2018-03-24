@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -17,6 +19,10 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 class DeprecationListener
 {
     private $isRegistered = false;
+
+    /**
+     * @var NewRelicInteractorInterface
+     */
     private $interactor;
 
     public function __construct(NewRelicInteractorInterface $interactor)

@@ -12,7 +12,7 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
 use Ekino\Bundle\NewRelicBundle\Listener\ResponseListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class ResponseListenerTest extends TestCase
     protected function setUp()
     {
         $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
-        $this->newRelic = $this->getMockBuilder(NewRelic::class)
+        $this->newRelic = $this->getMockBuilder(Config::class)
             ->setMethods(['getCustomEvents', 'getCustomMetrics', 'getCustomParameters'])
             ->disableOriginalConstructor()
             ->getMock();

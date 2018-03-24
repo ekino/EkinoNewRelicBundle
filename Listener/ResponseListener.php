@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,7 +13,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -22,7 +24,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 class ResponseListener
 {
     /**
-     * @var NewRelic
+     * @var Config
      */
     protected $newRelic;
 
@@ -49,14 +51,14 @@ class ResponseListener
     /**
      * Constructor.
      *
-     * @param NewRelic                    $newRelic
+     * @param Config                      $newRelic
      * @param NewRelicInteractorInterface $interactor
      * @param bool                        $instrument
      * @param bool                        $symfonyCache
      * @param NewRelicExtension           $newRelicTwigExtension
      */
     public function __construct(
-        NewRelic $newRelic,
+        Config $newRelic,
         NewRelicInteractorInterface $interactor,
         $instrument = false,
         $symfonyCache = false,

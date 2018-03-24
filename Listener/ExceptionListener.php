@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -23,7 +25,7 @@ class ExceptionListener
     /**
      * @var NewRelicInteractorInterface
      */
-    protected $interactor;
+    private $interactor;
 
     /**
      * @param NewRelicInteractorInterface $interactor
