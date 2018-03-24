@@ -4,6 +4,7 @@ cache:
     directories:
         - $HOME/.composer/cache/files
         - $HOME/symfony-bridge/.phpunit
+        - $HOME/.php-cs-fixer
 
 env:
     global:
@@ -23,7 +24,7 @@ matrix:
           # Test the latest stable release
         - php: 7.1
         - php: 7.2
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text" CS=true
 
           # Test LTS versions. This makes sure we do not use Symfony packages with version greater
           # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
@@ -51,11 +52,15 @@ install:
     - composer update ${COMPOSER_FLAGS} --prefer-dist --no-interaction
     - ./vendor/bin/simple-phpunit install
 
+before_script:
+  - mkdir -p "$HOME/.php-cs-fixer"
+
 script:
     - composer validate --strict --no-check-lock
     # simple-phpunit is the PHPUnit wrapper provided by the PHPUnit Bridge component and
     # it helps with testing legacy code and deprecations (composer require symfony/phpunit-bridge)
     - ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
+    - if [[ "$CS" == "true" ]]; then vendor/bin/php-cs-fixer fix --config=.php_cs --verbose --diff --dry-run; fi
 
 after_success:
     - if [[ $COVERAGE = true ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
