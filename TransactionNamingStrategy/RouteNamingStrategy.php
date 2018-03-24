@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RouteNamingStrategy implements TransactionNamingStrategyInterface
 {
-    public function getTransactionName(Request $request)
+    public function getTransactionName(Request $request): string
     {
         return $request->get('_route') ?: 'Unknown Symfony route';
     }

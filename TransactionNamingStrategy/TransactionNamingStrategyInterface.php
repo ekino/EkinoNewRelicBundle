@@ -15,5 +15,5 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface TransactionNamingStrategyInterface
 {
-    public function getTransactionName(Request $request);
+    public function getTransactionName(Request $request): string;
 }

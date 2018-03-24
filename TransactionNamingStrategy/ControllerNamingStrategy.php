@@ -19,13 +19,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ControllerNamingStrategy implements TransactionNamingStrategyInterface
 {
-    public function getTransactionName(Request $request)
+    public function getTransactionName(Request $request): string
     {
-        if (!$request->attributes->has('_controller')) {
+        $controller = $request->attributes->get('_controller');
+        if (empty($controller)) {
             return 'Unknown Symfony controller';
         }
-
-        $controller = $request->attributes->get('_controller');
 
         if ($controller instanceof \Closure) {
             return 'Closure controller';
