@@ -15,6 +15,8 @@ namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
 
 use Ekino\Bundle\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\ContainerHasParameterConstraint;
+use PHPUnit\Framework\Constraint\LogicalNot;
 
 class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 {
@@ -59,13 +61,23 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasService('ekino.new_relic.deprecation_listener');
     }
 
-    public function testLogs()
+    public function testMonolog()
     {
         $this->load(['monolog' => true]);
 
         $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog.channels');
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');
         $this->assertContainerBuilderHasServiceDefinitionWithArgument('ekino.new_relic.logs_handler', 0, 400);
+    }
+
+    public function testMonologDisabled()
+    {
+        $this->load(['monolog' => false]);
+
+        self::assertThat(
+            $this->container,
+            new LogicalNot(new ContainerHasParameterConstraint('ekino.new_relic.monolog.channels', null, false))
+        );
     }
 
     public function testConfigDisabled()
