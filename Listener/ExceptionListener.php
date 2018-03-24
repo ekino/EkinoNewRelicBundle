@@ -22,14 +22,8 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  */
 class ExceptionListener
 {
-    /**
-     * @var NewRelicInteractorInterface
-     */
     private $interactor;
 
-    /**
-     * @param NewRelicInteractorInterface $interactor
-     */
     public function __construct(NewRelicInteractorInterface $interactor)
     {
         $this->interactor = $interactor;

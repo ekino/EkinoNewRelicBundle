@@ -21,29 +21,10 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
  */
 class NewRelicExtension extends \Twig_Extension
 {
-    /**
-     * @var Config
-     */
     private $newRelic;
-
-    /**
-     * @var NewRelicInteractorInterface
-     */
     private $interactor;
-
-    /**
-     * @var bool
-     */
     private $instrument;
-
-    /**
-     * @var bool
-     */
     private $headerCalled = false;
-
-    /**
-     * @var bool
-     */
     private $footerCalled = false;
 
     public function __construct(

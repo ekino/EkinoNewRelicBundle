@@ -22,51 +22,20 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
 {
-    /**
-     * @var array
-     */
     private $ignoredRoutes;
-
-    /**
-     * @var array
-     */
     private $ignoredPaths;
-
-    /**
-     * @var Config
-     */
     private $config;
-
-    /**
-     * @var NewRelicInteractorInterface
-     */
     private $interactor;
-
-    /**
-     * @var TransactionNamingStrategyInterface
-     */
     private $transactionNamingStrategy;
-
-    /**
-     * @var bool
-     */
     private $symfonyCache;
 
-    /**
-     * @param Config                             $config
-     * @param NewRelicInteractorInterface        $interactor
-     * @param array                              $ignoreRoutes
-     * @param array                              $ignoredPaths
-     * @param TransactionNamingStrategyInterface $transactionNamingStrategy
-     * @param bool                               $symfonyCache
-     */
     public function __construct(
         Config $config,
         NewRelicInteractorInterface $interactor,
         array $ignoreRoutes,
         array $ignoredPaths,
         TransactionNamingStrategyInterface $transactionNamingStrategy,
-        $symfonyCache = false
+        bool $symfonyCache = false
     ) {
         $this->config = $config;
         $this->interactor = $interactor;

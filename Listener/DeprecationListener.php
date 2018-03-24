@@ -19,10 +19,6 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 class DeprecationListener
 {
     private $isRegistered = false;
-
-    /**
-     * @var NewRelicInteractorInterface
-     */
     private $interactor;
 
     public function __construct(NewRelicInteractorInterface $interactor)
