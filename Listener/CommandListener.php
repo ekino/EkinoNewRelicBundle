@@ -11,13 +11,11 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Exception\ThrowableException;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
-use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CommandListener implements EventSubscriberInterface
@@ -45,10 +43,10 @@ class CommandListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        $events = array(
-            ConsoleEvents::COMMAND => array('onConsoleCommand', 0),
-            ConsoleEvents::ERROR => array('onConsoleError', 0),
-        );
+        $events = [
+            ConsoleEvents::COMMAND => ['onConsoleCommand', 0],
+            ConsoleEvents::ERROR => ['onConsoleError', 0],
+        ];
 
         return $events;
     }
@@ -68,7 +66,7 @@ class CommandListener implements EventSubscriberInterface
 
         // Due to newrelic's extension implementation, the method `ignoreTransaction` must be called after `setApplicationName`
         // see https://discuss.newrelic.com/t/newrelic-ignore-transaction-not-being-honored/5450/5
-        if (in_array($command->getName(), $this->ignoredCommands)) {
+        if (in_array($command->getName(), $this->ignoredCommands, true)) {
             $this->interactor->ignoreTransaction();
         }
 
@@ -76,10 +74,10 @@ class CommandListener implements EventSubscriberInterface
 
         // send parameters to New Relic
         foreach ($input->getOptions() as $key => $value) {
-            $key = '--' . $key;
+            $key = '--'.$key;
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
-                    $this->interactor->addCustomParameter($key . '[' . $k . ']', $v);
+                    $this->interactor->addCustomParameter($key.'['.$k.']', $v);
                 }
             } else {
                 $this->interactor->addCustomParameter($key, $value);
@@ -89,7 +87,7 @@ class CommandListener implements EventSubscriberInterface
         foreach ($input->getArguments() as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
-                    $this->interactor->addCustomParameter($key . '[' . $k . ']', $v);
+                    $this->interactor->addCustomParameter($key.'['.$k.']', $v);
                 }
             } else {
                 $this->interactor->addCustomParameter($key, $value);

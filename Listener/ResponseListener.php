@@ -17,7 +17,7 @@ use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 /**
- * Newrelic response listener
+ * Newrelic response listener.
  */
 class ResponseListener
 {
@@ -32,12 +32,12 @@ class ResponseListener
     protected $interactor;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $instrument;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $symfonyCache;
 
@@ -47,7 +47,7 @@ class ResponseListener
     protected $newRelicTwigExtension;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param NewRelic                    $newRelic
      * @param NewRelicInteractorInterface $interactor
@@ -62,15 +62,15 @@ class ResponseListener
         $symfonyCache = false,
         NewRelicExtension $newRelicTwigExtension = null
     ) {
-        $this->newRelic              = $newRelic;
-        $this->interactor            = $interactor;
-        $this->instrument            = $instrument;
-        $this->symfonyCache          = $symfonyCache;
+        $this->newRelic = $newRelic;
+        $this->interactor = $interactor;
+        $this->instrument = $instrument;
+        $this->symfonyCache = $symfonyCache;
         $this->newRelicTwigExtension = $newRelicTwigExtension;
     }
 
     /**
-     * On core response
+     * On core response.
      *
      * @param FilterResponseEvent $event
      */
@@ -106,7 +106,7 @@ class ResponseListener
                 $response = $event->getResponse();
 
                 // We can only instrument HTML responses
-                if (substr($response->headers->get('Content-Type'), 0, 9) == 'text/html') {
+                if ('text/html' === substr($response->headers->get('Content-Type'), 0, 9)) {
                     $responseContent = $response->getContent();
 
                     if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isHeaderCalled()) {

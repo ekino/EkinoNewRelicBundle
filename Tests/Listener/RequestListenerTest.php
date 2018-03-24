@@ -11,14 +11,14 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
 use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 class RequestListenerTest extends TestCase
 {
@@ -34,7 +34,7 @@ class RequestListenerTest extends TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, [], [], $namingStrategy);
         $listener->setApplicationName($event);
     }
 
@@ -53,11 +53,11 @@ class RequestListenerTest extends TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, [], [], $namingStrategy);
         $listener->setTransactionName($event);
     }
 
-    public function testPathIsIgnored ()
+    public function testPathIsIgnored()
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('ignoreTransaction');
@@ -65,15 +65,15 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request(array(), array(), array(), array(), array(), array('REQUEST_URI' => '/ignored_path'));
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/ignored_path']);
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array('/ignored_path'), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, [], ['/ignored_path'], $namingStrategy);
         $listener->setIgnoreTransaction($event);
     }
 
-    public function testRouteIsIgnored ()
+    public function testRouteIsIgnored()
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('ignoreTransaction');
@@ -81,11 +81,11 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request(array(), array(), array('_route' => 'ignored_route'));
+        $request = new Request([], [], ['_route' => 'ignored_route']);
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array('ignored_route'), array(), $namingStrategy);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, ['ignored_route'], [], $namingStrategy);
         $listener->setIgnoreTransaction($event);
     }
 
@@ -101,7 +101,7 @@ class RequestListenerTest extends TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, true);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, [], [], $namingStrategy, true);
         $listener->setApplicationName($event);
     }
 
@@ -117,7 +117,7 @@ class RequestListenerTest extends TestCase
 
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, array(), array(), $namingStrategy, false);
+        $listener = new RequestListener(new NewRelic('App name', 'Token'), $interactor, [], [], $namingStrategy, false);
         $listener->setApplicationName($event);
     }
 }

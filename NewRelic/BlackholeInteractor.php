@@ -111,7 +111,6 @@ class BlackholeInteractor implements NewRelicInteractorInterface
 
     public function recordDatastoreSegment(callable $func, array $parameters)
     {
-        return null;
     }
 
     public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool

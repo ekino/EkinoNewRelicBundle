@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of Ekino New Relic bundle.
+ *
+ * (c) Ekino - Thomas Rabaix <thomas.rabaix@ekino.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -16,8 +25,8 @@ class MonologHandlerPass implements CompilerPassInterface
 
         $channels = $container->getParameter('ekino.new_relic.monolog.channels');
         foreach ($channels as $channel) {
-            $def = $container->getDefinition($channel === 'app' ? 'monolog.logger' : 'monolog.logger.'.$channel);
-            $def->addMethodCall('pushHandler', array(new Reference('ekino.new_relic.logs_handler')));
+            $def = $container->getDefinition('app' === $channel ? 'monolog.logger' : 'monolog.logger.'.$channel);
+            $def->addMethodCall('pushHandler', [new Reference('ekino.new_relic.logs_handler')]);
         }
     }
 }

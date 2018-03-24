@@ -49,28 +49,28 @@ class ResponseListenerTest extends TestCase
 
     public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
     {
-        $events = array(
-            'WidgetSale' => array(
-                array(
+        $events = [
+            'WidgetSale' => [
+                [
                     'color' => 'red',
                     'weight' => 12.5,
-                ),
-                array(
+                ],
+                [
                     'color' => 'blue',
                     'weight' => 12.5,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $metrics = array(
+        $metrics = [
             'foo_a' => 4.7,
             'foo_b' => 11,
-        );
+        ];
 
-        $parameters = array(
+        $parameters = [
             'foo_1' => 'bar_1',
             'foo_2' => 'bar_2',
-        );
+        ];
 
         $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue($events));
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue($metrics));
@@ -81,14 +81,14 @@ class ResponseListenerTest extends TestCase
         $this->interactor->expects($this->at(2))->method('addCustomParameter')->with('foo_1', 'bar_1');
         $this->interactor->expects($this->at(3))->method('addCustomParameter')->with('foo_2', 'bar_2');
 
-        $this->interactor->expects($this->at(4))->method('addCustomEvent')->with('WidgetSale', array(
+        $this->interactor->expects($this->at(4))->method('addCustomEvent')->with('WidgetSale', [
             'color' => 'red',
             'weight' => 12.5,
-        ));
-        $this->interactor->expects($this->at(5))->method('addCustomEvent')->with('WidgetSale', array(
+        ]);
+        $this->interactor->expects($this->at(5))->method('addCustomEvent')->with('WidgetSale', [
             'color' => 'blue',
             'weight' => 12.5,
-        ));
+        ]);
 
         $event = $this->createFilterResponseEventMock();
 
@@ -156,31 +156,31 @@ class ResponseListenerTest extends TestCase
 
     public function providerOnCoreResponseOnlyInstrumentHTMLResponses()
     {
-        return array(
+        return [
             // unsupported content types
-            array(null, null, 'text/xml'),
-            array(null, null, 'text/plain'),
-            array(null, null, 'application/json'),
+            [null, null, 'text/xml'],
+            [null, null, 'text/plain'],
+            [null, null, 'application/json'],
 
-            array('content', 'content', 'text/html'),
-            array('<div class="head">head</div>', '<div class="head">head</div>', 'text/html'),
-            array('<header>content</header>', '<header>content</header>', 'text/html'),
+            ['content', 'content', 'text/html'],
+            ['<div class="head">head</div>', '<div class="head">head</div>', 'text/html'],
+            ['<header>content</header>', '<header>content</header>', 'text/html'],
 
             // head, body tags
-            array('<head><title /></head>', '<head>__Timing_Header__<title /></head>', 'text/html'),
-            array('<body><div /></body>', '<body><div />__Timing_Feader__</body>', 'text/html'),
-            array('<head><title /></head><body><div /></body>', '<head>__Timing_Header__<title /></head><body><div />__Timing_Feader__</body>', 'text/html'),
+            ['<head><title /></head>', '<head>__Timing_Header__<title /></head>', 'text/html'],
+            ['<body><div /></body>', '<body><div />__Timing_Feader__</body>', 'text/html'],
+            ['<head><title /></head><body><div /></body>', '<head>__Timing_Header__<title /></head><body><div />__Timing_Feader__</body>', 'text/html'],
 
             // with charset
-            array('<head><title /></head><body><div /></body>', '<head>__Timing_Header__<title /></head><body><div />__Timing_Feader__</body>', 'text/html; charset=UTF-8'),
-        );
+            ['<head><title /></head><body><div /></body>', '<head>__Timing_Header__<title /></head><body><div />__Timing_Feader__</body>', 'text/html; charset=UTF-8'],
+        ];
     }
 
     public function testInteractionWithTwigExtensionHeader()
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
@@ -202,7 +202,7 @@ class ResponseListenerTest extends TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->once())->method('getBrowserTimingHeader')->will($this->returnValue('__Timing_Feader__'));
@@ -224,7 +224,7 @@ class ResponseListenerTest extends TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
@@ -244,9 +244,9 @@ class ResponseListenerTest extends TestCase
 
     private function setUpNoCustomMetricsOrParameters()
     {
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue(array()));
-        $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue(array()));
-        $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue(array()));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue([]));
 
         $this->interactor->expects($this->never())->method('addCustomEvent');
         $this->interactor->expects($this->never())->method('addCustomMetric');

@@ -22,7 +22,7 @@ class ControllerNamingStrategyTest extends TestCase
         $request->attributes->set('_controller', 'SomeBundle:Some:SomeAction');
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertEquals('SomeBundle:Some:SomeAction', $strategy->getTransactionName($request));
+        $this->assertSame('SomeBundle:Some:SomeAction', $strategy->getTransactionName($request));
     }
 
     public function testControllerAsClosure()
@@ -32,16 +32,16 @@ class ControllerNamingStrategyTest extends TestCase
         });
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertEquals('Closure controller', $strategy->getTransactionName($request));
+        $this->assertSame('Closure controller', $strategy->getTransactionName($request));
     }
 
     public function testControllerAsCallback()
     {
         $request = new Request();
-        $request->attributes->set('_controller', array($this, 'testControllerAsString'));
+        $request->attributes->set('_controller', [$this, 'testControllerAsString']);
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertEquals('Callback contoller: Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
+        $this->assertSame('Callback contoller: Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
     }
 
     public function testControllerUnknown()
@@ -49,6 +49,6 @@ class ControllerNamingStrategyTest extends TestCase
         $request = new Request();
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertEquals('Unknown Symfony controller', $strategy->getTransactionName($request));
+        $this->assertSame('Unknown Symfony controller', $strategy->getTransactionName($request));
     }
 }

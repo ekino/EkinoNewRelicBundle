@@ -15,11 +15,10 @@ use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -73,7 +72,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('transaction_naming')
                             ->defaultValue('route')
                             ->validate()
-                                ->ifNotInArray(array('route', 'controller', 'service'))
+                                ->ifNotInArray(['route', 'controller', 'service'])
                                 ->thenInvalid('Invalid transaction naming scheme "%s", must be "route", "controller" or "service".')
                             ->end()
                         ->end()
