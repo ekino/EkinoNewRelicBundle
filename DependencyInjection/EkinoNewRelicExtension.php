@@ -114,7 +114,7 @@ class EkinoNewRelicExtension extends Extension
         }
     }
 
-    private function getTransactionNamingService(array $config): string
+    private function getTransactionNamingService(array $config): Reference
     {
         switch ($config['http']['transaction_naming']) {
             case 'controller':
