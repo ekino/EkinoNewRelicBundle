@@ -48,7 +48,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
      * @param string $message
      * @param array  $context
      */
-    protected function log($message, array $context = [])
+    private function log($message, array $context = [])
     {
         if ($this->logger) {
             $this->logger->debug($message, $context);
