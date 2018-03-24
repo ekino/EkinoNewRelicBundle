@@ -34,7 +34,7 @@ class NotifyDeploymentCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDefinition([
@@ -59,7 +59,7 @@ class NotifyDeploymentCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $appNames = $this->newrelic->getDeploymentNames();
 
@@ -97,11 +97,7 @@ class NotifyDeploymentCommand extends Command
         return $exitCode;
     }
 
-    /**
-     * @param string $api_key
-     * @param string $payload
-     */
-    public function performRequest($api_key, $payload)
+    public function performRequest(string $api_key, string $payload): array
     {
         $headers = [
             sprintf('x-api-key: %s', $api_key),
@@ -149,13 +145,7 @@ class NotifyDeploymentCommand extends Command
         return $response;
     }
 
-    /**
-     * @param string         $appName
-     * @param InputInterface $input
-     *
-     * @return string
-     */
-    private function createPayload($appName, InputInterface $input)
+    private function createPayload(string $appName, InputInterface $input): string
     {
         $content_array = [
             'deployment[app_name]' => $appName,

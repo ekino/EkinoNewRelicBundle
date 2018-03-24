@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class MonologHandlerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasParameter('ekino.new_relic.monolog.channels') || !$container->hasDefinition('monolog.logger')) {
             return;

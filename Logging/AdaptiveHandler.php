@@ -17,21 +17,21 @@ use Psr\Log\LogLevel;
 class AdaptiveHandler extends NewRelicHandler
 {
     public function __construct(
-        $level = LogLevel::ERROR,
-        $bubble = true,
-        $appName = null,
-        $explodeArrays = false,
-        $transactionName = null
+        string $level = LogLevel::ERROR,
+        bool $bubble = true,
+        string $appName = null,
+        bool $explodeArrays = false,
+        string $transactionName = null
     ) {
         parent::__construct($level, $bubble, $appName, $explodeArrays, $transactionName);
     }
 
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         if (!$this->isNewRelicEnabled()) {
             return;
         }
 
-        return parent::write($record);
+        parent::write($record);
     }
 }
