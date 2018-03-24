@@ -22,7 +22,6 @@ class Config
     private $apiKey;
     private $licenseKey;
     private $xmit;
-    private $framework;
     private $customEvents;
     private $customMetrics;
     private $customParameters;
@@ -30,9 +29,9 @@ class Config
 
     public function __construct(string $name, string $apiKey, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [])
     {
-        $this->name = $name ?: ini_get('newrelic.appname');
+        $this->name = !empty($name) ? $name : ini_get('newrelic.appname') ?: '';
         $this->apiKey = $apiKey;
-        $this->licenseKey = $licenseKey ?: ini_get('newrelic.license');
+        $this->licenseKey = !empty($licenseKey) ? $licenseKey : ini_get('newrelic.license') ?: '';
         $this->xmit = $xmit;
         $this->deploymentNames = $deploymentNames;
         $this->customEvents = [];
