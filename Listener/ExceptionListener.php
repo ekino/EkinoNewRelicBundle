@@ -14,13 +14,15 @@ declare(strict_types=1);
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Listen to exceptions dispatched by Symfony to log them to NewRelic.
  */
-class ExceptionListener
+class ExceptionListener implements EventSubscriberInterface
 {
     private $interactor;
 
@@ -29,7 +31,14 @@ class ExceptionListener
         $this->interactor = $interactor;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::EXCEPTION => ['onKernelException', 0],
+        ];
+    }
+
+    public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
         if (!$exception instanceof HttpExceptionInterface) {

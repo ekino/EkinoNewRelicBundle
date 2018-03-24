@@ -16,12 +16,11 @@ namespace Ekino\Bundle\NewRelicBundle\Listener;
 use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-/**
- * Newrelic response listener.
- */
-class ResponseListener
+class ResponseListener implements EventSubscriberInterface
 {
     private $newRelic;
     private $interactor;
@@ -43,12 +42,16 @@ class ResponseListener
         $this->newRelicTwigExtension = $newRelicTwigExtension;
     }
 
-    /**
-     * On core response.
-     *
-     * @param FilterResponseEvent $event
-     */
-    public function onCoreResponse(FilterResponseEvent $event)
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::RESPONSE => [
+                ['onKernelResponse', -255],
+            ],
+        ];
+    }
+
+    public function onKernelResponse(FilterResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;

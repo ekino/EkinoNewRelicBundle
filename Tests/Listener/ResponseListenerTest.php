@@ -33,7 +33,7 @@ class ResponseListenerTest extends TestCase
             ->getMock();
     }
 
-    public function testOnCoreResponseOnlyMasterRequestsAreProcessed()
+    public function testOnKernelResponseOnlyMasterRequestsAreProcessed()
     {
         $event = $this->getMockBuilder(FilterResponseEvent::class)
             ->setMethods(['isMasterRequest'])
@@ -42,12 +42,12 @@ class ResponseListenerTest extends TestCase
         $event->method('isMasterRequest')->will($this->returnValue(false));
 
         $object = new ResponseListener($this->newRelic, $this->interactor);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
 
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
     }
 
-    public function testOnCoreResponseWithOnlyCustomMetricsAndParameters()
+    public function testOnKernelResponseWithOnlyCustomMetricsAndParameters()
     {
         $events = [
             'WidgetSale' => [
@@ -93,10 +93,10 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock();
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
-    public function testOnCoreResponseInstrumentDisabledInRequest()
+    public function testOnKernelResponseInstrumentDisabledInRequest()
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -106,7 +106,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, null);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     public function testSymfonyCacheEnabled()
@@ -119,7 +119,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, null);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false, true);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     public function testSymfonyCacheDisabled()
@@ -132,13 +132,13 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, null);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false, false);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     /**
-     * @dataProvider providerOnCoreResponseOnlyInstrumentHTMLResponses
+     * @dataProvider providerOnKernelResponseOnlyInstrumentHTMLResponses
      */
-    public function testOnCoreResponseOnlyInstrumentHTMLResponses($content, $expectsSetContent, $contentType)
+    public function testOnKernelResponseOnlyInstrumentHTMLResponses($content, $expectsSetContent, $contentType)
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -151,10 +151,10 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
-    public function providerOnCoreResponseOnlyInstrumentHTMLResponses()
+    public function providerOnKernelResponseOnlyInstrumentHTMLResponses()
     {
         return [
             // unsupported content types
@@ -195,7 +195,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     public function testInteractionWithTwigExtensionFooter()
@@ -217,7 +217,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     public function testInteractionWithTwigExtensionHeaderFooter()
@@ -239,7 +239,7 @@ class ResponseListenerTest extends TestCase
         $event = $this->createFilterResponseEventMock($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
-        $object->onCoreResponse($event);
+        $object->onKernelResponse($event);
     }
 
     private function setUpNoCustomMetricsOrParameters()

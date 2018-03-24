@@ -33,17 +33,15 @@ class CommandListener implements EventSubscriberInterface
         $this->ignoredCommands = $ignoredCommands;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
-        $events = [
+        return [
             ConsoleEvents::COMMAND => ['onConsoleCommand', 0],
             ConsoleEvents::ERROR => ['onConsoleError', 0],
         ];
-
-        return $events;
     }
 
-    public function onConsoleCommand(ConsoleCommandEvent $event)
+    public function onConsoleCommand(ConsoleCommandEvent $event): void
     {
         $command = $event->getCommand();
         $input = $event->getInput();
@@ -84,7 +82,7 @@ class CommandListener implements EventSubscriberInterface
         }
     }
 
-    public function onConsoleError(ConsoleErrorEvent $event)
+    public function onConsoleError(ConsoleErrorEvent $event): void
     {
         $this->interactor->noticeThrowable($event->getError());
     }

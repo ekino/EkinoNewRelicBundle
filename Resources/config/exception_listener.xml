@@ -6,9 +6,9 @@
 
     <services>
         <service id="ekino.new_relic.exception_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ExceptionListener">
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="0"/>
+            <tag name="kernel.event_subscriber"/>
 
-            <argument type="service" id="ekino.new_relic.interactor" />
+            <argument type="service" id="ekino.new_relic.interactor"/>
         </service>
     </services>
 </container>
