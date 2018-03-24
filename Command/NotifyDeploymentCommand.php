@@ -11,7 +11,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Command;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,14 +26,14 @@ class NotifyDeploymentCommand extends Command
     protected static $defaultName = 'newrelic:notify-deployment';
 
     /**
-     * @var NewRelic
+     * @var Config
      */
     private $newrelic;
 
     /**
-     * @param NewRelic $newrelic
+     * @param Config $newrelic
      */
-    public function __construct(NewRelic $newrelic)
+    public function __construct(Config $newrelic)
     {
         $this->newrelic = $newrelic;
 

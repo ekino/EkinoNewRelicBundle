@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -20,14 +22,8 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  */
 class ExceptionListener
 {
-    /**
-     * @var NewRelicInteractorInterface
-     */
-    protected $interactor;
+    private $interactor;
 
-    /**
-     * @param NewRelicInteractorInterface $interactor
-     */
     public function __construct(NewRelicInteractorInterface $interactor)
     {
         $this->interactor = $interactor;

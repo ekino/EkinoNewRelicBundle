@@ -11,14 +11,14 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Tests\NewRelic;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use PHPUnit\Framework\TestCase;
 
-class NewRelicTest extends TestCase
+class ConfigTest extends TestCase
 {
     public function testGeneric()
     {
-        $newRelic = new NewRelic('Ekino', 'XXX');
+        $newRelic = new Config('Ekino', 'XXX');
 
         $this->assertSame('Ekino', $newRelic->getName());
         $this->assertSame('XXX', $newRelic->getApiKey());
@@ -66,12 +66,12 @@ class NewRelicTest extends TestCase
 
     public function testDefaults()
     {
-        $newRelic = new NewRelic(null, null);
+        $newRelic = new Config('', '');
 
         $this->assertNotNull($newRelic->getName());
-        $this->assertSame(ini_get('newrelic.appname'), $newRelic->getName());
+        $this->assertSame(ini_get('newrelic.appname') ?: '', $newRelic->getName());
 
         $this->assertNotNull($newRelic->getLicenseKey());
-        $this->assertSame(ini_get('newrelic.license'), $newRelic->getLicenseKey());
+        $this->assertSame(ini_get('newrelic.license') ?: '', $newRelic->getLicenseKey());
     }
 }

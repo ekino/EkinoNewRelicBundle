@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,7 +13,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -20,24 +22,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CommandListener implements EventSubscriberInterface
 {
-    /**
-     * @var NewRelicInteractorInterface
-     */
-    protected $interactor;
+    private $interactor;
+    private $config;
+    private $ignoredCommands;
 
-    protected $newRelic;
-
-    protected $ignoredCommands;
-
-    /**
-     * @param NewRelic                    $newRelic
-     * @param NewRelicInteractorInterface $interactor
-     * @param array                       $ignoredCommands
-     */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoredCommands)
+    public function __construct(Config $config, NewRelicInteractorInterface $interactor, array $ignoredCommands)
     {
+        $this->config = $config;
         $this->interactor = $interactor;
-        $this->newRelic = $newRelic;
         $this->ignoredCommands = $ignoredCommands;
     }
 
@@ -59,8 +51,8 @@ class CommandListener implements EventSubscriberInterface
         $command = $event->getCommand();
         $input = $event->getInput();
 
-        if ($this->newRelic->getName()) {
-            $this->interactor->setApplicationName($this->newRelic->getName(), $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+        if ($this->config->getName()) {
+            $this->interactor->setApplicationName($this->config->getName(), $this->config->getLicenseKey(), $this->config->getXmit());
         }
         $this->interactor->setTransactionName($command->getName());
 

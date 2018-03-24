@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,7 +13,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -21,45 +23,17 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
  */
 class ResponseListener
 {
-    /**
-     * @var NewRelic
-     */
-    protected $newRelic;
+    private $newRelic;
+    private $interactor;
+    private $instrument;
+    private $symfonyCache;
+    private $newRelicTwigExtension;
 
-    /**
-     * @var NewRelicInteractorInterface
-     */
-    protected $interactor;
-
-    /**
-     * @var bool
-     */
-    protected $instrument;
-
-    /**
-     * @var bool
-     */
-    protected $symfonyCache;
-
-    /**
-     * @var NewRelicExtension
-     */
-    protected $newRelicTwigExtension;
-
-    /**
-     * Constructor.
-     *
-     * @param NewRelic                    $newRelic
-     * @param NewRelicInteractorInterface $interactor
-     * @param bool                        $instrument
-     * @param bool                        $symfonyCache
-     * @param NewRelicExtension           $newRelicTwigExtension
-     */
     public function __construct(
-        NewRelic $newRelic,
+        Config $newRelic,
         NewRelicInteractorInterface $interactor,
-        $instrument = false,
-        $symfonyCache = false,
+        bool $instrument = false,
+        bool $symfonyCache = false,
         NewRelicExtension $newRelicTwigExtension = null
     ) {
         $this->newRelic = $newRelic;

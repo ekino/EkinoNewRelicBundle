@@ -11,6 +11,7 @@
 
 namespace  Ekino\Bundle\NewRelicBundle\DependencyInjection;
 
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -59,7 +60,7 @@ class EkinoNewRelicExtension extends Extension
             $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'])));
         }
 
-        $container->getDefinition('ekino.new_relic')
+        $container->getDefinition(Config::class)
             ->replaceArgument(0, $config['application_name'])
             ->replaceArgument(1, $config['api_key'])
             ->replaceArgument(2, $config['license_key'])

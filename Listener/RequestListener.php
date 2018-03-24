@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,7 +13,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,33 +22,23 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
 {
-    protected $ignoredRoutes;
+    private $ignoredRoutes;
+    private $ignoredPaths;
+    private $config;
+    private $interactor;
+    private $transactionNamingStrategy;
+    private $symfonyCache;
 
-    protected $ignoredPaths;
-
-    protected $newRelic;
-
-    protected $interactor;
-
-    protected $transactionNamingStrategy;
-
-    /**
-     * @var bool
-     */
-    protected $symfonyCache;
-
-    /**
-     * @param NewRelic                           $newRelic
-     * @param NewRelicInteractorInterface        $interactor
-     * @param array                              $ignoreRoutes
-     * @param array                              $ignoredPaths
-     * @param TransactionNamingStrategyInterface $transactionNamingStrategy
-     * @param bool                               $symfonyCache
-     */
-    public function __construct(NewRelic $newRelic, NewRelicInteractorInterface $interactor, array $ignoreRoutes, array $ignoredPaths, TransactionNamingStrategyInterface $transactionNamingStrategy, $symfonyCache = false)
-    {
+    public function __construct(
+        Config $config,
+        NewRelicInteractorInterface $interactor,
+        array $ignoreRoutes,
+        array $ignoredPaths,
+        TransactionNamingStrategyInterface $transactionNamingStrategy,
+        bool $symfonyCache = false
+    ) {
+        $this->config = $config;
         $this->interactor = $interactor;
-        $this->newRelic = $newRelic;
         $this->ignoredRoutes = $ignoreRoutes;
         $this->ignoredPaths = $ignoredPaths;
         $this->transactionNamingStrategy = $transactionNamingStrategy;
@@ -64,7 +56,7 @@ class RequestListener
             return;
         }
 
-        $appName = $this->newRelic->getName();
+        $appName = $this->config->getName();
 
         if ($appName) {
             if ($this->symfonyCache) {
@@ -73,7 +65,7 @@ class RequestListener
 
             // Set application name if different from ini configuration
             if ($appName !== ini_get('newrelic.appname')) {
-                $this->interactor->setApplicationName($appName, $this->newRelic->getLicenseKey(), $this->newRelic->getXmit());
+                $this->interactor->setApplicationName($appName, $this->config->getLicenseKey(), $this->config->getXmit());
             }
         }
     }

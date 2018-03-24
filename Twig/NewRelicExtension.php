@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Ekino New Relic bundle.
  *
@@ -11,7 +13,7 @@
 
 namespace Ekino\Bundle\NewRelicBundle\Twig;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 /**
@@ -19,40 +21,16 @@ use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
  */
 class NewRelicExtension extends \Twig_Extension
 {
-    /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic
-     */
-    protected $newRelic;
+    private $newRelic;
+    private $interactor;
+    private $instrument;
+    private $headerCalled = false;
+    private $footerCalled = false;
 
-    /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface
-     */
-    protected $interactor;
-
-    /**
-     * @var bool
-     */
-    protected $instrument;
-
-    /**
-     * @var bool
-     */
-    protected $headerCalled = false;
-
-    /**
-     * @var bool
-     */
-    protected $footerCalled = false;
-
-    /**
-     * @param NewRelic                    $newRelic
-     * @param NewRelicInteractorInterface $interactor
-     * @param bool                        $instrument
-     */
     public function __construct(
-        NewRelic $newRelic,
+        Config $newRelic,
         NewRelicInteractorInterface $interactor,
-        $instrument = false
+        bool $instrument = false
     ) {
         $this->newRelic = $newRelic;
         $this->interactor = $interactor;
@@ -75,7 +53,7 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function getNewrelicBrowserTimingHeader()
+    public function getNewrelicBrowserTimingHeader(): string
     {
         if ($this->isHeaderCalled()) {
             throw new \RuntimeException('Function "ekino_newrelic_browser_timing_header" has already been called');
@@ -93,7 +71,7 @@ class NewRelicExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function getNewrelicBrowserTimingFooter()
+    public function getNewrelicBrowserTimingFooter(): string
     {
         if ($this->isFooterCalled()) {
             throw new \RuntimeException('Function "ekino_newrelic_browser_timing_footer" has already been called');
@@ -108,31 +86,22 @@ class NewRelicExtension extends \Twig_Extension
         return $this->interactor->getBrowserTimingFooter();
     }
 
-    /**
-     * @return bool
-     */
-    public function isHeaderCalled()
+    public function isHeaderCalled(): bool
     {
         return $this->headerCalled;
     }
 
-    /**
-     * @return bool
-     */
-    public function isFooterCalled()
+    public function isFooterCalled(): bool
     {
         return $this->footerCalled;
     }
 
-    /**
-     * @return bool
-     */
-    public function isUsed()
+    public function isUsed(): bool
     {
         return $this->isHeaderCalled() || $this->isFooterCalled();
     }
 
-    protected function prepareInteractor()
+    protected function prepareInteractor(): void
     {
         if ($this->instrument) {
             $this->interactor->disableAutoRUM();

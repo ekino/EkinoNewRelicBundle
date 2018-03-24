@@ -12,7 +12,7 @@
 namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
 
 use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelic;
+use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
 use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -60,7 +60,7 @@ class CommandListenerTest extends TestCase
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, []);
+        $listener = new CommandListener(new Config('App name', 'Token'), $interactor, []);
         $listener->onConsoleCommand($event);
     }
 
@@ -76,7 +76,7 @@ class CommandListenerTest extends TestCase
 
         $event = new ConsoleCommandEvent($command, $input, $output);
 
-        $listener = new CommandListener(new NewRelic('App name', 'Token'), $interactor, ['test:ignored-command']);
+        $listener = new CommandListener(new Config('App name', 'Token'), $interactor, ['test:ignored-command']);
         $listener->onConsoleCommand($event);
     }
 
@@ -84,7 +84,7 @@ class CommandListenerTest extends TestCase
     {
         $exception = new \Exception('', 1);
 
-        $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
+        $newrelic = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable')->with($exception);
 
@@ -103,7 +103,7 @@ class CommandListenerTest extends TestCase
     {
         $exception = new \Error();
 
-        $newrelic = $this->getMockBuilder(NewRelic::class)->disableOriginalConstructor()->getMock();
+        $newrelic = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable')->with($exception);
         $command = new Command('test:exception');
