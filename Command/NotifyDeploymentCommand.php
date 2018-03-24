@@ -25,14 +25,8 @@ class NotifyDeploymentCommand extends Command
 
     protected static $defaultName = 'newrelic:notify-deployment';
 
-    /**
-     * @var Config
-     */
     private $newrelic;
 
-    /**
-     * @param Config $newrelic
-     */
     public function __construct(Config $newrelic)
     {
         $this->newrelic = $newrelic;
@@ -40,9 +34,6 @@ class NotifyDeploymentCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure()
     {
         $this
@@ -68,9 +59,6 @@ class NotifyDeploymentCommand extends Command
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $appNames = $this->newrelic->getDeploymentNames();

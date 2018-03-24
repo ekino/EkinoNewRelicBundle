@@ -26,9 +26,6 @@ class AdaptiveHandler extends NewRelicHandler
         parent::__construct($level, $bubble, $appName, $explodeArrays, $transactionName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function write(array $record)
     {
         if (!$this->isNewRelicEnabled()) {

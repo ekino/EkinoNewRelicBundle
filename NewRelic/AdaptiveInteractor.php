@@ -20,14 +20,8 @@ namespace Ekino\Bundle\NewRelicBundle\NewRelic;
  */
 class AdaptiveInteractor implements NewRelicInteractorInterface
 {
-    /**
-     * @var NewRelicInteractorInterface
-     */
     private $interactor;
 
-    /**
-     * @param NewRelicInteractorInterface $interactor
-     */
     public function __construct(NewRelicInteractorInterface $real, NewRelicInteractorInterface $fake)
     {
         $this->interactor = extension_loaded('newrelic') ? $real : $fake;

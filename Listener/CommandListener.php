@@ -43,9 +43,6 @@ class CommandListener implements EventSubscriberInterface
         return $events;
     }
 
-    /**
-     * @param ConsoleCommandEvent $event
-     */
     public function onConsoleCommand(ConsoleCommandEvent $event)
     {
         $command = $event->getCommand();
@@ -87,9 +84,6 @@ class CommandListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param ConsoleErrorEvent $event
-     */
     public function onConsoleError(ConsoleErrorEvent $event)
     {
         $this->interactor->noticeThrowable($event->getError());

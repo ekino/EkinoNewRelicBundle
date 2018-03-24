@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
- * Notices the interactor on exception.
+ * Listen to exceptions dispatched by Symfony to log them to NewRelic.
  */
 class ExceptionListener
 {
@@ -29,9 +29,6 @@ class ExceptionListener
         $this->interactor = $interactor;
     }
 
-    /**
-     * @param GetResponseForExceptionEvent $event
-     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();

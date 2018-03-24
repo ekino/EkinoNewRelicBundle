@@ -45,11 +45,6 @@ class RequestListener
         $this->symfonyCache = $symfonyCache;
     }
 
-    /**
-     * Set the name of the application.
-     *
-     * @param GetResponseEvent $event
-     */
     public function setApplicationName(GetResponseEvent $event)
     {
         if (!$this->validateEvent($event)) {
@@ -70,11 +65,6 @@ class RequestListener
         }
     }
 
-    /**
-     * Set the name of the transaction.
-     *
-     * @param GetResponseEvent $event
-     */
     public function setTransactionName(GetResponseEvent $event)
     {
         if (!$this->validateEvent($event)) {
@@ -86,9 +76,6 @@ class RequestListener
         $this->interactor->setTransactionName($transactionName);
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
     public function setIgnoreTransaction(GetResponseEvent $event)
     {
         if (!$this->validateEvent($event)) {
@@ -107,10 +94,6 @@ class RequestListener
 
     /**
      * Make sure we should consider this event. Example: make sure it is a master request.
-     *
-     * @param GetResponseEvent $event
-     *
-     * @return bool
      */
     private function validateEvent(GetResponseEvent $event)
     {

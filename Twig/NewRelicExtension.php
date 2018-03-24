@@ -101,7 +101,7 @@ class NewRelicExtension extends \Twig_Extension
         return $this->isHeaderCalled() || $this->isFooterCalled();
     }
 
-    protected function prepareInteractor(): void
+    private function prepareInteractor(): void
     {
         if ($this->instrument) {
             $this->interactor->disableAutoRUM();

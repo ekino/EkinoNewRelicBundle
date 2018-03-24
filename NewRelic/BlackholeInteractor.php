@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Ekino\Bundle\NewRelicBundle\NewRelic;
 
 /**
- * Do not log anything.
+ * This interactor throw away any call.
+ *
+ * It can be used to avoid conditional log calls.
  */
 class BlackholeInteractor implements NewRelicInteractorInterface
 {
