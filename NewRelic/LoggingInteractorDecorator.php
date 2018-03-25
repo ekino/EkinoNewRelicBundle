@@ -121,7 +121,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function disableBackgroundJob(): void
     {
         $this->log('Disabling New Relic background job');
-        $this->interactor->enableBackgroundJob();
+        $this->interactor->disableBackgroundJob();
     }
 
     public function endTransaction(bool $ignore = false): bool
@@ -154,19 +154,20 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function setCaptureParams(bool $enabled): void
     {
         $this->log(sprintf('Toggle New Relic capture params to "%s"', $enabled ? 'true' : 'false'));
-        $this->interactor->addCustomTracer($enabled);
+        $this->interactor->setCaptureParams($enabled);
     }
 
     public function stopTransactionTiming(): void
     {
         $this->log('Stopping New Relic timing');
-        $this->interactor->excludeFromApdex();
+        $this->interactor->stopTransactionTiming();
     }
 
-    public function recordDatastoreSegment(callable $func, array $parameters): void
+    public function recordDatastoreSegment(callable $func, array $parameters)
     {
         $this->log('Adding custom New Relic datastore segment');
-        $this->interactor->recordDatastoreSegment($func, $parameters);
+
+        return $this->interactor->recordDatastoreSegment($func, $parameters);
     }
 
     public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
