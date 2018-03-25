@@ -24,7 +24,7 @@ class AdaptiveInteractor implements NewRelicInteractorInterface
 
     public function __construct(NewRelicInteractorInterface $real, NewRelicInteractorInterface $fake)
     {
-        $this->interactor = extension_loaded('newrelic') ? $real : $fake;
+        $this->interactor = \extension_loaded('newrelic') ? $real : $fake;
     }
 
     public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool

@@ -77,18 +77,18 @@ class NotifyDeploymentCommand extends Command
             switch ($response['status']) {
                 case 200:
                 case 201:
-                    $output->writeLn(sprintf("Recorded deployment to '%s' (%s)", $appName, ($input->getOption('description') ? $input->getOption('description') : date('r'))));
+                    $output->writeLn(\sprintf("Recorded deployment to '%s' (%s)", $appName, ($input->getOption('description') ? $input->getOption('description') : \date('r'))));
                     break;
                 case 403:
-                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': API key invalid</error>", $appName));
+                    $output->writeLn(\sprintf("<error>Deployment not recorded to '%s': API key invalid</error>", $appName));
                     $exitCode = self::EXIT_UNAUTHORIZED;
                     break;
                 case null:
-                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Did not understand response</error>", $appName));
+                    $output->writeLn(\sprintf("<error>Deployment not recorded to '%s': Did not understand response</error>", $appName));
                     $exitCode = self::EXIT_HTTP_ERROR;
                     break;
                 default:
-                    $output->writeLn(sprintf("<error>Deployment not recorded to '%s': Received HTTP status %d</error>", $appName, $response['status']));
+                    $output->writeLn(\sprintf("<error>Deployment not recorded to '%s': Received HTTP status %d</error>", $appName, $response['status']));
                     $exitCode = self::EXIT_HTTP_ERROR;
                     break;
             }
@@ -100,24 +100,24 @@ class NotifyDeploymentCommand extends Command
     public function performRequest(string $api_key, string $payload): array
     {
         $headers = [
-            sprintf('x-api-key: %s', $api_key),
+            \sprintf('x-api-key: %s', $api_key),
             'Content-type: application/x-www-form-urlencoded',
         ];
 
         $context = [
             'http' => [
                 'method' => 'POST',
-                'header' => implode("\r\n", $headers),
+                'header' => \implode("\r\n", $headers),
                 'content' => $payload,
                 'ignore_errors' => true,
             ],
         ];
 
-        $level = error_reporting(0);
-        $content = file_get_contents('https://api.newrelic.com/deployments.xml', 0, stream_context_create($context));
-        error_reporting($level);
+        $level = \error_reporting(0);
+        $content = \file_get_contents('https://api.newrelic.com/deployments.xml', 0, \stream_context_create($context));
+        \error_reporting($level);
         if (false === $content) {
-            $error = error_get_last();
+            $error = \error_get_last();
             throw new \RuntimeException($error['message']);
         }
 
@@ -127,14 +127,14 @@ class NotifyDeploymentCommand extends Command
         ];
 
         if (isset($http_response_header[0])) {
-            preg_match('/^HTTP\/1.\d (\d+)/', $http_response_header[0], $matches);
+            \preg_match('/^HTTP\/1.\d (\d+)/', $http_response_header[0], $matches);
 
             if (isset($matches[1])) {
                 $status = $matches[1];
 
                 $response['status'] = $status;
 
-                preg_match('/<error>(.*?)<\/error>/', $content, $matches);
+                \preg_match('/<error>(.*?)<\/error>/', $content, $matches);
 
                 if (isset($matches[1])) {
                     $response['error'] = $matches[1];
@@ -167,6 +167,6 @@ class NotifyDeploymentCommand extends Command
             $content_array['deployment[description]'] = $description;
         }
 
-        return http_build_query($content_array);
+        return \http_build_query($content_array);
     }
 }

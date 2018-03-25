@@ -53,7 +53,7 @@ class CommandListener implements EventSubscriberInterface
 
         // Due to newrelic's extension implementation, the method `ignoreTransaction` must be called after `setApplicationName`
         // see https://discuss.newrelic.com/t/newrelic-ignore-transaction-not-being-honored/5450/5
-        if (in_array($command->getName(), $this->ignoredCommands, true)) {
+        if (\in_array($command->getName(), $this->ignoredCommands, true)) {
             $this->interactor->ignoreTransaction();
         }
 
@@ -62,7 +62,7 @@ class CommandListener implements EventSubscriberInterface
         // send parameters to New Relic
         foreach ($input->getOptions() as $key => $value) {
             $key = '--'.$key;
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach ($value as $k => $v) {
                     $this->interactor->addCustomParameter($key.'['.$k.']', $v);
                 }
@@ -72,7 +72,7 @@ class CommandListener implements EventSubscriberInterface
         }
 
         foreach ($input->getArguments() as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach ($value as $k => $v) {
                     $this->interactor->addCustomParameter($key.'['.$k.']', $v);
                 }

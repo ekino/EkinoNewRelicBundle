@@ -48,7 +48,7 @@ class LoggingInteractorDecoratorTest extends TestCase
                 continue;
             }
 
-            $arguments = array_map(function (\ReflectionParameter $parameter) {
+            $arguments = \array_map(function (\ReflectionParameter $parameter) {
                 return $this->getTypeStub($parameter->getType());
             }, $method->getParameters());
 
@@ -61,18 +61,18 @@ class LoggingInteractorDecoratorTest extends TestCase
     private function getTypeStub(?\ReflectionType $type)
     {
         if (null === $type) {
-            return uniqid('', true);
+            return \uniqid('', true);
         }
 
         switch ($type->getName()) {
             case 'string':
-                return uniqid('', true);
+                return \uniqid('', true);
             case 'bool':
-                return (bool) rand(0, 1);
+                return (bool) \rand(0, 1);
             case 'float':
-                return rand(0, 100) / rand(1, 10);
+                return \rand(0, 100) / \rand(1, 10);
             case 'int':
-                return rand(0, 100);
+                return \rand(0, 100);
             case 'void':
                 return null;
             case 'Throwable':
@@ -80,7 +80,7 @@ class LoggingInteractorDecoratorTest extends TestCase
             case 'callable':
                 return function () {};
             case 'array':
-                return array_fill(0, 2, uniqid('', true));
+                return \array_fill(0, 2, \uniqid('', true));
             default:
                 throw new \UnexpectedValueException('Unknow type. '.$type->getName());
         }
