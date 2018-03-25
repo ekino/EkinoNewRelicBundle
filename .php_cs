@@ -29,6 +29,7 @@ return PhpCsFixer\Config::create()
         'strict_param' => true,
         'strict_comparison' => true,
         'yoda_style' => true,
+        'declare_strict_types' => true,
         'native_function_invocation' => true,
     ])
     ->setFinder(
