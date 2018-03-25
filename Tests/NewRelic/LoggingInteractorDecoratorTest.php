@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\NewRelic;
+namespace Ekino\NewRelicBundle\Tests\NewRelic;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 

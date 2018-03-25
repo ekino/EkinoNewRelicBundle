@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests;
+namespace Ekino\NewRelicBundle\Tests;
 
-use Ekino\Bundle\NewRelicBundle\EkinoNewRelicBundle;
-use Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor;
+use Ekino\NewRelicBundle\EkinoNewRelicBundle;
+use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Nyholm\BundleTest\CompilerPass\PublicServicePass;
 

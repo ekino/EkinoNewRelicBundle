@@ -6,7 +6,7 @@
 
     <services>
         <!-- Logging -->
-        <service id="ekino.new_relic.logs_handler.adaptive" class="Ekino\Bundle\NewRelicBundle\Logging\AdaptiveHandler" public="false">
+        <service id="ekino.new_relic.logs_handler.adaptive" class="Ekino\NewRelicBundle\Logging\AdaptiveHandler" public="false">
             <argument/> <!-- level -->
             <argument>true</argument>
             <argument/> <!-- app_name -->

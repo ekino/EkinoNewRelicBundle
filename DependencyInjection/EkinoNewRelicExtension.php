@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace  Ekino\Bundle\NewRelicBundle\DependencyInjection;
+namespace  Ekino\NewRelicBundle\DependencyInjection;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\Config;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;

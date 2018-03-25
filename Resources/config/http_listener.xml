@@ -5,10 +5,10 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="ekino.new_relic.request_listener" class="Ekino\Bundle\NewRelicBundle\Listener\RequestListener">
+        <service id="ekino.new_relic.request_listener" class="Ekino\NewRelicBundle\Listener\RequestListener">
             <tag name="kernel.event_subscriber"/>
 
-            <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
+            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument type="collection" />
             <argument type="collection" />
@@ -16,10 +16,10 @@
             <argument />
         </service>
 
-        <service id="ekino.new_relic.response_listener" class="Ekino\Bundle\NewRelicBundle\Listener\ResponseListener">
+        <service id="ekino.new_relic.response_listener" class="Ekino\NewRelicBundle\Listener\ResponseListener">
             <tag name="kernel.event_subscriber"/>
 
-            <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
+            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>false</argument>
             <argument />

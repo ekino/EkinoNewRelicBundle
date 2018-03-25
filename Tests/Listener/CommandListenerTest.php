@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
+namespace Ekino\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Listener\CommandListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Listener\CommandListener;
+use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;

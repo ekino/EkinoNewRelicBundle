@@ -35,7 +35,7 @@
         "symfony/monolog-bundle": "^3.2"
     },
     "autoload": {
-        "psr-4": { "Ekino\\Bundle\\NewRelicBundle\\": "" }
+        "psr-4": { "Ekino\\NewRelicBundle\\": "" }
     },
     "extra": {
         "branch-alias": {

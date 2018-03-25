@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection\Compiler;
+namespace Ekino\NewRelicBundle\Tests\DependencyInjection\Compiler;
 
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler\MonologHandlerPass;
+use Ekino\NewRelicBundle\DependencyInjection\Compiler\MonologHandlerPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

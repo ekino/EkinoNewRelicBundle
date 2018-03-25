@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
+namespace Ekino\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Listener\ResponseListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use Ekino\NewRelicBundle\Listener\ResponseListener;
+use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 

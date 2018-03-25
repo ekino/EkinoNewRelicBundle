@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\NewRelic;
+namespace Ekino\NewRelicBundle\NewRelic;
 
 /**
  * This value object contains data and configuration that should be passed to the interactors.

@@ -11,22 +11,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Twig;
+namespace Ekino\NewRelicBundle\Tests\Twig;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
 
 class NewRelicExtensionTest extends TestCase
 {
     /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\Config
+     * @var \Ekino\NewRelicBundle\NewRelic\Config
      */
     private $newRelic;
 
     /**
-     * @var \Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface
+     * @var \Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface
      */
     private $interactor;
 

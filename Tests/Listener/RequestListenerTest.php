@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
+namespace Ekino\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Listener\RequestListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
+use Ekino\NewRelicBundle\Listener\RequestListener;
+use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

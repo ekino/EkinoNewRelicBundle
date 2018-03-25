@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\DependencyInjection;
+namespace Ekino\NewRelicBundle\DependencyInjection;
 
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\NewRelic;
+namespace Ekino\NewRelicBundle\Tests\NewRelic;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\Config;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase

@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Listener;
+namespace Ekino\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Ekino\Bundle\NewRelicBundle\Twig\NewRelicExtension;
+use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

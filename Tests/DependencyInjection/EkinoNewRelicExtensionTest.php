@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
+namespace Ekino\NewRelicBundle\Tests\DependencyInjection;
 
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
+use Ekino\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\ContainerHasParameterConstraint;
 use PHPUnit\Framework\Constraint\LogicalNot;

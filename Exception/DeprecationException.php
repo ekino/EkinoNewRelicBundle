@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace  Ekino\Bundle\NewRelicBundle\Exception;
+namespace  Ekino\NewRelicBundle\Exception;
 
 /**
  * Exception dedicated to report Deprecation.
