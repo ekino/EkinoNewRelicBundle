@@ -61,12 +61,12 @@ class LoggingInteractorDecoratorTest extends TestCase
     private function getTypeStub(?\ReflectionType $type)
     {
         if (null === $type) {
-            return uniqid('', null);
+            return uniqid('', true);
         }
 
         switch ($type->getName()) {
             case 'string':
-                return uniqid('', null);
+                return uniqid('', true);
             case 'bool':
                 return (bool) rand(0, 1);
             case 'float':
