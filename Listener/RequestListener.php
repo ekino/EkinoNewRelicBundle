@@ -75,7 +75,7 @@ class RequestListener implements EventSubscriberInterface
         }
 
         // Set application name if different from ini configuration
-        if ($appName !== ini_get('newrelic.appname')) {
+        if ($appName !== \ini_get('newrelic.appname')) {
             $this->interactor->setApplicationName($appName, $this->config->getLicenseKey(), $this->config->getXmit());
         }
     }
@@ -98,11 +98,11 @@ class RequestListener implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-        if (in_array($request->get('_route'), $this->ignoredRoutes, true)) {
+        if (\in_array($request->get('_route'), $this->ignoredRoutes, true)) {
             $this->interactor->ignoreTransaction();
         }
 
-        if (in_array($request->getPathInfo(), $this->ignoredPaths, true)) {
+        if (\in_array($request->getPathInfo(), $this->ignoredPaths, true)) {
             $this->interactor->ignoreTransaction();
         }
     }

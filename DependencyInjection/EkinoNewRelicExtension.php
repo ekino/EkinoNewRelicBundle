@@ -40,7 +40,7 @@ class EkinoNewRelicExtension extends Extension
             $interactor = $config['interactor'];
         } else {
             // Fallback to see if the extension is loaded or not
-            $interactor = extension_loaded('newrelic')
+            $interactor = \extension_loaded('newrelic')
                 ? 'ekino.new_relic.interactor.real'
                 : 'ekino.new_relic.interactor.blackhole';
         }
@@ -54,7 +54,7 @@ class EkinoNewRelicExtension extends Extension
         }
 
         if (!empty($config['deployment_names'])) {
-            $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'])));
+            $config['deployment_names'] = \array_values(\array_filter(\explode(';', $config['application_name'])));
         }
 
         $container->getDefinition(Config::class)
@@ -97,7 +97,7 @@ class EkinoNewRelicExtension extends Extension
         }
 
         if ($config['monolog']['enabled']) {
-            if (!class_exists(\Monolog\Handler\NewRelicHandler::class)) {
+            if (!\class_exists(\Monolog\Handler\NewRelicHandler::class)) {
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
             $loader->load('monolog.xml');
@@ -106,7 +106,7 @@ class EkinoNewRelicExtension extends Extension
 
             $level = $config['monolog']['level'];
             $container->findDefinition('ekino.new_relic.logs_handler')
-                ->replaceArgument(0, is_int($level) ? $level : constant('Monolog\Logger::'.strtoupper($level)))
+                ->replaceArgument(0, \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)))
                 ->replaceArgument(2, $config['application_name']);
         }
     }
@@ -131,7 +131,7 @@ class EkinoNewRelicExtension extends Extension
                 break;
             default:
                 throw new \InvalidArgumentException(
-                    sprintf(
+                    \sprintf(
                         'Invalid transaction naming scheme "%s", must be "route", "controller" or "service".',
                         $config['http']['transaction_naming']
                     )

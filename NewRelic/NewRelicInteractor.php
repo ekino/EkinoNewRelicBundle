@@ -88,7 +88,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     public function startTransaction(string $name = null, string $license = null): bool
     {
         if (null === $name) {
-            $name = ini_get('newrelic.appname');
+            $name = \ini_get('newrelic.appname');
         }
 
         return newrelic_start_transaction($name, $license);

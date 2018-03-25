@@ -28,7 +28,7 @@ class CommandListenerTest extends TestCase
 {
     public function testCommandMarkedAsBackgroundJob()
     {
-        if (!class_exists('Symfony\Component\Console\Event\ConsoleCommandEvent')) {
+        if (!\class_exists('Symfony\Component\Console\Event\ConsoleCommandEvent')) {
             $this->markTestSkipped('Console Events is only available from Symfony 2.3');
         }
 
