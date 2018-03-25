@@ -13,7 +13,15 @@ declare(strict_types=1);
 
 namespace  Ekino\NewRelicBundle\DependencyInjection;
 
+use Ekino\NewRelicBundle\Listener\CommandListener;
+use Ekino\NewRelicBundle\Listener\RequestListener;
+use Ekino\NewRelicBundle\Listener\ResponseListener;
+use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
+use Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy;
+use Ekino\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -37,23 +45,20 @@ class EkinoNewRelicExtension extends Extension
 
         if (!$config['enabled']) {
             $config['monolog']['enabled'] = false;
-            $interactor = 'ekino.new_relic.interactor.blackhole';
+            $interactor = BlackholeInteractor::class;
         } elseif (isset($config['interactor'])) {
             $interactor = $config['interactor'];
         } else {
             // Fallback to see if the extension is loaded or not
-            $interactor = \extension_loaded('newrelic')
-                ? 'ekino.new_relic.interactor.real'
-                : 'ekino.new_relic.interactor.blackhole';
+            $interactor = \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
         }
 
         if ($config['logging']) {
-            $container->setAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.logger');
-            $container->getDefinition('ekino.new_relic.interactor.logger')
+            $container->getDefinition(LoggingInteractorDecorator::class)
                 ->replaceArgument(0, new Reference($interactor));
-        } else {
-            $container->setAlias('ekino.new_relic.interactor', $interactor);
+            $interactor = LoggingInteractorDecorator::class;
         }
+        $container->setAlias('ekino.new_relic.interactor', $interactor);
 
         if (!empty($config['deployment_names'])) {
             $config['deployment_names'] = \array_values(\array_filter(\explode(';', $config['application_name'])));
@@ -69,20 +74,20 @@ class EkinoNewRelicExtension extends Extension
 
         if ($config['http']['enabled']) {
             $loader->load('http_listener.xml');
-            $container->getDefinition('ekino.new_relic.request_listener')
+            $container->getDefinition(RequestListener::class)
                 ->replaceArgument(2, $config['http']['ignored_routes'])
                 ->replaceArgument(3, $config['http']['ignored_paths'])
                 ->replaceArgument(4, $this->getTransactionNamingService($config))
                 ->replaceArgument(5, $config['http']['using_symfony_cache']);
 
-            $container->getDefinition('ekino.new_relic.response_listener')
+            $container->getDefinition(ResponseListener::class)
                 ->replaceArgument(2, $config['http']['instrument'])
                 ->replaceArgument(3, $config['http']['using_symfony_cache']);
         }
 
         if ($config['commands']['enabled']) {
             $loader->load('command_listener.xml');
-            $container->getDefinition('ekino.new_relic.command_listener')
+            $container->getDefinition(CommandListener::class)
                 ->replaceArgument(2, $config['commands']['ignored_commands']);
         }
 
@@ -117,10 +122,10 @@ class EkinoNewRelicExtension extends Extension
     {
         switch ($config['http']['transaction_naming']) {
             case 'controller':
-                $serviceId = new Reference('ekino.new_relic.transaction_naming_strategy.controller');
+                $serviceId = new Reference(ControllerNamingStrategy::class);
                 break;
             case 'route':
-                $serviceId = new Reference('ekino.new_relic.transaction_naming_strategy.route');
+                $serviceId = new Reference(RouteNamingStrategy::class);
                 break;
             case 'service':
                 if (!isset($config['http']['transaction_naming_service'])) {

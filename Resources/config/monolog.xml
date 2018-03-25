@@ -6,12 +6,12 @@
 
     <services>
         <!-- Logging -->
-        <service id="ekino.new_relic.logs_handler.adaptive" class="Ekino\NewRelicBundle\Logging\AdaptiveHandler" public="false">
+        <service id="Ekino\NewRelicBundle\Logging\AdaptiveHandler" public="false">
             <argument/> <!-- level -->
             <argument>true</argument>
             <argument/> <!-- app_name -->
         </service>
-        <service id="ekino.new_relic.logs_handler.real" class="Monolog\Handler\NewRelicHandler" public="false">
+        <service id="ekino.new_relic.monolog_handler" class="Monolog\Handler\NewRelicHandler" public="false">
             <argument/> <!-- level -->
             <argument>true</argument>
             <argument/> <!-- app_name -->

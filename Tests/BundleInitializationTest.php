@@ -31,7 +31,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         parent::setUp();
 
         // Make services public that have an idea that matches a regex
-        $this->addCompilerPass(new PublicServicePass('|ekino.new_relic.interactor.*|'));
+        $this->addCompilerPass(new PublicServicePass('|Ekino.*|i'));
     }
 
     protected function getBundleClass()
@@ -48,12 +48,16 @@ class BundleInitializationTest extends BaseBundleTestCase
         $container = $this->getContainer();
 
         $services = [
-            'ekino.new_relic.interactor.real' => NewRelicInteractor::class,
-            'ekino.new_relic.interactor.blackhole' => BlackholeInteractor::class,
+            'ekino.new_relic.interactor' => BlackholeInteractor::class,
+            BlackholeInteractor::class,
+            NewRelicInteractor::class,
         ];
 
         // Test if you services exists
         foreach ($services as $id => $class) {
+            if (is_int($id)) {
+                $id = $class;
+            }
             $this->assertTrue($container->has($id));
             $service = $container->get($id);
             $this->assertInstanceOf($class, $service);

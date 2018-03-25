@@ -99,7 +99,7 @@ ekino_new_relic:
         enabled: false                    # When enabled, send application's logs to New Relic (default: disabled)
         channels: [app]                   # Channels to listen (default: app)
         level: error                      # Report only logs higher than this level (see \Psr\Log\LogLevel) (default: error)
-        service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.logs_handler.real)
+        service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.monolog_handler)
     commands: 
         enabled: true                     # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
         ignored_commands: []              # No transaction recorded for this commands (background tasks)

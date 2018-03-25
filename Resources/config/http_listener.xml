@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="ekino.new_relic.request_listener" class="Ekino\NewRelicBundle\Listener\RequestListener">
+        <service id="Ekino\NewRelicBundle\Listener\RequestListener">
             <tag name="kernel.event_subscriber"/>
 
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
@@ -16,14 +16,14 @@
             <argument />
         </service>
 
-        <service id="ekino.new_relic.response_listener" class="Ekino\NewRelicBundle\Listener\ResponseListener">
+        <service id="Ekino\NewRelicBundle\Listener\ResponseListener">
             <tag name="kernel.event_subscriber"/>
 
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
             <argument type="service" id="ekino.new_relic.interactor" />
             <argument>false</argument>
             <argument />
-            <argument type="service" id="ekino.new_relic.twig.new_relic_extension" on-invalid="null" />
+            <argument type="service" id="Ekino\NewRelicBundle\Twig\NewRelicExtension" on-invalid="null" />
         </service>
     </services>
 </container>

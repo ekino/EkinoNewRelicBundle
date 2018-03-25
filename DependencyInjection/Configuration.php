@@ -107,7 +107,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(['app'])
                         ->end()
                         ->scalarNode('level')->defaultValue(LogLevel::ERROR)->end()
-                        ->scalarNode('service')->defaultValue('ekino.new_relic.logs_handler.real')->end()
+                        ->scalarNode('service')->defaultValue('ekino.new_relic.monolog_handler')->end()
                     ->end()
                 ->end()
             ->end()
