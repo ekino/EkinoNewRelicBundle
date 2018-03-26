@@ -55,7 +55,7 @@ class BundleInitializationTest extends BaseBundleTestCase
 
         // Test if you services exists
         foreach ($services as $id => $class) {
-            if (is_int($id)) {
+            if (\is_int($id)) {
                 $id = $class;
             }
             $this->assertTrue($container->has($id));
