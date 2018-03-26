@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\NewRelic;
+namespace Ekino\NewRelicBundle\NewRelic;
 
 /**
  * This is the service that talks to NewRelic.

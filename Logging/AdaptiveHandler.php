@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Logging;
+namespace Ekino\NewRelicBundle\Logging;
 
 use Monolog\Handler\NewRelicHandler;
 use Psr\Log\LogLevel;

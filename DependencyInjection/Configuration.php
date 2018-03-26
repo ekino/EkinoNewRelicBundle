@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\DependencyInjection;
+namespace Ekino\NewRelicBundle\DependencyInjection;
 
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -107,7 +107,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(['app'])
                         ->end()
                         ->scalarNode('level')->defaultValue(LogLevel::ERROR)->end()
-                        ->scalarNode('service')->defaultValue('ekino.new_relic.logs_handler.real')->end()
+                        ->scalarNode('service')->defaultValue('ekino.new_relic.monolog_handler')->end()
                     ->end()
                 ->end()
             ->end()

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy;
+namespace Ekino\NewRelicBundle\TransactionNamingStrategy;
 
 use Symfony\Component\HttpFoundation\Request;
 

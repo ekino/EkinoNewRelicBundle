@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Command;
+namespace Ekino\NewRelicBundle\Command;
 
-use Ekino\Bundle\NewRelicBundle\NewRelic\Config;
+use Ekino\NewRelicBundle\NewRelic\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

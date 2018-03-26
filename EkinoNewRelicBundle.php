@@ -11,9 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle;
+namespace Ekino\NewRelicBundle;
 
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\Compiler\MonologHandlerPass;
+use Ekino\NewRelicBundle\DependencyInjection\Compiler\MonologHandlerPass;
+use Ekino\NewRelicBundle\Listener\DeprecationListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -30,8 +31,8 @@ class EkinoNewRelicBundle extends Bundle
     {
         parent::boot();
 
-        if ($this->container->has('ekino.new_relic.deprecation_listener')) {
-            $this->container->get('ekino.new_relic.deprecation_listener')->register();
+        if ($this->container->has(DeprecationListener::class)) {
+            $this->container->get(DeprecationListener::class)->register();
         }
     }
 }

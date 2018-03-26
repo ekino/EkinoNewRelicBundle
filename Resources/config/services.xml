@@ -5,24 +5,22 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="ekino.new_relic.interactor.real" class="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
-        <service id="ekino.new_relic.interactor.blackhole" class="Ekino\Bundle\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
-        <service id="ekino.new_relic.interactor.adaptive" class="Ekino\Bundle\NewRelicBundle\NewRelic\AdaptiveInteractor" public="false">
-            <argument type="service" id="ekino.new_relic.interactor.real" />
-            <argument type="service" id="ekino.new_relic.interactor.blackhole" />
+        <service id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
+        <service id="Ekino\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
+        <service id="ekino.new_relic.interactor.adaptive" class="Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor" public="false">
+            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" />
+            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\BlackholeInteractor" />
         </service>
 
-        <!-- Default alias -->
-        <service id="ekino.new_relic.interactor" alias="ekino.new_relic.interactor.blackhole" />
         <!-- Help auto complete -->
-        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
+        <service id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
 
-        <service id="ekino.new_relic.interactor.logger" class="Ekino\Bundle\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
-            <argument type="service" id="ekino.new_relic.interactor.real" />
+        <service id="Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
+            <argument />
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
-        <service id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" >
+        <service id="Ekino\NewRelicBundle\NewRelic\Config" >
             <argument />
             <argument />
             <argument />
@@ -30,11 +28,11 @@
             <argument type="collection" />
         </service>
 
-        <service id="ekino.new_relic.transaction_naming_strategy.route" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
-        <service id="ekino.new_relic.transaction_naming_strategy.controller" class="Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
+        <service id="Ekino\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
+        <service id="Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
 
-        <service id="ekino.new_relic.command.notify_deployment" class="Ekino\Bundle\NewRelicBundle\Command\NotifyDeploymentCommand">
-            <argument type="service" id="Ekino\Bundle\NewRelicBundle\NewRelic\Config" />
+        <service id="Ekino\NewRelicBundle\Command\NotifyDeploymentCommand">
+            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
             <tag name="console.command" command="newrelic:notify-deployment" />
         </service>
     </services>

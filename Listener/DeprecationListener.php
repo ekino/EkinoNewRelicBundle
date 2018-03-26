@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Listener;
+namespace Ekino\NewRelicBundle\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Exception\DeprecationException;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Exception\DeprecationException;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 
 class DeprecationListener
 {

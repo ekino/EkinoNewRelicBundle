@@ -62,7 +62,7 @@ Then register the bundle with your kernel:
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new Ekino\Bundle\NewRelicBundle\EkinoNewRelicBundle(),
+    new Ekino\NewRelicBundle\EkinoNewRelicBundle(),
     // ...
 );
 ```
@@ -99,7 +99,7 @@ ekino_new_relic:
         enabled: false                    # When enabled, send application's logs to New Relic (default: disabled)
         channels: [app]                   # Channels to listen (default: app)
         level: error                      # Report only logs higher than this level (see \Psr\Log\LogLevel) (default: error)
-        service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.logs_handler.real)
+        service: app.my_custom_handler    # Define a custom log handler (default: ekino.new_relic.monolog_handler)
     commands: 
         enabled: true                     # If true, logs CLI commands to New Relic as Background jobs (>2.3 only) (default: true)
         ignored_commands: []              # No transaction recorded for this commands (background tasks)
@@ -117,7 +117,7 @@ If enhanced RUM instrumentation is enabled, you can *disable* instrumentation fo
 
 The bundle comes with two built-in transaction naming strategies. `route` and `controller`, naming the New Relic transaction after the route or controller respectively. However, the bundle supports custom transaction naming strategies through the `service` configuration option. If you have selected the `service` configuration option, you must pass the name of your own transaction naming service as the `transaction_naming_service` configuration option.
 
-The transaction naming service class must implement the `Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface` interface. For more information on creating your own services, see the Symfony documentation on [Creating/Configuring Services in the Container](http://symfony.com/doc/current/book/service_container.html#creating-configuring-services-in-the-container).
+The transaction naming service class must implement the `Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface` interface. For more information on creating your own services, see the Symfony documentation on [Creating/Configuring Services in the Container](http://symfony.com/doc/current/book/service_container.html#creating-configuring-services-in-the-container).
 
 ## Symfony HTTP Cache
 

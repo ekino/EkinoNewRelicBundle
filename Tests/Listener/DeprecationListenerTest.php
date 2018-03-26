@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\Listener;
+namespace Ekino\NewRelicBundle\Tests\Listener;
 
-use Ekino\Bundle\NewRelicBundle\Exception\DeprecationException;
-use Ekino\Bundle\NewRelicBundle\Listener\DeprecationListener;
-use Ekino\Bundle\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Ekino\NewRelicBundle\Exception\DeprecationException;
+use Ekino\NewRelicBundle\Listener\DeprecationListener;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use PHPUnit\Framework\TestCase;
 
 class DeprecationListenerTest extends TestCase

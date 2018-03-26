@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
+namespace Ekino\NewRelicBundle\Tests\DependencyInjection;
 
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\Configuration;
+use Ekino\NewRelicBundle\DependencyInjection\Configuration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;

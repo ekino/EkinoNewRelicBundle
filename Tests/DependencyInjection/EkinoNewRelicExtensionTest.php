@@ -11,9 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\Tests\DependencyInjection;
+namespace Ekino\NewRelicBundle\Tests\DependencyInjection;
 
-use Ekino\Bundle\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
+use Ekino\NewRelicBundle\DependencyInjection\EkinoNewRelicExtension;
+use Ekino\NewRelicBundle\Listener\CommandListener;
+use Ekino\NewRelicBundle\Listener\DeprecationListener;
+use Ekino\NewRelicBundle\Listener\ExceptionListener;
+use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
+use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\ContainerHasParameterConstraint;
 use PHPUnit\Framework\Constraint\LogicalNot;
@@ -36,9 +41,9 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertContainerBuilderHasService('ekino.new_relic.twig.new_relic_extension');
-        $this->assertContainerBuilderHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderHasService(NewRelicExtension::class);
+        $this->assertContainerBuilderHasService(CommandListener::class);
+        $this->assertContainerBuilderHasService(ExceptionListener::class);
     }
 
     public function testAlternativeConfiguration()
@@ -49,16 +54,16 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'twig' => false,
         ]);
 
-        $this->assertContainerBuilderNotHasService('ekino.new_relic.twig.new_relic_extension');
-        $this->assertContainerBuilderNotHasService('ekino.new_relic.command_listener');
-        $this->assertContainerBuilderNotHasService('ekino.new_relic.exception_listener');
+        $this->assertContainerBuilderNotHasService(NewRelicExtension::class);
+        $this->assertContainerBuilderNotHasService(CommandListener::class);
+        $this->assertContainerBuilderNotHasService(ExceptionListener::class);
     }
 
     public function testDeprecation()
     {
         $this->load();
 
-        $this->assertContainerBuilderHasService('ekino.new_relic.deprecation_listener');
+        $this->assertContainerBuilderHasService(DeprecationListener::class);
     }
 
     public function testMonolog()
@@ -86,7 +91,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'enabled' => false,
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.blackhole');
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', BlackholeInteractor::class);
     }
 
     public function testConfigDisabledWithInteractor()
@@ -96,7 +101,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.blackhole');
+        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', BlackholeInteractor::class);
     }
 
     public function testConfigEnabledWithInteractor()

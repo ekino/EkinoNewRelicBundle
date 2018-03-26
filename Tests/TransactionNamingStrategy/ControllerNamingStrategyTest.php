@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy;
+namespace Ekino\NewRelicBundle\TransactionNamingStrategy;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +43,7 @@ class ControllerNamingStrategyTest extends TestCase
         $request->attributes->set('_controller', [$this, 'testControllerAsString']);
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertSame('Callback contoller: Ekino\Bundle\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
+        $this->assertSame('Callback contoller: Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
     }
 
     public function testControllerUnknown()
