@@ -27,7 +27,7 @@ class Config
     private $customParameters;
     private $deploymentNames;
 
-    public function __construct(string $name, string $apiKey, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [])
+    public function __construct(?string $name, string $apiKey = null, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [])
     {
         $this->name = !empty($name) ? $name : \ini_get('newrelic.appname') ?: '';
         $this->apiKey = $apiKey;
@@ -101,7 +101,7 @@ class Config
         return $this->deploymentNames;
     }
 
-    public function getApiKey(): string
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
     }
