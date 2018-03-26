@@ -34,9 +34,9 @@ class RequestListener implements EventSubscriberInterface
     public function __construct(
         Config $config,
         NewRelicInteractorInterface $interactor,
-        array $ignoreRoutes,
-        array $ignoredPaths,
         TransactionNamingStrategyInterface $transactionNamingStrategy,
+        array $ignoreRoutes = [],
+        array $ignoredPaths = [],
         bool $symfonyCache = false
     ) {
         $this->config = $config;

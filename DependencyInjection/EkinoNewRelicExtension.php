@@ -20,8 +20,10 @@ use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy;
 use Ekino\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy;
+use Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -40,92 +42,110 @@ class EkinoNewRelicExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.php');
 
-        if (!$config['enabled']) {
-            $config['monolog']['enabled'] = false;
-            $interactor = BlackholeInteractor::class;
-        } elseif (isset($config['interactor'])) {
-            $interactor = $config['interactor'];
-        } else {
-            // Fallback to see if the extension is loaded or not
-            $interactor = \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
-        }
+        $container->setAlias(NewRelicInteractorInterface::class, $this->getInteractorServiceId($config));
+        $container->setAlias(TransactionNamingStrategyInterface::class, $this->getTransactionNamingServiceId($config));
 
         if ($config['logging']) {
-            $container->getDefinition(LoggingInteractorDecorator::class)
-                ->replaceArgument(0, new Reference($interactor));
-            $interactor = LoggingInteractorDecorator::class;
+            $container->register(LoggingInteractorDecorator::class)
+                ->setDecoratedService(NewRelicInteractorInterface::class)
+                ->setArgument('$interactor', new Reference(LoggingInteractorDecorator::class.'.inner'))
+                ->setPublic(false)
+            ;
         }
-        $container->setAlias('ekino.new_relic.interactor', $interactor);
 
         if (!empty($config['deployment_names'])) {
             $config['deployment_names'] = \array_values(\array_filter(\explode(';', $config['application_name'])));
         }
 
         $container->getDefinition(Config::class)
-            ->replaceArgument(0, $config['application_name'])
-            ->replaceArgument(1, $config['api_key'])
-            ->replaceArgument(2, $config['license_key'])
-            ->replaceArgument(3, $config['xmit'])
-            ->replaceArgument(4, $config['deployment_names'])
-        ;
+            ->setArguments([
+                '$name' => $config['application_name'],
+                '$apiKey' => $config['api_key'],
+                '$licenseKey' => $config['license_key'],
+                '$xmit' => $config['xmit'],
+                '$deploymentNames' => $config['deployment_names'],
+            ]);
 
         if ($config['http']['enabled']) {
-            $loader->load('http_listener.xml');
+            $loader->load('http_listener.php');
             $container->getDefinition(RequestListener::class)
-                ->replaceArgument(2, $config['http']['ignored_routes'])
-                ->replaceArgument(3, $config['http']['ignored_paths'])
-                ->replaceArgument(4, $this->getTransactionNamingService($config))
-                ->replaceArgument(5, $config['http']['using_symfony_cache']);
+                ->setArguments([
+                    '$ignoreRoutes' => $config['http']['ignored_routes'],
+                    '$ignoredPaths' => $config['http']['ignored_paths'],
+                    '$symfonyCache' => $config['http']['using_symfony_cache'],
+                ]);
 
             $container->getDefinition(ResponseListener::class)
-                ->replaceArgument(2, $config['http']['instrument'])
-                ->replaceArgument(3, $config['http']['using_symfony_cache']);
+                ->setArguments([
+                    '$instrument' => $config['http']['instrument'],
+                    '$symfonyCache' => $config['http']['using_symfony_cache'],
+                ]);
         }
 
         if ($config['commands']['enabled']) {
-            $loader->load('command_listener.xml');
+            $loader->load('command_listener.php');
             $container->getDefinition(CommandListener::class)
-                ->replaceArgument(2, $config['commands']['ignored_commands']);
+                ->setArguments([
+                    '$ignoredCommands' => $config['commands']['ignored_commands'],
+                ]);
         }
 
         if ($config['exceptions']['enabled']) {
-            $loader->load('exception_listener.xml');
+            $loader->load('exception_listener.php');
         }
 
         if ($config['deprecations']['enabled']) {
-            $loader->load('deprecation_listener.xml');
+            $loader->load('deprecation_listener.php');
         }
 
         if ($config['twig']) {
-            $loader->load('twig.xml');
+            $loader->load('twig.php');
         }
 
+        if (!$config['enabled']) {
+            $config['monolog']['enabled'] = false;
+        }
         if ($config['monolog']['enabled']) {
             if (!\class_exists(\Monolog\Handler\NewRelicHandler::class)) {
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
-            $loader->load('monolog.xml');
+            $loader->load('monolog.php');
             $container->setParameter('ekino.new_relic.monolog.channels', $config['monolog']['channels']);
             $container->setAlias('ekino.new_relic.logs_handler', $config['monolog']['service']);
 
             $level = $config['monolog']['level'];
+
+            // This service is used by MonologHandlerPass to inject into Monolog Service
             $container->findDefinition('ekino.new_relic.logs_handler')
-                ->replaceArgument(0, \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)))
-                ->replaceArgument(2, $config['application_name']);
+                ->setArguments([
+                    '$level' => \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)),
+                    '$appName' => $config['application_name'],
+                ]);
         }
     }
 
-    private function getTransactionNamingService(array $config): Reference
+    private function getInteractorServiceId(array $config): string
+    {
+        if (!$config['enabled']) {
+            return BlackholeInteractor::class;
+        } elseif (isset($config['interactor'])) {
+            return $config['interactor'];
+        } else {
+            // Fallback to see if the extension is loaded or not
+            return \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
+        }
+    }
+    private function getTransactionNamingServiceId(array $config): string
     {
         switch ($config['http']['transaction_naming']) {
             case 'controller':
-                $serviceId = new Reference(ControllerNamingStrategy::class);
+                return ControllerNamingStrategy::class;
                 break;
             case 'route':
-                $serviceId = new Reference(RouteNamingStrategy::class);
+                return RouteNamingStrategy::class;
                 break;
             case 'service':
                 if (!isset($config['http']['transaction_naming_service'])) {
@@ -134,7 +154,7 @@ class EkinoNewRelicExtension extends Extension
                     );
                 }
 
-                $serviceId = new Reference($config['http']['transaction_naming_service']);
+                return $config['http']['transaction_naming_service'];
                 break;
             default:
                 throw new \InvalidArgumentException(
@@ -144,7 +164,5 @@ class EkinoNewRelicExtension extends Extension
                     )
                 );
         }
-
-        return $serviceId;
     }
 }
