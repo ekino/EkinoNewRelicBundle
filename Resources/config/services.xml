@@ -16,7 +16,7 @@
         <service id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
 
         <service id="Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
-            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" />
+            <argument />
             <argument type="service" id="logger" on-invalid="null" />
         </service>
 
