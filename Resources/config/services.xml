@@ -5,35 +5,14 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" public="false" />
-        <service id="Ekino\NewRelicBundle\NewRelic\BlackholeInteractor" public="false" />
-        <service id="ekino.new_relic.interactor.adaptive" class="Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor" public="false">
+        <defaults autowire="true" autoconfigure="true" public="false" />
+        <prototype namespace="Ekino\NewRelicBundle\Command\" resource="../../Command/*" />
+        <prototype namespace="Ekino\NewRelicBundle\NewRelic\" resource="../../NewRelic/*" />
+        <prototype namespace="Ekino\NewRelicBundle\TransactionNamingStrategy\" resource="../../TransactionNamingStrategy/*" />
+
+        <service id="Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor">
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" />
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\BlackholeInteractor" />
-        </service>
-
-        <!-- Help auto complete -->
-        <service id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface" alias="ekino.new_relic.interactor" />
-
-        <service id="Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator" public="false">
-            <argument />
-            <argument type="service" id="logger" on-invalid="null" />
-        </service>
-
-        <service id="Ekino\NewRelicBundle\NewRelic\Config" >
-            <argument />
-            <argument />
-            <argument />
-            <argument />
-            <argument type="collection" />
-        </service>
-
-        <service id="Ekino\NewRelicBundle\TransactionNamingStrategy\RouteNamingStrategy" public="false" />
-        <service id="Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategy" public="false" />
-
-        <service id="Ekino\NewRelicBundle\Command\NotifyDeploymentCommand">
-            <argument type="service" id="Ekino\NewRelicBundle\NewRelic\Config" />
-            <tag name="console.command" command="newrelic:notify-deployment" />
         </service>
     </services>
 </container>

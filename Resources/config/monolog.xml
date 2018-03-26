@@ -5,16 +5,10 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Logging -->
-        <service id="Ekino\NewRelicBundle\Logging\AdaptiveHandler" public="false">
-            <argument/> <!-- level -->
-            <argument>true</argument>
-            <argument/> <!-- app_name -->
-        </service>
-        <service id="ekino.new_relic.monolog_handler" class="Monolog\Handler\NewRelicHandler" public="false">
-            <argument/> <!-- level -->
-            <argument>true</argument>
-            <argument/> <!-- app_name -->
-        </service>
+        <defaults autowire="true" autoconfigure="true" public="false" />
+        <prototype namespace="Ekino\NewRelicBundle\Logging\" resource="../../Logging/*" />
+
+        <!-- id must be defined to not override custom configuration of `Monolog\Handler\NewRelicHandler` -->
+        <service id="ekino.new_relic.monolog_handler" class="Monolog\Handler\NewRelicHandler" />
     </services>
 </container>
