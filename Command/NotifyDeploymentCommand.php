@@ -116,7 +116,7 @@ class NotifyDeploymentCommand extends Command
         ];
 
         $level = \error_reporting(0);
-        $content = \file_get_contents('https://api.newrelic.com/deployments.xml', 0, \stream_context_create($context));
+        $content = \file_get_contents('https://api.newrelic.com/deployments.xml', false, \stream_context_create($context));
         \error_reporting($level);
         if (false === $content) {
             $error = \error_get_last();
