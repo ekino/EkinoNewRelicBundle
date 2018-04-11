@@ -31,9 +31,9 @@ class ResponseListener implements EventSubscriberInterface
     public function __construct(
         Config $newRelic,
         NewRelicInteractorInterface $interactor,
+        NewRelicExtension $newRelicTwigExtension = null,
         bool $instrument = false,
-        bool $symfonyCache = false,
-        NewRelicExtension $newRelicTwigExtension = null
+        bool $symfonyCache = false
     ) {
         $this->newRelic = $newRelic;
         $this->interactor = $interactor;

@@ -18,6 +18,7 @@ use Ekino\NewRelicBundle\Listener\CommandListener;
 use Ekino\NewRelicBundle\Listener\DeprecationListener;
 use Ekino\NewRelicBundle\Listener\ExceptionListener;
 use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\ContainerHasParameterConstraint;
@@ -91,7 +92,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'enabled' => false,
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', BlackholeInteractor::class);
+        $this->assertContainerBuilderHasAlias(NewRelicInteractorInterface::class, BlackholeInteractor::class);
     }
 
     public function testConfigDisabledWithInteractor()
@@ -101,7 +102,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', BlackholeInteractor::class);
+        $this->assertContainerBuilderHasAlias(NewRelicInteractorInterface::class, BlackholeInteractor::class);
     }
 
     public function testConfigEnabledWithInteractor()
@@ -111,6 +112,6 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
             'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
-        $this->assertContainerBuilderHasAlias('ekino.new_relic.interactor', 'ekino.new_relic.interactor.adaptive');
+        $this->assertContainerBuilderHasAlias(NewRelicInteractorInterface::class, 'ekino.new_relic.interactor.adaptive');
     }
 }

@@ -16,6 +16,7 @@ namespace Ekino\NewRelicBundle\Tests;
 use Ekino\NewRelicBundle\EkinoNewRelicBundle;
 use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
+use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Nyholm\BundleTest\CompilerPass\PublicServicePass;
 
@@ -48,7 +49,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         $container = $this->getContainer();
 
         $services = [
-            'ekino.new_relic.interactor' => BlackholeInteractor::class,
+            NewRelicInteractorInterface::class => BlackholeInteractor::class,
             BlackholeInteractor::class,
             NewRelicInteractor::class,
         ];
