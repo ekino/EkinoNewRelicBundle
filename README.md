@@ -15,7 +15,7 @@ This bundle integrates the NewRelic PHP API into Symfony. For more information a
 
 3. **Exception Listening**: It also captures all Symfony exceptions in web requests and console commands and sends them to New Relic (something new relic doesn't do too well itself as symfony aggressively catches all exceptions/errors). It also ensures all HTTP Exceptions (4xx codes) are logged as notices in New Relic and not exceptions to reduce the noise in New Relic.
 
-4. **Interactor Service**: It provides you the New Relic PHP Agent API via a Service class `ekino.new_relic.interactor` so in my code, I can inject it into any class, controller, service and do stuff like -
+4. **Interactor Service**: It provides you the New Relic PHP Agent API via a Service class `NewRelicInteractorInterface::class` so in my code, I can inject it into any class, controller, service and do stuff like -
 
     ```php
     // Bundle

@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener" public="true">
-            <argument type="service" id="ekino.new_relic.interactor"/>
-        </service>
+        <defaults autowire="true" autoconfigure="true" public="false" />
+
+        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener"/>
     </services>
 </container>
