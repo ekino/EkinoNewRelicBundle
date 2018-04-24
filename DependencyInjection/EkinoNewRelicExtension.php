@@ -62,7 +62,7 @@ class EkinoNewRelicExtension extends Extension
             ;
         }
 
-        if (!empty($config['deployment_names'])) {
+        if (empty($config['deployment_names'])) {
             $config['deployment_names'] = \array_values(\array_filter(\explode(';', $config['application_name'])));
         }
 
