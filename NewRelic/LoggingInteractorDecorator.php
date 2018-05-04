@@ -27,11 +27,11 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function setApplicationName(string $name, string $key = null, bool $xmit = false): bool
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
     {
         $this->logger->debug('Setting New Relic Application name to {name}', ['name' => $name]);
 
-        return $this->interactor->setApplicationName($name, $key, $xmit);
+        return $this->interactor->setApplicationName($name, $license, $xmit);
     }
 
     public function setTransactionName(string $name): bool
