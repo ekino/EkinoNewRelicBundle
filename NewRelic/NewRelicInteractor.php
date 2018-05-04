@@ -15,9 +15,9 @@ namespace Ekino\NewRelicBundle\NewRelic;
 
 class NewRelicInteractor implements NewRelicInteractorInterface
 {
-    public function setApplicationName(string $name, string $key = null, bool $xmit = false): bool
+    public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
     {
-        return newrelic_set_appname($name, $key, $xmit);
+        return newrelic_set_appname($name, $license, $xmit);
     }
 
     public function setTransactionName(string $name): bool
