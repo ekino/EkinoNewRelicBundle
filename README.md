@@ -83,7 +83,6 @@ ekino_new_relic:
     license_key:                          # New Relic license key (optional, default value is read from php.ini)
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true (default: false)
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)
-    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
     interactor: ~                         # The interactor service that is used. Setting enabled=false will override this value 
     twig: true                            # Allows you to disable twig integration (falls back to class_exists(\Twig_Environment::class))
     exceptions: true                      # If true, sends exceptions to New Relic (default: true)
@@ -93,6 +92,7 @@ ekino_new_relic:
         using_symfony_cache: false        # Symfony HTTP cache (see below) (default: false)
         transaction_naming: route         # route, controller or service (see below)
         transaction_naming_service: ~     # Transaction naming service (see below)
+        instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
         ignored_routes: []                # No transaction recorded for this routes
         ignored_paths: []                 # No transaction recorded for this paths
     monolog: 
