@@ -92,7 +92,7 @@ ekino_new_relic:
         using_symfony_cache: false        # Symfony HTTP cache (see below) (default: false)
         transaction_naming: route         # route, controller or service (see below)
         transaction_naming_service: ~     # Transaction naming service (see below)
-        instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
+        instrument: false                 # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
         ignored_routes: []                # No transaction recorded for this routes
         ignored_paths: []                 # No transaction recorded for this paths
     monolog: 
