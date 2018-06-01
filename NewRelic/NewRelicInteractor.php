@@ -91,6 +91,10 @@ class NewRelicInteractor implements NewRelicInteractorInterface
             $name = \ini_get('newrelic.appname');
         }
 
+        if ($license === null) {
+            return newrelic_start_transaction($name);
+        }
+
         return newrelic_start_transaction($name, $license);
     }
 
