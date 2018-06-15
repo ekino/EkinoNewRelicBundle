@@ -146,7 +146,7 @@ class EkinoNewRelicExtension extends Extension
             return BlackholeInteractor::class;
         }
 
-        if ('auto' === $config['enabled']) {
+        if ('auto' === $config['interactor']) {
             // Check if the extension is loaded or not
             return \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
         }
