@@ -7,6 +7,6 @@
     <services>
         <defaults autowire="true" autoconfigure="true" public="false" />
 
-        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener"/>
+        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener" public="true" />
     </services>
 </container>
