@@ -146,17 +146,17 @@ class EkinoNewRelicExtension extends Extension
             return BlackholeInteractor::class;
         }
 
+        if (!isset($config['interactor'])) {
+            // Fallback on AdaptiveInteractor.
+            return AdaptiveInteractor::class;
+        }
+
         if ('auto' === $config['interactor']) {
             // Check if the extension is loaded or not
             return \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
         }
 
-        if (isset($config['interactor'])) {
-            return $config['interactor'];
-        }
-
-        // Fallback on AdaptiveInteractor.
-        return AdaptiveInteractor::class;
+        return $config['interactor'];
     }
 
     private function getTransactionNamingServiceId(array $config): string
