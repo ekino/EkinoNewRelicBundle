@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Ekino\NewRelicBundle\Tests;
 
 use Ekino\NewRelicBundle\EkinoNewRelicBundle;
+use Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor;
 use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
@@ -49,7 +50,7 @@ class BundleInitializationTest extends BaseBundleTestCase
         $container = $this->getContainer();
 
         $services = [
-            NewRelicInteractorInterface::class => BlackholeInteractor::class,
+            NewRelicInteractorInterface::class => AdaptiveInteractor::class,
             BlackholeInteractor::class,
             NewRelicInteractor::class,
         ];
