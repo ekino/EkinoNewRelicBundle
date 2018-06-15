@@ -148,6 +148,22 @@ The bundle provide a [Capifony](http://capifony.org) recipe to automate the depl
 
 It makes one request per `app_name`, due roll-up names are not supported by Data REST API.
 
+## Interactor services
+
+The config key`ekino_new_relic.interactor` will accept a service ID to a service implementing `NewRelicInteractorInterface`. 
+This bundle comes with a few services that may be suitable for you. 
+
+| Configuration value | Description |
+| ------------------- | ----------- |
+| `Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor` | This is the default interactor. It will check once per request if the NewRelic PHP extension is installed or not. It is a decorator for the `NewRelicInteractor` | 
+| `Ekino\NewRelicBundle\NewRelic\NewRelicInteractor` | This interactor communicates with NewRelic. It is the one decorator that actually does some work. | 
+| `Ekino\NewRelicBundle\NewRelic\BlackholeInteractor` | This interactor does nothing. | 
+| `auto` | This value will check if the NewRelic PHP extension is installed when you build your container. | 
+
+Note that if you set `ekino_new_relic.enabled: false` you will always use the `BlackholeInteractor` no matter what value 
+used for `ekino_new_relic.interactor`.
+ 
+
 ## Flow of the Request
 
 1. A request comes in and the first thing we do is to `setApplicationName` so that we use the correct license key and name.

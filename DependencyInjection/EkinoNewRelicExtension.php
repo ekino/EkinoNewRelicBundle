@@ -16,6 +16,7 @@ namespace  Ekino\NewRelicBundle\DependencyInjection;
 use Ekino\NewRelicBundle\Listener\CommandListener;
 use Ekino\NewRelicBundle\Listener\RequestListener;
 use Ekino\NewRelicBundle\Listener\ResponseListener;
+use Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor;
 use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\LoggingInteractorDecorator;
@@ -145,12 +146,17 @@ class EkinoNewRelicExtension extends Extension
             return BlackholeInteractor::class;
         }
 
-        if (isset($config['interactor'])) {
-            return $config['interactor'];
+        if (!isset($config['interactor'])) {
+            // Fallback on AdaptiveInteractor.
+            return AdaptiveInteractor::class;
         }
 
-        // Fallback to see if the extension is loaded or not
-        return \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
+        if ('auto' === $config['interactor']) {
+            // Check if the extension is loaded or not
+            return \extension_loaded('newrelic') ? NewRelicInteractor::class : BlackholeInteractor::class;
+        }
+
+        return $config['interactor'];
     }
 
     private function getTransactionNamingServiceId(array $config): string

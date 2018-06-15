@@ -1,12 +1,11 @@
 # Changelog
 
-
-
 ## v2.0.0-beta3
 
 ### Changed
 
 - Moved "instrument" to the root level
+- The `AdaptiveInteractor` is now the default interactor. 
 
 ### Fixed
 
