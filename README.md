@@ -87,12 +87,12 @@ ekino_new_relic:
     twig: true                            # Allows you to disable twig integration (falls back to class_exists(\Twig_Environment::class))
     exceptions: true                      # If true, sends exceptions to New Relic (default: true)
     deprecations: true                    # If true, reports deprecations to New Relic (default: true)
+    instrument: false                     # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
     http:
         enabled: true
         using_symfony_cache: false        # Symfony HTTP cache (see below) (default: false)
         transaction_naming: route         # route, controller or service (see below)
         transaction_naming_service: ~     # Transaction naming service (see below)
-        instrument: false                 # If true, uses enhanced New Relic RUM instrumentation (see below) (default: false)
         ignored_routes: []                # No transaction recorded for this routes
         ignored_paths: []                 # No transaction recorded for this paths
     monolog: 

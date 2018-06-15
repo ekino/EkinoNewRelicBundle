@@ -91,7 +91,7 @@ class EkinoNewRelicExtension extends Extension
             $container->getDefinition(ResponseListener::class)
                 ->setArguments(
                     [
-                        '$instrument' => $config['http']['instrument'],
+                        '$instrument' => $config['instrument'],
                         '$symfonyCache' => $config['http']['using_symfony_cache'],
                     ]
                 );

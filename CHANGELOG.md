@@ -1,6 +1,26 @@
 # Changelog
 
-## v2.0.0
+
+
+## v2.0.0-beta3
+
+### Changed
+
+- Moved "instrument" to the root level
+
+### Fixed
+
+- Bug where logging deprecations did not work. 
+
+## v2.0.0-beta2
+
+### Changed
+
+- Add default "deployment_names"
+- Updated interface variable names to match the NewRelic extension.
+
+
+## v2.0.0-beta1
 
 ### Added
 
