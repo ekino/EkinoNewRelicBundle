@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-beta4
+
+### Changed
+
+- Changed the configuration for monolog's channel to a configuration similar to MonologBundle. 
+
 ## v2.0.0-beta3
 
 ### Changed

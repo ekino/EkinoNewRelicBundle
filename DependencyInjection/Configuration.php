@@ -16,6 +16,7 @@ namespace Ekino\NewRelicBundle\DependencyInjection;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class Configuration implements ConfigurationInterface
 {
@@ -100,11 +101,64 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('monolog')
                     ->canBeEnabled()
-                    ->fixXmlConfig('channel')
                     ->children()
                         ->arrayNode('channels')
-                            ->prototype('scalar')->end()
-                            ->defaultValue(['app'])
+                            ->fixXmlConfig('channel', 'elements')
+                            ->canBeUnset()
+                            ->beforeNormalization()
+                                ->ifString()
+                                ->then(function ($v) { return ['elements' => [$v]]; })
+                            ->end()
+                            ->beforeNormalization()
+                                ->ifTrue(function ($v) { return \is_array($v) && \is_numeric(\key($v)); })
+                                ->then(function ($v) { return ['elements' => $v]; })
+                            ->end()
+                            ->validate()
+                                ->ifTrue(function ($v) { return empty($v); })
+                                ->thenUnset()
+                            ->end()
+                            ->validate()
+                                ->always(function ($v) {
+                                    $isExclusive = null;
+                                    if (isset($v['type'])) {
+                                        $isExclusive = 'exclusive' === $v['type'];
+                                    }
+
+                                    $elements = [];
+                                    foreach ($v['elements'] as $element) {
+                                        if (0 === \strpos($element, '!')) {
+                                            if (false === $isExclusive) {
+                                                throw new InvalidConfigurationException('Cannot combine exclusive/inclusive definitions in channels list.');
+                                            }
+                                            $elements[] = \substr($element, 1);
+                                            $isExclusive = true;
+                                        } else {
+                                            if (true === $isExclusive) {
+                                                throw new InvalidConfigurationException('Cannot combine exclusive/inclusive definitions in channels list');
+                                            }
+                                            $elements[] = $element;
+                                            $isExclusive = false;
+                                        }
+                                    }
+
+                                    if (!\count($elements)) {
+                                        return;
+                                    }
+
+                                    return ['type' => $isExclusive ? 'exclusive' : 'inclusive', 'elements' => $elements];
+                                })
+                            ->end()
+                                ->children()
+                                ->scalarNode('type')
+                                    ->validate()
+                                        ->ifNotInArray(['inclusive', 'exclusive'])
+                                        ->thenInvalid('The type of channels has to be inclusive or exclusive')
+                                    ->end()
+                                ->end()
+                                ->arrayNode('elements')
+                                    ->prototype('scalar')->end()
+                                ->end()
+                            ->end()
                         ->end()
                         ->scalarNode('level')->defaultValue(LogLevel::ERROR)->end()
                         ->scalarNode('service')->defaultValue('ekino.new_relic.monolog_handler')->end()

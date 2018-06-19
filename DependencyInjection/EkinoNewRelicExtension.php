@@ -125,7 +125,7 @@ class EkinoNewRelicExtension extends Extension
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
             $loader->load('monolog.xml');
-            $container->setParameter('ekino.new_relic.monolog.channels', $config['monolog']['channels']);
+            $container->setParameter('ekino.new_relic.monolog.channels', $config['monolog']['channels'] ?? null);
             $container->setAlias('ekino.new_relic.logs_handler', $config['monolog']['service'])->setPublic(false);
 
             $level = $config['monolog']['level'];
