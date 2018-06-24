@@ -85,18 +85,17 @@ class ResponseListener implements EventSubscriberInterface
                 // We can only instrument HTML responses
                 if ('text/html' === \substr($response->headers->get('Content-Type'), 0, 9)) {
                     $responseContent = $response->getContent();
+                    $response->setContent(''); // free the memory
 
                     if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isHeaderCalled()) {
-                        $responseContent = \preg_replace('/<\s*head\s*>/', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
+                        $responseContent = \preg_replace('|<head>|i', '$0'.$this->interactor->getBrowserTimingHeader(), $responseContent);
                     }
 
                     if (null === $this->newRelicTwigExtension || false === $this->newRelicTwigExtension->isFooterCalled()) {
-                        $responseContent = \preg_replace('/<\s*\/\s*body\s*>/', $this->interactor->getBrowserTimingFooter().'$0', $responseContent);
+                        $responseContent = \preg_replace('|</body>|i', $this->interactor->getBrowserTimingFooter().'$0', $responseContent);
                     }
 
-                    if ($responseContent) {
-                        $response->setContent($responseContent);
-                    }
+                    $response->setContent($responseContent);
                 }
             }
         }
