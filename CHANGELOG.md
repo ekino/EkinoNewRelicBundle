@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixed
+
+- Fixed type error when no Content-Type header was returned.
+
 ## v2.0.0-beta4
 
 ### Changed

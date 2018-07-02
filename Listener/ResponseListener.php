@@ -83,7 +83,7 @@ class ResponseListener implements EventSubscriberInterface
                 $response = $event->getResponse();
 
                 // We can only instrument HTML responses
-                if ('text/html' === \substr($response->headers->get('Content-Type'), 0, 9)) {
+                if ('text/html' === \substr($response->headers->get('Content-Type', ''), 0, 9)) {
                     $responseContent = $response->getContent();
                     $response->setContent(''); // free the memory
 
