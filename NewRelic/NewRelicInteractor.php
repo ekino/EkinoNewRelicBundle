@@ -57,7 +57,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
 
     public function disableAutoRUM(): bool
     {
-        return newrelic_disable_autorum();
+        newrelic_disable_autorum();
+
+        return true;
     }
 
     public function noticeError(int $errno, string $errstr, string $errfile = null, int $errline = null, string $errcontext = null): void
