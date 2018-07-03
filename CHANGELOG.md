@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fixed type error when no Content-Type header was returned.
+- Make sure `NewRelicInteractor::disableAutoRUM` always returns true. 
 
 ## v2.0.0-beta4
 
