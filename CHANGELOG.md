@@ -2,8 +2,11 @@
 
 ## UNRELEASED
 
+## v2.0.0-beta5
+
 ### Fixed
 
+- Memory leak in the `ResponseListener` that may casuse issues on large HTML responses. 
 - Fixed type error when no Content-Type header was returned.
 - Make sure `NewRelicInteractor::disableAutoRUM` always returns true. 
 
