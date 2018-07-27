@@ -55,11 +55,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
         return newrelic_get_browser_timing_footer($includeTags);
     }
 
-    public function disableAutoRUM(): bool
+    public function disableAutoRUM(): ?bool
     {
-        newrelic_disable_autorum();
-
-        return true;
+        return newrelic_disable_autorum();
     }
 
     public function noticeError(int $errno, string $errstr, string $errfile = null, int $errline = null, string $errcontext = null): void

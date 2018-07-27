@@ -79,7 +79,7 @@ interface NewRelicInteractorInterface
      *
      * {@link https://docs.newrelic.com/docs/agents/php-agent/php-agent-api/newrelic_disable_autorum}
      */
-    public function disableAutoRUM(): bool;
+    public function disableAutoRUM(): ?bool;
 
     /**
      * Use these calls to collect errors that the PHP agent does not collect automatically and to set the callback for

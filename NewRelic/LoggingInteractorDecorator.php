@@ -81,7 +81,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         return $this->interactor->getBrowserTimingFooter($includeTags);
     }
 
-    public function disableAutoRUM(): bool
+    public function disableAutoRUM(): ?bool
     {
         $this->logger->debug('Disabling New Relic Auto-RUM');
 
