@@ -70,7 +70,7 @@ class AdaptiveInteractor implements NewRelicInteractorInterface
         return $this->interactor->getBrowserTimingFooter($includeTags);
     }
 
-    public function disableAutoRUM(): bool
+    public function disableAutoRUM(): ?bool
     {
         return $this->interactor->disableAutoRUM();
     }

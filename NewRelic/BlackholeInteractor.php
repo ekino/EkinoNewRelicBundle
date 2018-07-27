@@ -58,7 +58,7 @@ class BlackholeInteractor implements NewRelicInteractorInterface
         return '';
     }
 
-    public function disableAutoRUM(): bool
+    public function disableAutoRUM(): ?bool
     {
         return true;
     }
