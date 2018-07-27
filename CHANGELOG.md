@@ -2,6 +2,13 @@
 
 ## UNRELEASED
 
+## v2.0.0
+
+### Changed
+
+- Updated the return type annotation of `NewRelicInteractorInterface::disableAutoRUM` to `?bool` 
+to match the latest changes in the NewRelic API. 
+
 ## v2.0.0-beta5
 
 ### Fixed
