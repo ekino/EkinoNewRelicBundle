@@ -3,7 +3,7 @@ UPGRADE FROM 1.x to 2.0
 
 > Many internal things in the bundle has changed. If you only installed the
 > bundle and added some configuration then you just have to check the 2 first
-> steps of this file.
+> bullets of this file.
 
  * The namespace of the bundle has changed to follow:
 
