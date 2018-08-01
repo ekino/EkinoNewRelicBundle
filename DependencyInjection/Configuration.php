@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->beforeNormalization()
                         ->ifTrue(function ($v) { return !\is_array($v); })
-                        ->then(function ($v) { return \array_values(\array_filter(\explode(';', $v))); })
+                        ->then(function ($v) { return \array_values(\array_filter(\explode(';', (string) $v))); })
                     ->end()
                 ->end()
                 ->scalarNode('xmit')->defaultValue(false)->end()
