@@ -54,11 +54,11 @@ class ResponseListenerTest extends TestCase
         $events = [
             'WidgetSale' => [
                 [
-                    'color' => 'red',
+                    'color'  => 'red',
                     'weight' => 12.5,
                 ],
                 [
-                    'color' => 'blue',
+                    'color'  => 'blue',
                     'weight' => 12.5,
                 ],
             ],
@@ -84,11 +84,11 @@ class ResponseListenerTest extends TestCase
         $this->interactor->expects($this->at(3))->method('addCustomParameter')->with('foo_2', 'bar_2');
 
         $this->interactor->expects($this->at(4))->method('addCustomEvent')->with('WidgetSale', [
-            'color' => 'red',
+            'color'  => 'red',
             'weight' => 12.5,
         ]);
         $this->interactor->expects($this->at(5))->method('addCustomEvent')->with('WidgetSale', [
-            'color' => 'blue',
+            'color'  => 'blue',
             'weight' => 12.5,
         ]);
 
