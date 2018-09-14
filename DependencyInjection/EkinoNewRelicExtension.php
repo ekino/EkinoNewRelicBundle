@@ -56,11 +56,10 @@ class EkinoNewRelicExtension extends Extension
                 ->setArguments(
                     [
                         '$interactor' => new Reference(LoggingInteractorDecorator::class.'.inner'),
-                        '$logger' => new Reference('logger', ContainerInterface::NULL_ON_INVALID_REFERENCE),
+                        '$logger'     => new Reference('logger', ContainerInterface::NULL_ON_INVALID_REFERENCE),
                     ]
                 )
-                ->setPublic(false)
-            ;
+                ->setPublic(false);
         }
 
         if (empty($config['deployment_names'])) {
@@ -70,10 +69,10 @@ class EkinoNewRelicExtension extends Extension
         $container->getDefinition(Config::class)
             ->setArguments(
                 [
-                    '$name' => $config['application_name'],
-                    '$apiKey' => $config['api_key'],
-                    '$licenseKey' => $config['license_key'],
-                    '$xmit' => $config['xmit'],
+                    '$name'            => $config['application_name'],
+                    '$apiKey'          => $config['api_key'],
+                    '$licenseKey'      => $config['license_key'],
+                    '$xmit'            => $config['xmit'],
                     '$deploymentNames' => $config['deployment_names'],
                 ]
             );
@@ -92,7 +91,7 @@ class EkinoNewRelicExtension extends Extension
             $container->getDefinition(ResponseListener::class)
                 ->setArguments(
                     [
-                        '$instrument' => $config['instrument'],
+                        '$instrument'   => $config['instrument'],
                         '$symfonyCache' => $config['http']['using_symfony_cache'],
                     ]
                 );
@@ -133,7 +132,7 @@ class EkinoNewRelicExtension extends Extension
             $container->findDefinition('ekino.new_relic.logs_handler')
                 ->setArguments(
                     [
-                        '$level' => \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)),
+                        '$level'   => \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)),
                         '$appName' => $config['application_name'],
                     ]
                 );

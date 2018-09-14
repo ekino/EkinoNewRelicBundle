@@ -38,8 +38,12 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')
                     ->end()
                     ->beforeNormalization()
-                        ->ifTrue(function ($v) { return !\is_array($v); })
-                        ->then(function ($v) { return \array_values(\array_filter(\explode(';', (string) $v))); })
+                        ->ifTrue(function ($v) {
+                            return !\is_array($v);
+                        })
+                        ->then(function ($v) {
+                            return \array_values(\array_filter(\explode(';', (string) $v)));
+                        })
                     ->end()
                 ->end()
                 ->scalarNode('xmit')->defaultValue(false)->end()
@@ -57,8 +61,12 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')
                             ->end()
                             ->beforeNormalization()
-                                ->ifTrue(function ($v) { return !\is_array($v); })
-                                ->then(function ($v) { return (array) $v; })
+                                ->ifTrue(function ($v) {
+                                    return !\is_array($v);
+                                })
+                                ->then(function ($v) {
+                                    return (array) $v;
+                                })
                             ->end()
                         ->end()
                     ->end()
@@ -81,16 +89,24 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')
                             ->end()
                             ->beforeNormalization()
-                                ->ifTrue(function ($v) { return !\is_array($v); })
-                                ->then(function ($v) { return (array) $v; })
+                                ->ifTrue(function ($v) {
+                                    return !\is_array($v);
+                                })
+                                ->then(function ($v) {
+                                    return (array) $v;
+                                })
                             ->end()
                         ->end()
                         ->arrayNode('ignored_paths')
                             ->prototype('scalar')
                             ->end()
                             ->beforeNormalization()
-                                ->ifTrue(function ($v) { return !\is_array($v); })
-                                ->then(function ($v) { return (array) $v; })
+                                ->ifTrue(function ($v) {
+                                    return !\is_array($v);
+                                })
+                                ->then(function ($v) {
+                                    return (array) $v;
+                                })
                             ->end()
                         ->end()
                         ->scalarNode('using_symfony_cache')->defaultFalse()->end()
@@ -107,14 +123,22 @@ class Configuration implements ConfigurationInterface
                             ->canBeUnset()
                             ->beforeNormalization()
                                 ->ifString()
-                                ->then(function ($v) { return ['elements' => [$v]]; })
+                                ->then(function ($v) {
+                                    return ['elements' => [$v]];
+                                })
                             ->end()
                             ->beforeNormalization()
-                                ->ifTrue(function ($v) { return \is_array($v) && \is_numeric(\key($v)); })
-                                ->then(function ($v) { return ['elements' => $v]; })
+                                ->ifTrue(function ($v) {
+                                    return \is_array($v) && \is_numeric(\key($v));
+                                })
+                                ->then(function ($v) {
+                                    return ['elements' => $v];
+                                })
                             ->end()
                             ->validate()
-                                ->ifTrue(function ($v) { return empty($v); })
+                                ->ifTrue(function ($v) {
+                                    return empty($v);
+                                })
                                 ->thenUnset()
                             ->end()
                             ->validate()
@@ -164,8 +188,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('service')->defaultValue('ekino.new_relic.monolog_handler')->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

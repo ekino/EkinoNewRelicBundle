@@ -161,7 +161,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function setUserAttributes(string $userValue, string $accountValue, string $productValue): bool
     {
         $this->logger->debug('Setting New Relic user attributes', [
-            'user_value' => $userValue,
+            'user_value'    => $userValue,
             'account_value' => $accountValue,
             'product_value' => $productValue,
         ]);

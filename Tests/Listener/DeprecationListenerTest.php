@@ -27,7 +27,10 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        \set_error_handler(function () {
+            return false;
+        });
+
         try {
             $listener->register();
             @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
@@ -44,8 +47,11 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        \set_error_handler(function () {
+            return false;
+        });
         $e = \error_reporting(0);
+
         try {
             $listener->register();
             @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
@@ -63,7 +69,10 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        \set_error_handler(function () {
+            return false;
+        });
+
         try {
             $listener->register();
             @\trigger_error('This is a notice', E_USER_NOTICE);
@@ -84,6 +93,7 @@ class DeprecationListenerTest extends TestCase
         $listener = new DeprecationListener($interactor);
 
         \set_error_handler($handler);
+
         try {
             $listener->register();
             @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
@@ -100,7 +110,10 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        \set_error_handler(function () {
+            return false;
+        });
+
         try {
             $listener->register();
             $listener->unregister();
@@ -120,6 +133,7 @@ class DeprecationListenerTest extends TestCase
         $listener = new DeprecationListener($interactor);
 
         \set_error_handler($handler);
+
         try {
             $listener->register();
             $listener->unregister();

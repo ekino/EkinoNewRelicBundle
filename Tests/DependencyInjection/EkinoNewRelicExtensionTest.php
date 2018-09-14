@@ -51,8 +51,8 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load([
             'exceptions' => false,
-            'commands' => false,
-            'twig' => false,
+            'commands'   => false,
+            'twig'       => false,
         ]);
 
         $this->assertContainerBuilderNotHasService(NewRelicExtension::class);
@@ -98,7 +98,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     public function testConfigDisabledWithInteractor()
     {
         $this->load([
-            'enabled' => false,
+            'enabled'    => false,
             'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
@@ -108,7 +108,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     public function testConfigEnabledWithInteractor()
     {
         $this->load([
-            'enabled' => true,
+            'enabled'    => true,
             'interactor' => 'ekino.new_relic.interactor.adaptive',
         ]);
 
