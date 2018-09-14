@@ -35,9 +35,9 @@ class CommandListenerTest extends TestCase
         }
 
         $parameters = [
-            '--foo' => true,
+            '--foo'    => true,
             '--foobar' => ['baz', 'baz_2'],
-            'name' => 'bar',
+            'name'     => 'bar',
         ];
 
         $definition = new InputDefinition([

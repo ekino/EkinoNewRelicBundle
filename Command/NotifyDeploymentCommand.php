@@ -57,8 +57,7 @@ class NotifyDeploymentCommand extends Command
                     'Text annotation for the deployment — notes for you', null
                 ),
             ])
-            ->setDescription('Notifies New Relic that a new deployment has been made')
-        ;
+            ->setDescription('Notifies New Relic that a new deployment has been made');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -108,9 +107,9 @@ class NotifyDeploymentCommand extends Command
 
         $context = [
             'http' => [
-                'method' => 'POST',
-                'header' => \implode("\r\n", $headers),
-                'content' => $payload,
+                'method'        => 'POST',
+                'header'        => \implode("\r\n", $headers),
+                'content'       => $payload,
                 'ignore_errors' => true,
             ],
         ];
@@ -120,12 +119,13 @@ class NotifyDeploymentCommand extends Command
         \error_reporting($level);
         if (false === $content) {
             $error = \error_get_last();
+
             throw new \RuntimeException($error['message']);
         }
 
         $response = [
             'status' => null,
-            'error' => null,
+            'error'  => null,
         ];
 
         if (isset($http_response_header[0])) {

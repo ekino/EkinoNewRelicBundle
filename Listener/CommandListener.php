@@ -37,7 +37,7 @@ class CommandListener implements EventSubscriberInterface
     {
         return [
             ConsoleEvents::COMMAND => ['onConsoleCommand', 0],
-            ConsoleEvents::ERROR => ['onConsoleError', 0],
+            ConsoleEvents::ERROR   => ['onConsoleError', 0],
         ];
     }
 

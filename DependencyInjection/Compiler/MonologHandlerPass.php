@@ -40,6 +40,7 @@ class MonologHandlerPass implements CompilerPassInterface
                 $def = $container->getDefinition('app' === $channel ? 'monolog.logger' : 'monolog.logger.'.$channel);
             } catch (InvalidArgumentException $e) {
                 $msg = 'NewRelicBundle configuration error: The logging channel "'.$channel.'" does not exist.';
+
                 throw new \InvalidArgumentException($msg, 0, $e);
             }
             $def->addMethodCall('pushHandler', [new Reference('ekino.new_relic.logs_handler')]);

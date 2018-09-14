@@ -35,11 +35,11 @@ class ConfigTest extends TestCase
         $expected = [
             'WidgetSale' => [
                 [
-                    'color' => 'red',
+                    'color'  => 'red',
                     'weight' => 12.5,
                 ],
                 [
-                    'color' => 'blue',
+                    'color'  => 'blue',
                     'weight' => 12.5,
                 ],
             ],
