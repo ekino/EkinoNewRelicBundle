@@ -125,18 +125,9 @@ class EkinoNewRelicExtension extends Extension
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
             $loader->load('monolog.xml');
-            $container->setParameter('ekino.new_relic.monolog.channels', $config['monolog']['channels'] ?? null);
+            $container->setParameter('ekino.new_relic.monolog', $config['monolog'] ?? []);
+            $container->setParameter('ekino.new_relic.application_name', $config['application_name']);
             $container->setAlias('ekino.new_relic.logs_handler', $config['monolog']['service'])->setPublic(false);
-
-            $level = $config['monolog']['level'];
-            // This service is used by MonologHandlerPass to inject into Monolog Service
-            $container->findDefinition('ekino.new_relic.logs_handler')
-                ->setArguments(
-                    [
-                        '$level' => \is_int($level) ? $level : \constant('Monolog\Logger::'.\strtoupper($level)),
-                        '$appName' => $config['application_name'],
-                    ]
-                );
         }
     }
 

@@ -27,7 +27,10 @@ class MonologHandlerPassTest extends AbstractCompilerPassTestCase
 
     public function testProcessChannel()
     {
-        $this->container->setParameter('ekino.new_relic.monolog.channels', ['type' => 'inclusive', 'elements' => ['app', 'foo']]);
+        $this->container->setParameter('ekino.new_relic.monolog', ['level' => 100, 'channels' => ['type' => 'inclusive', 'elements' => ['app', 'foo']]]);
+        $this->container->setParameter('ekino.new_relic.application_name', 'app');
+        $this->registerService('ekino.new_relic.monolog_handler', \Monolog\Handler\NewRelicHandler::class);
+        $this->container->setAlias('ekino.new_relic.logs_handler', 'ekino.new_relic.monolog_handler')->setPublic(false);
         $this->registerService('monolog.logger', \Monolog\Logger::class)->setArgument(0, 'app');
         $this->registerService('monolog.logger.foo', \Monolog\Logger::class)->setArgument(0, 'foo');
 
@@ -39,7 +42,10 @@ class MonologHandlerPassTest extends AbstractCompilerPassTestCase
 
     public function testProcessChannelAllChannels()
     {
-        $this->container->setParameter('ekino.new_relic.monolog.channels', null);
+        $this->container->setParameter('ekino.new_relic.monolog', ['level' => 100, 'channels' => null]);
+        $this->container->setParameter('ekino.new_relic.application_name', 'app');
+        $this->registerService('ekino.new_relic.monolog_handler', \Monolog\Handler\NewRelicHandler::class);
+        $this->container->setAlias('ekino.new_relic.logs_handler', 'ekino.new_relic.monolog_handler')->setPublic(false);
         $this->registerService('monolog.logger', \Monolog\Logger::class)->setArgument(0, 'app');
         $this->registerService('monolog.logger.foo', \Monolog\Logger::class)->setArgument(0, 'foo');
 
@@ -51,7 +57,10 @@ class MonologHandlerPassTest extends AbstractCompilerPassTestCase
 
     public function testProcessChannelExcludeChannels()
     {
-        $this->container->setParameter('ekino.new_relic.monolog.channels', ['type' => 'exclusive', 'elements' => ['foo']]);
+        $this->container->setParameter('ekino.new_relic.monolog', ['level' => 100, 'channels' => ['type' => 'exclusive', 'elements' => ['foo']]]);
+        $this->container->setParameter('ekino.new_relic.application_name', 'app');
+        $this->registerService('ekino.new_relic.monolog_handler', \Monolog\Handler\NewRelicHandler::class);
+        $this->container->setAlias('ekino.new_relic.logs_handler', 'ekino.new_relic.monolog_handler')->setPublic(false);
         $this->registerService('monolog.logger', \Monolog\Logger::class)->setArgument(0, 'app');
         $this->registerService('monolog.logger.foo', \Monolog\Logger::class)->setArgument(0, 'foo');
 

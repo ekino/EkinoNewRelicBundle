@@ -71,9 +71,9 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
     {
         $this->load(['monolog' => true]);
 
-        $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog.channels');
+        $this->assertContainerBuilderHasParameter('ekino.new_relic.monolog');
+        $this->assertContainerBuilderHasParameter('ekino.new_relic.application_name');
         $this->assertContainerBuilderHasService('ekino.new_relic.logs_handler');
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument('ekino.new_relic.logs_handler', '$level', 400);
     }
 
     public function testMonologDisabled()
@@ -82,7 +82,7 @@ class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 
         self::assertThat(
             $this->container,
-            new LogicalNot(new ContainerHasParameterConstraint('ekino.new_relic.monolog.channels', null, false))
+            new LogicalNot(new ContainerHasParameterConstraint('ekino.new_relic.monolog', null, false))
         );
     }
 
