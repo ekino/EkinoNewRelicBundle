@@ -22,17 +22,24 @@ class MonologHandlerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasParameter('ekino.new_relic.monolog.channels') || !$container->hasDefinition('monolog.logger')) {
+        if (!$container->hasParameter('ekino.new_relic.monolog') || !$container->hasDefinition('monolog.logger')) {
             return;
         }
 
-        $configuration = $container->getParameter('ekino.new_relic.monolog.channels');
-        if (null === $configuration) {
+        $configuration = $container->getParameter('ekino.new_relic.monolog');
+        if ($container->hasDefinition('ekino.new_relic.logs_handler') && $container->hasParameter('ekino.new_relic.application_name')) {
+            $container->findDefinition('ekino.new_relic.logs_handler')
+                ->setArgument('$level', \is_int($configuration['level']) ? $configuration['level'] : \constant('Monolog\Logger::'.\strtoupper($configuration['level'])))
+                ->setArgument('$bubble', true)
+                ->setArgument('$appName', $container->getParameter('ekino.new_relic.application_name'));
+        }
+
+        if (!isset($configuration['channels'])) {
             $channels = $this->getChannels($container);
-        } elseif ('inclusive' === $configuration['type']) {
-            $channels = $configuration['elements'] ?: $this->getChannels($container);
+        } elseif ('inclusive' === $configuration['channels']['type']) {
+            $channels = $configuration['channels']['elements'] ?: $this->getChannels($container);
         } else {
-            $channels = \array_diff($this->getChannels($container), $configuration['elements']);
+            $channels = \array_diff($this->getChannels($container), $configuration['channels']['elements']);
         }
 
         foreach ($channels as $channel) {
