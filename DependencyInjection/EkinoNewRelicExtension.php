@@ -129,6 +129,10 @@ class EkinoNewRelicExtension extends Extension
             $container->setParameter('ekino.new_relic.application_name', $config['application_name']);
             $container->setAlias('ekino.new_relic.logs_handler', $config['monolog']['service'])->setPublic(false);
         }
+
+        if (!$config['enabled']) {
+            $container->removeDefinition(ExceptionListener::class);
+        }
     }
 
     private function getInteractorServiceId(array $config): string
