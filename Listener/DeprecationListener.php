@@ -31,6 +31,7 @@ class DeprecationListener
         if ($this->isRegistered) {
             return;
         }
+
         $this->isRegistered = true;
 
         $prevErrorHandler = \set_error_handler(function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler) {
@@ -47,6 +48,7 @@ class DeprecationListener
         if (!$this->isRegistered) {
             return;
         }
+
         $this->isRegistered = false;
         \restore_error_handler();
     }
