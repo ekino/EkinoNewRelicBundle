@@ -7,6 +7,8 @@
     <services>
         <defaults autowire="true" autoconfigure="true" public="false" />
 
-        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener" public="true" />
+        <service id="Ekino\NewRelicBundle\Listener\DeprecationListener" public="true">
+            <tag name="kernel.event_listener" event="kernel.terminate" method="unregister" />
+        </service>
     </services>
 </container>
