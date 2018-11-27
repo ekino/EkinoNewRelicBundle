@@ -35,4 +35,13 @@ class EkinoNewRelicBundle extends Bundle
             $this->container->get(DeprecationListener::class)->register();
         }
     }
+
+    public function shutdown()
+    {
+        if ($this->container->has(DeprecationListener::class)) {
+            $this->container->get(DeprecationListener::class)->unregister();
+        }
+
+        parent::shutdown();
+    }
 }
