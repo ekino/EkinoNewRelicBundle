@@ -35,7 +35,13 @@
         "symfony/monolog-bundle": "^3.2"
     },
     "autoload": {
-        "psr-4": { "Ekino\\NewRelicBundle\\": "" }
+        "psr-4": { "Ekino\\NewRelicBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": { "Ekino\\NewRelicBundle\\Tests\\": "Tests/" }
     },
     "extra": {
         "branch-alias": {
