@@ -17,6 +17,7 @@ use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -81,6 +82,9 @@ class ResponseListener implements EventSubscriberInterface
             // Some requests might not want to get instrumented
             if ($event->getRequest()->attributes->get('_instrument', true)) {
                 $response = $event->getResponse();
+                if ($response instanceof StreamedResponse) {
+                    return;
+                }
 
                 // We can only instrument HTML responses
                 if ('text/html' === \substr($response->headers->get('Content-Type', ''), 0, 9)) {
