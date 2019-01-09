@@ -2,6 +2,25 @@
 
 ## UNRELEASED
 
+## v2.0.2
+
+### Changed
+
+- Remove deprecations triggered by Symfony 4.0.
+- Excluded tests from classmap.
+
+### Fixed
+
+- Fixed call to non-allowed method `setContent` on a `StreamedResponse`.
+- Fixed multiple decoration of error handler when the bundle is often started and stopped like in test suite.
+- Fixed issue in monolog's service configuration that does not allows application's services or aliases. 
+
+## v2.0.1
+
+### Fixed
+
+- Fixed type error when configuration's property `deployment_names` is not a string
+
 ## v2.0.0
 
 ### Changed
@@ -13,7 +32,7 @@
 
 ### Fixed
 
-- Memory leak in the `ResponseListener` that may casuse issues on large HTML responses. 
+- Memory leak in the `ResponseListener` that may cause issues on large HTML responses. 
 - Fixed type error when no Content-Type header was returned.
 - Make sure `NewRelicInteractor::disableAutoRUM` always returns true. 
 
