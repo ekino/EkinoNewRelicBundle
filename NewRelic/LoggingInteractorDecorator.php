@@ -109,7 +109,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     {
         $this->logger->debug('Sending exception to New Relic', [
             'message' => $message,
-            'exception' => $e
+            'exception' => $e,
         ]);
         $this->interactor->noticeThrowable($e, $message);
     }
@@ -168,7 +168,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
     public function recordDatastoreSegment(callable $func, array $parameters)
     {
         $this->logger->debug('Adding custom New Relic datastore segment', [
-            'parameters' => $parameters
+            'parameters' => $parameters,
         ]);
 
         return $this->interactor->recordDatastoreSegment($func, $parameters);
