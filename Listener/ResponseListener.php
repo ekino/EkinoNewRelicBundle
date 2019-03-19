@@ -82,12 +82,11 @@ class ResponseListener implements EventSubscriberInterface
             // Some requests might not want to get instrumented
             if ($event->getRequest()->attributes->get('_instrument', true)) {
                 $response = $event->getResponse();
-                if ($response instanceof StreamedResponse) {
-                    return;
-                }
 
                 // We can only instrument HTML responses
-                if ('text/html' === \substr($response->headers->get('Content-Type', ''), 0, 9)) {
+                if (!$response instanceof StreamedResponse
+                    && 'text/html' === \substr($response->headers->get('Content-Type', ''), 0, 9)
+                ) {
                     $responseContent = $response->getContent();
                     $response->setContent(''); // free the memory
 
