@@ -120,7 +120,7 @@ class EkinoNewRelicExtension extends Extension
             $loader->load('twig.xml');
         }
 
-        if ($config['enabled'] && $config['monolog']['enabled']) {
+        if (\extension_loaded('newrelic') && $config['enabled'] && $config['monolog']['enabled']) {
             if (!\class_exists(\Monolog\Handler\NewRelicHandler::class)) {
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
