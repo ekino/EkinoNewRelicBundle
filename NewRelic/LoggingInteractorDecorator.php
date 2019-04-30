@@ -88,15 +88,29 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         return $this->interactor->disableAutoRUM();
     }
 
-    public function noticeError(int $errno, string $errstr, string $errfile = null, int $errline = null, string $errcontext = null): void
-    {
-        $this->logger->debug('Sending notice error to New Relic');
+    public function noticeError(
+        int $errno,
+        string $errstr,
+        string $errfile = null,
+        int $errline = null,
+        string $errcontext = null
+    ): void {
+        $this->logger->debug('Sending notice error to New Relic', [
+            'error_code' => $errno,
+            'message' => $errstr,
+            'file' => $errfile,
+            'line' => $errline,
+            'context_error' => $errcontext,
+        ]);
         $this->interactor->noticeError($errno, $errstr, $errfile, $errline, $errcontext);
     }
 
     public function noticeThrowable(\Throwable $e, string $message = null): void
     {
-        $this->logger->debug('Sending exception to New Relic');
+        $this->logger->debug('Sending exception to New Relic', [
+            'message' => $message,
+            'exception' => $e,
+        ]);
         $this->interactor->noticeThrowable($e, $message);
     }
 
@@ -134,7 +148,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
 
     public function addCustomTracer(string $name): bool
     {
-        $this->logger->debug('Adding custom New Relic tracer');
+        $this->logger->debug('Adding custom New Relic tracer', ['name' => $name]);
 
         return $this->interactor->addCustomTracer($name);
     }
@@ -153,7 +167,9 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
 
     public function recordDatastoreSegment(callable $func, array $parameters)
     {
-        $this->logger->debug('Adding custom New Relic datastore segment');
+        $this->logger->debug('Adding custom New Relic datastore segment', [
+            'parameters' => $parameters,
+        ]);
 
         return $this->interactor->recordDatastoreSegment($func, $parameters);
     }
