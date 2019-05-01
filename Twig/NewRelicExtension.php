@@ -15,11 +15,12 @@ namespace Ekino\NewRelicBundle\Twig;
 
 use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Twig\Extension\AbstractExtension;
 
 /**
  * Twig extension to manually include BrowserTimingHeader and BrowserTimingFooter into twig templates.
  */
-class NewRelicExtension extends \Twig_Extension
+class NewRelicExtension extends AbstractExtension
 {
     private $newRelic;
     private $interactor;

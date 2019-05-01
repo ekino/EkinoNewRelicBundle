@@ -17,6 +17,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Twig\Extension;
 
 class Configuration implements ConfigurationInterface
 {
@@ -34,7 +35,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->scalarNode('interactor')->end()
-                ->booleanNode('twig')->defaultValue(\class_exists('\Twig_Environment'))->end()
+                ->booleanNode('twig')->defaultValue(\class_exists(Extension::class))->end()
                 ->scalarNode('api_key')->defaultValue(null)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
                 ->scalarNode('application_name')->defaultValue(null)->end()
