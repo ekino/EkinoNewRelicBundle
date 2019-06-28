@@ -25,8 +25,7 @@
         "nyholm/symfony-bundle-test": "^1.4",
         "symfony/phpunit-bridge": "^4.0",
         "twig/twig": "^1.32 || ^2.4",
-        "symfony/monolog-bundle": "^3.2",
-        "friendsofphp/php-cs-fixer": "^2.11"
+        "symfony/monolog-bundle": "^3.2"
     },
     "conflict": {
         "twig/twig": "<1.32"
