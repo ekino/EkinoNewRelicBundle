@@ -48,7 +48,7 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)
             ->setMethods(['getTransactionName'])
             ->getMock();
-        $namingStrategy->expects($this->once())->method('getTransactionName')->will($this->returnValue('foobar'));
+        $namingStrategy->expects($this->once())->method('getTransactionName')->willReturn('foobar');
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();

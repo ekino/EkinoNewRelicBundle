@@ -63,11 +63,11 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->expectException(\RuntimeException::class);
 
@@ -84,11 +84,11 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->expectException(\RuntimeException::class);
 
@@ -109,18 +109,18 @@ class NewRelicExtensionTest extends TestCase
 
         $this->newRelic->expects($this->once())
             ->method('getCustomMetrics')
-            ->will($this->returnValue([
+            ->willReturn([
                 'a' => 'b',
                 'c' => 'd',
-            ]));
+            ]);
 
         $this->newRelic->expects($this->once())
             ->method('getCustomParameters')
-            ->will($this->returnValue([
+            ->willReturn([
                 'e' => 'f',
                 'g' => 'h',
                 'i' => 'j',
-            ]));
+            ]);
 
         $this->interactor->expects($this->once())
             ->method('disableAutoRum');
@@ -133,11 +133,11 @@ class NewRelicExtensionTest extends TestCase
 
         $this->interactor->expects($this->once())
             ->method('getBrowserTimingHeader')
-            ->will($this->returnValue($headerValue));
+            ->willReturn($headerValue);
 
         $this->interactor->expects($this->once())
             ->method('getBrowserTimingFooter')
-            ->will($this->returnValue($footerValue));
+            ->willReturn($footerValue);
 
         $this->assertSame($headerValue, $extension->getNewrelicBrowserTimingHeader());
         $this->assertTrue($extension->isHeaderCalled());
