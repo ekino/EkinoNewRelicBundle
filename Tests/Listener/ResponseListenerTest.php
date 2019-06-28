@@ -41,7 +41,7 @@ class ResponseListenerTest extends TestCase
             ->setMethods(['isMasterRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $event->method('isMasterRequest')->will($this->returnValue(false));
+        $event->method('isMasterRequest')->willReturn(false);
 
         $object = new ResponseListener($this->newRelic, $this->interactor);
         $object->onKernelResponse($event);
@@ -74,9 +74,9 @@ class ResponseListenerTest extends TestCase
             'foo_2' => 'bar_2',
         ];
 
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue($events));
-        $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue($metrics));
-        $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue($parameters));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn($events);
+        $this->newRelic->expects($this->once())->method('getCustomMetrics')->willReturn($metrics);
+        $this->newRelic->expects($this->once())->method('getCustomParameters')->willReturn($parameters);
 
         $this->interactor->expects($this->at(0))->method('addCustomMetric')->with('foo_a', 4.7);
         $this->interactor->expects($this->at(1))->method('addCustomMetric')->with('foo_b', 11);
@@ -145,8 +145,8 @@ class ResponseListenerTest extends TestCase
         $this->setupNoCustomMetricsOrParameters();
 
         $this->interactor->expects($this->once())->method('disableAutoRUM');
-        $this->interactor->expects($this->any())->method('getBrowserTimingHeader')->will($this->returnValue('__Timing_Header__'));
-        $this->interactor->expects($this->any())->method('getBrowserTimingFooter')->will($this->returnValue('__Timing_Feader__'));
+        $this->interactor->expects($this->any())->method('getBrowserTimingHeader')->willReturn('__Timing_Header__');
+        $this->interactor->expects($this->any())->method('getBrowserTimingFooter')->willReturn('__Timing_Feader__');
 
         $request = $this->createRequestMock();
         $response = $this->createResponseMock($content, $expectsSetContent, $contentType);
@@ -182,15 +182,15 @@ class ResponseListenerTest extends TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
-        $this->interactor->expects($this->once())->method('getBrowserTimingFooter')->will($this->returnValue('__Timing_Feader__'));
+        $this->interactor->expects($this->once())->method('getBrowserTimingFooter')->willReturn('__Timing_Feader__');
 
-        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
-        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(true));
-        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(false));
+        $this->extension->expects($this->exactly(2))->method('isUsed')->willReturn(true);
+        $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(true);
+        $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(false);
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
@@ -204,15 +204,15 @@ class ResponseListenerTest extends TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
-        $this->interactor->expects($this->once())->method('getBrowserTimingHeader')->will($this->returnValue('__Timing_Feader__'));
+        $this->interactor->expects($this->once())->method('getBrowserTimingHeader')->willReturn('__Timing_Feader__');
         $this->interactor->expects($this->never())->method('getBrowserTimingFooter');
 
-        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
-        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(false));
-        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(true));
+        $this->extension->expects($this->exactly(2))->method('isUsed')->willReturn(true);
+        $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(false);
+        $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(true);
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
@@ -226,15 +226,15 @@ class ResponseListenerTest extends TestCase
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
 
         $this->interactor->expects($this->never())->method('disableAutoRUM');
         $this->interactor->expects($this->never())->method('getBrowserTimingHeader');
         $this->interactor->expects($this->never())->method('getBrowserTimingFooter');
 
-        $this->extension->expects($this->exactly(2))->method('isUsed')->will($this->returnValue(true));
-        $this->extension->expects($this->once())->method('isHeaderCalled')->will($this->returnValue(true));
-        $this->extension->expects($this->once())->method('isFooterCalled')->will($this->returnValue(true));
+        $this->extension->expects($this->exactly(2))->method('isUsed')->willReturn(true);
+        $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(true);
+        $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(true);
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
@@ -246,9 +246,9 @@ class ResponseListenerTest extends TestCase
 
     private function setUpNoCustomMetricsOrParameters()
     {
-        $this->newRelic->expects($this->once())->method('getCustomEvents')->will($this->returnValue([]));
-        $this->newRelic->expects($this->once())->method('getCustomMetrics')->will($this->returnValue([]));
-        $this->newRelic->expects($this->once())->method('getCustomParameters')->will($this->returnValue([]));
+        $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
+        $this->newRelic->expects($this->once())->method('getCustomMetrics')->willReturn([]);
+        $this->newRelic->expects($this->once())->method('getCustomParameters')->willReturn([]);
 
         $this->interactor->expects($this->never())->method('addCustomEvent');
         $this->interactor->expects($this->never())->method('addCustomMetric');
@@ -262,7 +262,7 @@ class ResponseListenerTest extends TestCase
             ->getMock();
         $mock->attributes = $mock;
 
-        $mock->expects($this->any())->method('get')->will($this->returnValue($instrumentEnabled));
+        $mock->expects($this->any())->method('get')->willReturn($instrumentEnabled);
 
         return $mock;
     }
@@ -274,8 +274,8 @@ class ResponseListenerTest extends TestCase
             ->getMock();
         $mock->headers = $mock;
 
-        $mock->expects($this->any())->method('get')->will($this->returnValue($contentType));
-        $mock->expects($content ? $this->any() : $this->never())->method('getContent')->will($this->returnValue($content));
+        $mock->expects($this->any())->method('get')->willReturn($contentType);
+        $mock->expects($content ? $this->any() : $this->never())->method('getContent')->willReturn($content);
 
         if ($expectsSetContent) {
             $mock->expects($this->exactly(2))->method('setContent')->withConsecutive([''], [$expectsSetContent]);
@@ -293,9 +293,9 @@ class ResponseListenerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $event->expects($request ? $this->any() : $this->never())->method('getRequest')->will($this->returnValue($request));
-        $event->expects($response ? $this->any() : $this->never())->method('getResponse')->will($this->returnValue($response));
-        $event->method('isMasterRequest')->will($this->returnValue(true));
+        $event->expects($request ? $this->any() : $this->never())->method('getRequest')->willReturn($request);
+        $event->expects($response ? $this->any() : $this->never())->method('getResponse')->willReturn($response);
+        $event->method('isMasterRequest')->willReturn(true);
 
         return $event;
     }
