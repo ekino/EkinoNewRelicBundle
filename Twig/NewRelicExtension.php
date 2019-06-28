@@ -15,11 +15,13 @@ namespace Ekino\NewRelicBundle\Twig;
 
 use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Twig extension to manually include BrowserTimingHeader and BrowserTimingFooter into twig templates.
  */
-class NewRelicExtension extends \Twig_Extension
+class NewRelicExtension extends AbstractExtension
 {
     private $newRelic;
     private $interactor;
@@ -43,8 +45,8 @@ class NewRelicExtension extends \Twig_Extension
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_header', [$this, 'getNewrelicBrowserTimingHeader'], ['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('ekino_newrelic_browser_timing_footer', [$this, 'getNewrelicBrowserTimingFooter'], ['is_safe' => ['html']]),
+            new TwigFunction('ekino_newrelic_browser_timing_header', [$this, 'getNewrelicBrowserTimingHeader'], ['is_safe' => ['html']]),
+            new TwigFunction('ekino_newrelic_browser_timing_footer', [$this, 'getNewrelicBrowserTimingFooter'], ['is_safe' => ['html']]),
         ];
     }
 
