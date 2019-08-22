@@ -2,6 +2,18 @@
 
 ## UNRELEASED
 
+## v2.1.0
+
+### Added
+
+- More detail/context when PSR-3 Logging the Newrelic transactions
+
+### Fixed 
+
+- Even when handling a streamed response should call 'endTransaction' on onKernelResponse even
+- Warnings in PHP 7.4
+- Stop using Twig deprecated classes
+
 ## v2.0.2
 
 ### Changed
