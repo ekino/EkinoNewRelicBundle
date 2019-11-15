@@ -2,6 +2,12 @@
 
 ## UNRELEASED
 
+## v2.1.1
+
+### Added
+
+- Allow Symfony 5.0
+
 ## v2.1.0
 
 ### Added
