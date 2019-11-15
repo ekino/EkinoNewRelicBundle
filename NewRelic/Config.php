@@ -70,7 +70,6 @@ class Config
     }
 
     /**
-     * @param string           $name
      * @param string|int|float $value or any scalar value
      */
     public function addCustomParameter(string $name, $value): void

@@ -159,19 +159,12 @@ class EkinoNewRelicExtension extends Extension
                 return RouteNamingStrategy::class;
             case 'service':
                 if (!isset($config['http']['transaction_naming_service'])) {
-                    throw new \LogicException(
-                        'When using the "service", transaction naming scheme, the "transaction_naming_service" config parameter must be set.'
-                    );
+                    throw new \LogicException('When using the "service", transaction naming scheme, the "transaction_naming_service" config parameter must be set.');
                 }
 
                 return $config['http']['transaction_naming_service'];
             default:
-                throw new \InvalidArgumentException(
-                    \sprintf(
-                        'Invalid transaction naming scheme "%s", must be "route", "controller" or "service".',
-                        $config['http']['transaction_naming']
-                    )
-                );
+                throw new \InvalidArgumentException(\sprintf('Invalid transaction naming scheme "%s", must be "route", "controller" or "service".', $config['http']['transaction_naming']));
         }
     }
 }

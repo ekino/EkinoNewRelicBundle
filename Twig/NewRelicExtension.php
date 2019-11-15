@@ -39,9 +39,6 @@ class NewRelicExtension extends AbstractExtension
         $this->instrument = $instrument;
     }
 
-    /**
-     * @return array
-     */
     public function getFunctions(): array
     {
         return [
@@ -52,8 +49,6 @@ class NewRelicExtension extends AbstractExtension
 
     /**
      * @throws \RuntimeException
-     *
-     * @return string
      */
     public function getNewrelicBrowserTimingHeader(): string
     {
@@ -70,8 +65,6 @@ class NewRelicExtension extends AbstractExtension
 
     /**
      * @throws \RuntimeException
-     *
-     * @return string
      */
     public function getNewrelicBrowserTimingFooter(): string
     {
