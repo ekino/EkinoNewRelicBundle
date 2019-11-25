@@ -40,9 +40,14 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function onKernelException(GetResponseForExceptionEvent $event): void
     {
-        $exception = $event->getException();
-        if (!$exception instanceof HttpExceptionInterface) {
-            $this->interactor->noticeThrowable($exception);
+        if (method_exists($event, 'getThrowable')) {
+            $throwable = $event->getThrowable();
+        } else {
+            $throwable = $event->getException();
+        }
+
+        if (!$throwable instanceof HttpExceptionInterface) {
+            $this->interactor->noticeThrowable($throwable);
         }
     }
 }
