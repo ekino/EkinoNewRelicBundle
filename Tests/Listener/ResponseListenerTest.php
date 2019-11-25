@@ -18,11 +18,15 @@ use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ResponseListenerTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $this->newRelic = $this->getMockBuilder(Config::class)
@@ -37,11 +41,11 @@ class ResponseListenerTest extends TestCase
 
     public function testOnKernelResponseOnlyMasterRequestsAreProcessed()
     {
-        $event = $this->getMockBuilder(FilterResponseEvent::class)
-            ->setMethods(['isMasterRequest'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->method('isMasterRequest')->willReturn(false);
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
+        $request = new Request();
+
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::SUB_REQUEST, new Response());
 
         $object = new ResponseListener($this->newRelic, $this->interactor);
         $object->onKernelResponse($event);

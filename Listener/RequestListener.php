@@ -17,8 +17,8 @@ use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -58,8 +58,15 @@ class RequestListener implements EventSubscriberInterface
         ];
     }
 
-    public function setApplicationName(GetResponseEvent $event): void
+    /**
+     * @param GetResponseEvent|ResponseEvent $event
+     */
+    public function setApplicationName($event): void
     {
+        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
+            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
+        }
+
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -80,8 +87,15 @@ class RequestListener implements EventSubscriberInterface
         }
     }
 
-    public function setTransactionName(GetResponseEvent $event): void
+    /**
+     * @param GetResponseEvent|ResponseEvent $event
+     */
+    public function setTransactionName($event): void
     {
+        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
+            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
+        }
+
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -91,8 +105,15 @@ class RequestListener implements EventSubscriberInterface
         $this->interactor->setTransactionName($transactionName);
     }
 
-    public function setIgnoreTransaction(GetResponseEvent $event): void
+    /**
+     * @param GetResponseEvent|ResponseEvent $event
+     */
+    public function setIgnoreTransaction($event): void
     {
+        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
+            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
+        }
+
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -109,9 +130,15 @@ class RequestListener implements EventSubscriberInterface
 
     /**
      * Make sure we should consider this event. Example: make sure it is a master request.
+     *
+     * @param GetResponseEvent|ResponseEvent $event
      */
-    private function isEventValid(GetResponseEvent $event): bool
+    private function isEventValid($event): bool
     {
+        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
+            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
+        }
+
         return HttpKernelInterface::MASTER_REQUEST === $event->getRequestType();
     }
 }

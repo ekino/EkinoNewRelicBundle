@@ -19,6 +19,7 @@ use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResponseListener implements EventSubscriberInterface
@@ -52,8 +53,15 @@ class ResponseListener implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelResponse(FilterResponseEvent $event): void
+    /**
+     * @param FilterResponseEvent|ResponseEvent $event
+     */
+    public function onKernelResponse($event): void
     {
+        if (!$event instanceof FilterResponseEvent && !$event instanceof ResponseEvent) {
+            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
+        }
+
         if (!$event->isMasterRequest()) {
             return;
         }
