@@ -30,9 +30,11 @@ class LoggingInteractorDecoratorTest extends TestCase
         $interactor = new LoggingInteractorDecorator($decorated, $logger);
 
         $logger->expects($this->once())->method('debug');
-        $decorated->expects($this->once())->method($method)
-            ->with(...$arguments)
-            ->willReturn($return);
+        $call = $decorated->expects($this->once())->method($method)
+            ->with(...$arguments);
+        if (null !== $return) {
+            $call->willReturn($return);
+        }
 
         $result = $interactor->$method(...$arguments);
 

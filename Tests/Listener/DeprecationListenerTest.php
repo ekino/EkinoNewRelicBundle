@@ -23,7 +23,9 @@ class DeprecationListenerTest extends TestCase
     public function testDeprecationIsReported()
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
-        $interactor->expects($this->once())->method('noticeThrowable')->with($this->isInstanceOf(DeprecationException::class));
+        $interactor->expects($this->once())->method('noticeThrowable')->with(
+            $this->isInstanceOf(DeprecationException::class)
+        );
 
         $listener = new DeprecationListener($interactor);
 
@@ -78,7 +80,7 @@ class DeprecationListenerTest extends TestCase
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable');
 
-        $handler = $this->createPartialMock(\stdClass::class, ['__invoke']);
+        $handler = $this->createPartialMock(DummyHandler::class, ['__invoke']);
         $handler->expects($this->once())->method('__invoke');
 
         $listener = new DeprecationListener($interactor);
@@ -114,7 +116,7 @@ class DeprecationListenerTest extends TestCase
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
 
-        $handler = $this->createPartialMock(\stdClass::class, ['__invoke']);
+        $handler = $this->createPartialMock(DummyHandler::class, ['__invoke']);
         $handler->expects($this->once())->method('__invoke');
 
         $listener = new DeprecationListener($interactor);
@@ -127,5 +129,12 @@ class DeprecationListenerTest extends TestCase
         } finally {
             \restore_error_handler();
         }
+    }
+}
+
+class DummyHandler
+{
+    public function __invoke()
+    {
     }
 }

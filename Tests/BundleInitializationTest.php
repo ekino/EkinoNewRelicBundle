@@ -28,7 +28,7 @@ use Nyholm\BundleTest\CompilerPass\PublicServicePass;
  */
 class BundleInitializationTest extends BaseBundleTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

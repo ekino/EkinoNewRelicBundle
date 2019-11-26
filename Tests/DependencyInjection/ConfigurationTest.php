@@ -84,13 +84,13 @@ class ConfigurationTest extends TestCase
         $config = $processor->processConfiguration(new Configuration(), []);
 
         $this->assertEmpty($config['http']['ignored_routes']);
-        $this->assertInternalType('array', $config['http']['ignored_routes']);
+        $this->assertIsArray($config['http']['ignored_routes']);
         $this->assertEmpty($config['http']['ignored_paths']);
-        $this->assertInternalType('array', $config['http']['ignored_paths']);
+        $this->assertIsArray($config['http']['ignored_paths']);
         $this->assertEmpty($config['commands']['ignored_commands']);
-        $this->assertInternalType('array', $config['commands']['ignored_commands']);
+        $this->assertIsArray($config['commands']['ignored_commands']);
         $this->assertEmpty($config['deployment_names']);
-        $this->assertInternalType('array', $config['deployment_names']);
+        $this->assertIsArray($config['deployment_names']);
     }
 
     public static function ignoredRoutesProvider()

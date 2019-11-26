@@ -26,12 +26,12 @@ use PHPUnit\Framework\Constraint\LogicalNot;
 
 class EkinoNewRelicExtensionTest extends AbstractExtensionTestCase
 {
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return [new EkinoNewRelicExtension()];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

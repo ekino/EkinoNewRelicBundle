@@ -19,7 +19,9 @@ use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListenerTest extends TestCase
@@ -32,9 +34,9 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request();
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::SUB_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy);
         $listener->setApplicationName($event);
@@ -51,9 +53,9 @@ class RequestListenerTest extends TestCase
         $namingStrategy->expects($this->once())->method('getTransactionName')->willReturn('foobar');
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request();
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy);
         $listener->setTransactionName($event);
@@ -69,7 +71,8 @@ class RequestListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/ignored_path']);
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, $request, HttpKernelInterface::MASTER_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], ['/ignored_path'], $namingStrategy);
         $listener->setIgnoreTransaction($event);
@@ -85,7 +88,8 @@ class RequestListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], ['_route' => 'ignored_route']);
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, $request, HttpKernelInterface::MASTER_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, ['ignored_route'], [], $namingStrategy);
         $listener->setIgnoreTransaction($event);
@@ -99,9 +103,9 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request();
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy, true);
         $listener->setApplicationName($event);
@@ -115,9 +119,9 @@ class RequestListenerTest extends TestCase
         $namingStrategy = $this->getMockBuilder(TransactionNamingStrategyInterface::class)->getMock();
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request();
 
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy, false);
         $listener->setApplicationName($event);
