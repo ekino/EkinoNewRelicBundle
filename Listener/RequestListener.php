@@ -58,15 +58,8 @@ class RequestListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param GetResponseEvent|ResponseEvent $event
-     */
-    public function setApplicationName($event): void
+    public function setApplicationName(KernelRequestEvent $event): void
     {
-        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -87,15 +80,8 @@ class RequestListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param GetResponseEvent|ResponseEvent $event
-     */
-    public function setTransactionName($event): void
+    public function setTransactionName(KernelRequestEvent $event): void
     {
-        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -105,15 +91,8 @@ class RequestListener implements EventSubscriberInterface
         $this->interactor->setTransactionName($transactionName);
     }
 
-    /**
-     * @param GetResponseEvent|ResponseEvent $event
-     */
-    public function setIgnoreTransaction($event): void
+    public function setIgnoreTransaction(KernelRequestEvent $event): void
     {
-        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         if (!$this->isEventValid($event)) {
             return;
         }
@@ -130,15 +109,15 @@ class RequestListener implements EventSubscriberInterface
 
     /**
      * Make sure we should consider this event. Example: make sure it is a master request.
-     *
-     * @param GetResponseEvent|ResponseEvent $event
      */
-    private function isEventValid($event): bool
+    private function isEventValid(KernelRequestEvent $event): bool
     {
-        if (!$event instanceof GetResponseEvent && !$event instanceof ResponseEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : GetResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         return HttpKernelInterface::MASTER_REQUEST === $event->getRequestType();
     }
+}
+
+if (\class_exists(ResponseEvent::class)) {
+    \class_alias(ResponseEvent::class, KernelRequestEvent::class);
+} else {
+    \class_alias(GetResponseEvent::class, KernelRequestEvent::class);
 }

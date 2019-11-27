@@ -15,9 +15,9 @@ matrix:
     include:
           # Minimum supported dependencies with the latest and oldest PHP version
         - php: 7.3
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_VERSION=7 SYMFONY_DEPRECATIONS_HELPER="max[direct]=0"
         - php: 7.1
-          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 SYMFONY_DEPRECATIONS_HELPER="max[direct]=0"
 
           # Test the latest stable release
         - php: 7.1
