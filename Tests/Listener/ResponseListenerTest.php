@@ -41,11 +41,7 @@ class ResponseListenerTest extends TestCase
 
     public function testOnKernelResponseOnlyMasterRequestsAreProcessed()
     {
-        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $request = new Request();
-
-        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
-        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::SUB_REQUEST, new Response());
+        $event = $this->createFilterResponseEventDummy(null, null, HttpKernelInterface::SUB_REQUEST);
 
         $object = new ResponseListener($this->newRelic, $this->interactor);
         $object->onKernelResponse($event);
@@ -96,7 +92,7 @@ class ResponseListenerTest extends TestCase
             'weight' => 12.5,
         ]);
 
-        $event = $this->createFilterResponseEventMock();
+        $event = $this->createFilterResponseEventDummy();
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false);
         $object->onKernelResponse($event);
@@ -108,8 +104,7 @@ class ResponseListenerTest extends TestCase
 
         $this->interactor->expects($this->once())->method('disableAutoRUM');
 
-        $request = $this->createRequestMock(false);
-        $event = $this->createFilterResponseEventMock($request, null);
+        $event = $this->createFilterResponseEventDummy();
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true);
         $object->onKernelResponse($event);
@@ -121,8 +116,7 @@ class ResponseListenerTest extends TestCase
 
         $this->interactor->expects($this->once())->method('endTransaction');
 
-        $request = $this->createRequestMock(false);
-        $event = $this->createFilterResponseEventMock($request, null);
+        $event = $this->createFilterResponseEventDummy();
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false, true);
         $object->onKernelResponse($event);
@@ -134,8 +128,7 @@ class ResponseListenerTest extends TestCase
 
         $this->interactor->expects($this->never())->method('endTransaction');
 
-        $request = $this->createRequestMock(false);
-        $event = $this->createFilterResponseEventMock($request, null);
+        $event = $this->createFilterResponseEventDummy();
 
         $object = new ResponseListener($this->newRelic, $this->interactor, false, false);
         $object->onKernelResponse($event);
@@ -152,9 +145,8 @@ class ResponseListenerTest extends TestCase
         $this->interactor->expects($this->any())->method('getBrowserTimingHeader')->willReturn('__Timing_Header__');
         $this->interactor->expects($this->any())->method('getBrowserTimingFooter')->willReturn('__Timing_Feader__');
 
-        $request = $this->createRequestMock();
         $response = $this->createResponseMock($content, $expectsSetContent, $contentType);
-        $event = $this->createFilterResponseEventMock($request, $response);
+        $event = $this->createFilterResponseEventDummy(null, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true);
         $object->onKernelResponse($event);
@@ -198,7 +190,7 @@ class ResponseListenerTest extends TestCase
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
-        $event = $this->createFilterResponseEventMock($request, $response);
+        $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
         $object->onKernelResponse($event);
@@ -220,7 +212,7 @@ class ResponseListenerTest extends TestCase
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
-        $event = $this->createFilterResponseEventMock($request, $response);
+        $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
         $object->onKernelResponse($event);
@@ -242,7 +234,7 @@ class ResponseListenerTest extends TestCase
 
         $request = $this->createRequestMock(true);
         $response = $this->createResponseMock('content', 'content', 'text/html');
-        $event = $this->createFilterResponseEventMock($request, $response);
+        $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
         $object->onKernelResponse($event);
@@ -261,7 +253,7 @@ class ResponseListenerTest extends TestCase
 
     private function createRequestMock($instrumentEnabled = true)
     {
-        $mock = $this->getMockBuilder('stdClass')
+        $mock = $this->getMockBuilder(Request::class)
             ->setMethods(['get'])
             ->getMock();
         $mock->attributes = $mock;
@@ -273,7 +265,7 @@ class ResponseListenerTest extends TestCase
 
     private function createResponseMock($content = null, $expectsSetContent = null, $contentType = 'text/html')
     {
-        $mock = $this->getMockBuilder('stdClass')
+        $mock = $this->getMockBuilder(Response::class)
             ->setMethods(['get', 'getContent', 'setContent'])
             ->getMock();
         $mock->headers = $mock;
@@ -290,16 +282,12 @@ class ResponseListenerTest extends TestCase
         return $mock;
     }
 
-    private function createFilterResponseEventMock($request = null, $response = null)
+    private function createFilterResponseEventDummy(Request $request = null, Response $response = null, int $requestType = HttpKernelInterface::MASTER_REQUEST)
     {
-        $event = $this->getMockBuilder(FilterResponseEvent::class)
-            ->setMethods(['getResponse', 'getRequest', 'isMasterRequest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $event->expects($request ? $this->any() : $this->never())->method('getRequest')->willReturn($request);
-        $event->expects($response ? $this->any() : $this->never())->method('getResponse')->willReturn($response);
-        $event->method('isMasterRequest')->willReturn(true);
+        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
+        $event = new $eventClass($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
 
         return $event;
     }

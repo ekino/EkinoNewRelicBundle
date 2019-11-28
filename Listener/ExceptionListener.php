@@ -42,15 +42,17 @@ class ExceptionListener implements EventSubscriberInterface
     /**
      * @param GetResponseForExceptionEvent|ExceptionEvent $event
      */
-    public function onKernelException($event): void
+    public function onKernelException(KernelExceptionEvent $event): void
     {
-        if (!$event instanceof GetResponseForExceptionEvent && !$event instanceof ExceptionEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         $exception = \method_exists($event, 'getThrowable') ? $event->getThrowable() : $event->getException();
         if (!$exception instanceof HttpExceptionInterface) {
             $this->interactor->noticeThrowable($exception);
         }
     }
+}
+
+if (\class_exists(ExceptionEvent::class)) {
+    \class_alias(ExceptionEvent::class, KernelExceptionEvent::class);
+} else {
+    \class_alias(GetResponseForExceptionEvent::class, KernelExceptionEvent::class);
 }

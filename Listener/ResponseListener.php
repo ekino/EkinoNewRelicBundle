@@ -53,15 +53,8 @@ class ResponseListener implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FilterResponseEvent|ResponseEvent $event
-     */
-    public function onKernelResponse($event): void
+    public function onKernelResponse(KernelResponseEvent $event): void
     {
-        if (!$event instanceof FilterResponseEvent && !$event instanceof ResponseEvent) {
-            throw new \InvalidArgumentException(\sprintf('Expected instance of type %s, %s given', \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class, \is_object($event) ? \get_class($event) : \gettype($event)));
-        }
-
         if (!$event->isMasterRequest()) {
             return;
         }
@@ -115,4 +108,10 @@ class ResponseListener implements EventSubscriberInterface
             $this->interactor->endTransaction();
         }
     }
+}
+
+if (\class_exists(ResponseEvent::class)) {
+    \class_alias(ResponseEvent::class, KernelResponseEvent::class);
+} else {
+    \class_alias(FilterResponseEvent::class, KernelResponseEvent::class);
 }

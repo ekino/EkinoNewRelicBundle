@@ -2,6 +2,12 @@
 
 ## UNRELEASED
 
+## v2.1.2
+
+### Fixed
+
+- Fixed compatibility issues with Symfony 5.0
+
 ## v2.1.1
 
 ### Added
