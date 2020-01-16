@@ -20,10 +20,11 @@ class ConfigTest extends TestCase
 {
     public function testGeneric()
     {
-        $newRelic = new Config('Ekino', 'XXX');
+        $newRelic = new Config('Ekino', 'api.host', 'XXX');
 
         $this->assertSame('Ekino', $newRelic->getName());
         $this->assertSame('XXX', $newRelic->getApiKey());
+        $this->assertSame('api.host', $newRelic->getApiHost());
 
         $this->assertEmpty($newRelic->getCustomEvents());
         $this->assertEmpty($newRelic->getCustomMetrics());
