@@ -99,7 +99,7 @@ class NotifyDeploymentCommand extends Command
         return $exitCode;
     }
 
-    public function performRequest(string $api_key, string $payload, string $api_host = null): array
+    public function performRequest(string $api_key, string $payload, ?string $api_host = null): array
     {
         $headers = [
             \sprintf('x-api-key: %s', $api_key),
