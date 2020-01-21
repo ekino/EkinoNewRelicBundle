@@ -74,7 +74,7 @@ class NotifyDeploymentCommand extends Command
         $exitCode = 0;
 
         foreach ($appNames as $appName) {
-            $response = $this->performRequest($this->newrelic->getApiHost(), $this->newrelic->getApiKey(), $this->createPayload($appName, $input));
+            $response = $this->performRequest($this->newrelic->getApiKey(), $this->createPayload($appName, $input), $this->newrelic->getApiHost());
 
             switch ($response['status']) {
                 case 200:
@@ -99,7 +99,7 @@ class NotifyDeploymentCommand extends Command
         return $exitCode;
     }
 
-    public function performRequest(string $api_host, string $api_key, string $payload): array
+    public function performRequest(string $api_key, string $payload, string $api_host = null): array
     {
         $headers = [
             \sprintf('x-api-key: %s', $api_key),
@@ -116,7 +116,7 @@ class NotifyDeploymentCommand extends Command
         ];
 
         $level = \error_reporting(0);
-        $content = \file_get_contents(\sprintf('https://%s/deployments.xml', $api_host), false, \stream_context_create($context));
+        $content = \file_get_contents(\sprintf('https://%s/deployments.xml', $api_host ?? 'api.newrelic.com'), false, \stream_context_create($context));
         \error_reporting($level);
         if (false === $content) {
             $error = \error_get_last();

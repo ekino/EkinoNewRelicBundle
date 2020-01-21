@@ -20,7 +20,7 @@ class Config
 {
     private $name;
     private $apiKey;
-    private $apiHost;
+    private $apiHost = null;
     private $licenseKey;
     private $xmit;
     private $customEvents;
@@ -28,7 +28,7 @@ class Config
     private $customParameters;
     private $deploymentNames;
 
-    public function __construct(?string $name, string $apiHost, string $apiKey = null, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [])
+    public function __construct(?string $name, string $apiKey = null, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [], ?string $apiHost = null)
     {
         $this->name = (!empty($name) ? $name : \ini_get('newrelic.appname')) ?: '';
         $this->apiKey = $apiKey;
@@ -107,7 +107,7 @@ class Config
         return $this->apiKey;
     }
 
-    public function getApiHost(): string
+    public function getApiHost(): ?string
     {
         return $this->apiHost;
     }

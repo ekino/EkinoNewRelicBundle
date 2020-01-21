@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('interactor')->end()
                 ->booleanNode('twig')->defaultValue(\class_exists(Environment::class))->end()
                 ->scalarNode('api_key')->defaultValue(null)->end()
-                ->scalarNode('api_host')->defaultValue('api.newrelic.com')->end()
+                ->scalarNode('api_host')->defaultValue(null)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
                 ->scalarNode('application_name')->defaultValue(null)->end()
                 ->arrayNode('deployment_names')
