@@ -71,11 +71,11 @@ class EkinoNewRelicExtension extends Extension
             ->setArguments(
                 [
                     '$name' => $config['application_name'],
-                    '$apiHost' => $config['api_host'],
                     '$apiKey' => $config['api_key'],
                     '$licenseKey' => $config['license_key'],
                     '$xmit' => $config['xmit'],
                     '$deploymentNames' => $config['deployment_names'],
+                    '$apiHost' => $config['api_host'],
                 ]
             );
 
