@@ -80,6 +80,7 @@ ekino_new_relic:
                                           # as php ini-value
     deployment_names: ~                   # default value is 'application_name', supports string array or semi-colon separated string
     api_key:                              # New Relic API
+    api_host: ~                           # New Relic API Host (default value is api.newrelic.com, for EU should be set to api.eu.newrelic.com )
     license_key:                          # New Relic license key (optional, default value is read from php.ini)
     xmit: false                           # if you want to record the metric data up to the point newrelic_set_appname is called, set this to true (default: false)
     logging: false                        # If true, logs all New Relic interactions to the Symfony log (default: false)

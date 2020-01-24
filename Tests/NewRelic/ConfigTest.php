@@ -20,10 +20,11 @@ class ConfigTest extends TestCase
 {
     public function testGeneric()
     {
-        $newRelic = new Config('Ekino', 'XXX');
+        $newRelic = new Config('Ekino', 'XXX', null, false, [], 'api.host');
 
         $this->assertSame('Ekino', $newRelic->getName());
         $this->assertSame('XXX', $newRelic->getApiKey());
+        $this->assertSame('api.host', $newRelic->getApiHost());
 
         $this->assertEmpty($newRelic->getCustomEvents());
         $this->assertEmpty($newRelic->getCustomMetrics());
@@ -75,5 +76,7 @@ class ConfigTest extends TestCase
 
         $this->assertNotNull($newRelic->getLicenseKey());
         $this->assertSame(\ini_get('newrelic.license') ?: '', $newRelic->getLicenseKey());
+
+        $this->assertNull($newRelic->getApiHost());
     }
 }

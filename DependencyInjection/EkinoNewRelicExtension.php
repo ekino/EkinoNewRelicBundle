@@ -75,6 +75,7 @@ class EkinoNewRelicExtension extends Extension
                     '$licenseKey' => $config['license_key'],
                     '$xmit' => $config['xmit'],
                     '$deploymentNames' => $config['deployment_names'],
+                    '$apiHost' => $config['api_host'],
                 ]
             );
 
