@@ -43,7 +43,7 @@ class ControllerNamingStrategyTest extends TestCase
         $request->attributes->set('_controller', [$this, 'testControllerAsString']);
 
         $strategy = new ControllerNamingStrategy();
-        $this->assertSame('Callback contoller: Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
+        $this->assertSame('Callback controller: Ekino\NewRelicBundle\TransactionNamingStrategy\ControllerNamingStrategyTest::testControllerAsString()', $strategy->getTransactionName($request));
     }
 
     public function testControllerUnknown()

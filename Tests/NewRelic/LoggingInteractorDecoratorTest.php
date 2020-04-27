@@ -86,7 +86,7 @@ class LoggingInteractorDecoratorTest extends TestCase
             case 'array':
                 return \array_fill(0, 2, \uniqid('', true));
             default:
-                throw new \UnexpectedValueException('Unknow type. '.$type->getName());
+                throw new \UnexpectedValueException('Unknown type. '.$type->getName());
         }
     }
 }

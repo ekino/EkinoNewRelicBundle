@@ -15,7 +15,7 @@ namespace Ekino\NewRelicBundle\NewRelic;
 
 /**
  * This interactor does never assume that the NewRelic extension is installed. It will check
- * for the existence of the NewRelic extension every time this is class is instanciated. This
+ * for the existence of the NewRelic extension every time this is class is instantiated. This
  * is a good interactor to use when you want to enable and disable the NewRelic extension
  * without rebuilding your container.
  *
