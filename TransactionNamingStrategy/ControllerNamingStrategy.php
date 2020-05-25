@@ -47,7 +47,7 @@ class ControllerNamingStrategy implements TransactionNamingStrategyInterface
                 $controller = \implode('::', $controller);
             }
 
-            return 'Callback contoller: '.$controller.'()';
+            return 'Callback controller: '.$controller.'()';
         }
 
         return $controller;
