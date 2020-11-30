@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  pull_request: ~
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: Ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        composer: ['']
+        phpunit: ['']
+        deprecation: ['']
+        coverage: ['none']
+        symfony: ['']
+        stability: ['']
+        include:
+          # Minimum supported dependencies with the latest and oldest PHP version
+          - php: 8.0
+            composer: --prefer-stable --prefer-lowest
+            deprecation: max[direct]=0
+          - php: 7.1
+            composer: --prefer-stable --prefer-lowest
+            deprecation: max[direct]=0
+
+          # coverage
+          - php: 8.0
+            phpunit: '--coverage-text'
+            coverage: 'xdebug'
+
+          # symfony version
+          - php: 8.0
+            symfony: '^3.0'
+          - php: 8.0
+            symfony: '^4.0'
+          - php: 8.0
+            symfony: '^5.0'
+
+          # dev
+          - php: 8.0
+            stability: 'dev'
+
+    steps:
+      - name: Set up PHP
+        uses: shivammathur/setup-php@2.7.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: ${{ matrix.coverage }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup stability
+        if: matrix.stability != ''
+        run: composer config minimum-stability "${{ matrix.stability }}"
+
+      - name: Setup deprecation
+        if: matrix.deprecation != ''
+        run: echo 'SYMFONY_DEPRECATIONS_HELPER=${{ matrix.deprecation }}' >> $GITHUB_ENV
+
+      - name: Setup symfony
+        if: matrix.symfony != ''
+        run: |
+          composer global require symfony/flex
+          echo 'SYMFONY_REQUIRE=${{ matrix.symfony }}' >> $GITHUB_ENV
+
+      - name: Download dependencies
+        run: |
+          composer update ${{ matrix.composer}} --prefer-dist --no-interaction
+          ./vendor/bin/simple-phpunit install
+
+      - name: Validate
+        run: |
+            composer validate --strict --no-check-lock
+
+      - name: Run tests
+        env:
+          SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
+        run: |
+          ./vendor/bin/simple-phpunit ${{ matrix.phpunit }}
+
+#      - name: Upload coverage
+#        if: matrix.coverage == 'xdebug'
+#        run: |
+#          wget https://scrutinizer-ci.com/ocular.phar
+#          php ocular.phar code-coverage:upload --format=php-clover build/coverage.xml
+
+      - name: Stats
+        run: |
+          wget http://tnyholm.se/reporter.phar
+          php reporter.phar build:upload
