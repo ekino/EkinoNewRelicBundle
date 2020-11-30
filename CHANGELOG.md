@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.1
+
+### Fixed
+
+- Fixed class loaded twice.
+
 ## v2.2.0
 
 ### Added
