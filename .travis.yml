@@ -14,7 +14,7 @@ matrix:
     fast_finish: true
     include:
           # Minimum supported dependencies with the latest and oldest PHP version
-        - php: 7.4
+        - php: 8.0
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_VERSION=7 SYMFONY_DEPRECATIONS_HELPER="max[direct]=0"
         - php: 7.1
           env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 SYMFONY_DEPRECATIONS_HELPER="max[direct]=0"
@@ -24,19 +24,20 @@ matrix:
         - php: 7.2
         - php: 7.3
         - php: 7.4
+        - php: 8.0
           env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
 
           # Test LTS versions. This makes sure we do not use Symfony packages with version greater
           # than 2 or 3 respectively. Read more at https://github.com/symfony/lts
-        - php: 7.4
+        - php: 8.0
           env: SYMFONY_REQUIRE="^3.0"
-        - php: 7.4
+        - php: 8.0
           env: SYMFONY_REQUIRE="^4.0"
-        - php: 7.4
+        - php: 8.0
           env: SYMFONY_REQUIRE="^5.0"
 
           # Latest commit to master
-        - php: 7.4
+        - php: 8.0
           env: STABILITY="dev"
 
     allow_failures:
