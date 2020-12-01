@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.2.2
+
+### Fixed
+
+- Allow PHP 8.0
+- Switcher tests from travis-ci to Github Actions
+
 ## v2.2.1
 
 ### Fixed
