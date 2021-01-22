@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.2
+
+### Added
+
+- Test again PHP 8.0
+
 ## v2.2.1
 
 ### Fixed
