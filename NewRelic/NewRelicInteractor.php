@@ -17,6 +17,9 @@ class NewRelicInteractor implements NewRelicInteractorInterface
 {
     public function setApplicationName(string $name, string $license = null, bool $xmit = false): bool
     {
+        if (null === $license) {
+            return newrelic_set_appname($name);
+        }
         return newrelic_set_appname($name, $license, $xmit);
     }
 
