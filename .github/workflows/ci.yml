@@ -28,7 +28,6 @@ jobs:
           - php: 7.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
-            phpunit: SYMFONY_PHPUNIT_VERSION=6
 
           # symfony version
           - php: 8.0
