@@ -78,19 +78,24 @@ class ResponseListenerTest extends TestCase
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->willReturn($metrics);
         $this->newRelic->expects($this->once())->method('getCustomParameters')->willReturn($parameters);
 
-        $this->interactor->expects($this->at(0))->method('addCustomMetric')->with('foo_a', 4.7);
-        $this->interactor->expects($this->at(1))->method('addCustomMetric')->with('foo_b', 11);
-        $this->interactor->expects($this->at(2))->method('addCustomParameter')->with('foo_1', 'bar_1');
-        $this->interactor->expects($this->at(3))->method('addCustomParameter')->with('foo_2', 'bar_2');
-
-        $this->interactor->expects($this->at(4))->method('addCustomEvent')->with('WidgetSale', [
-            'color' => 'red',
-            'weight' => 12.5,
-        ]);
-        $this->interactor->expects($this->at(5))->method('addCustomEvent')->with('WidgetSale', [
-            'color' => 'blue',
-            'weight' => 12.5,
-        ]);
+        $this->interactor->expects($this->exactly(2))->method('addCustomMetric')->withConsecutive(
+            ['foo_a', 4.7],
+            ['foo_b', 11]
+        );
+        $this->interactor->expects($this->exactly(2))->method('addCustomParameter')->withConsecutive(
+            ['foo_1', 'bar_1'],
+            ['foo_2', 'bar_2']
+        );
+        $this->interactor->expects($this->exactly(2))->method('addCustomEvent')->withConsecutive(
+            ['WidgetSale', [
+                'color' => 'red',
+                'weight' => 12.5,
+            ]],
+            ['WidgetSale', [
+                'color' => 'blue',
+                'weight' => 12.5,
+            ]]
+        );
 
         $event = $this->createFilterResponseEventDummy();
 

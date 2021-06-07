@@ -50,10 +50,12 @@ class CommandListenerTest extends TestCase
         $interactor->expects($this->once())->method('setTransactionName')->with($this->equalTo('test:newrelic'));
         $interactor->expects($this->once())->method('enableBackgroundJob');
 
-        $interactor->expects($this->at(3))->method('addCustomParameter')->with('--foo', true);
-        $interactor->expects($this->at(4))->method('addCustomParameter')->with('--foobar[0]', 'baz');
-        $interactor->expects($this->at(5))->method('addCustomParameter')->with('--foobar[1]', 'baz_2');
-        $interactor->expects($this->at(6))->method('addCustomParameter')->with('name', 'bar');
+        $interactor->expects($this->exactly(4))->method('addCustomParameter')->withConsecutive(
+            ['--foo', true],
+            ['--foobar[0]', 'baz'],
+            ['--foobar[1]', 'baz_2'],
+            ['name', 'bar']
+        );
 
         $command = new Command('test:newrelic');
         $input = new ArrayInput($parameters, $definition);
