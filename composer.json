@@ -20,9 +20,15 @@
         "symfony/event-dispatcher": "^3.4|^4.0|^5.0",
         "symfony/http-kernel": "^3.4|^4.0|^5.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/guillaumesmo/symfony-bundle-test"
+        }
+    ],
     "require-dev": {
         "matthiasnoback/symfony-dependency-injection-test": "^3.1|^4.0",
-        "nyholm/symfony-bundle-test": "^1.6",
+        "nyholm/symfony-bundle-test": "dev-master",
         "symfony/phpunit-bridge": "^5.2",
         "twig/twig": "^1.32|^2.4",
         "symfony/monolog-bundle": "^3.2"

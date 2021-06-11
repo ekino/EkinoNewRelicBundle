@@ -32,7 +32,7 @@ class DeprecationListenerTest extends TestCase
         \set_error_handler(function () { return false; });
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
+            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
             \restore_error_handler();
@@ -50,7 +50,7 @@ class DeprecationListenerTest extends TestCase
         $e = \error_reporting(0);
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
+            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
             \error_reporting($e);
@@ -68,7 +68,7 @@ class DeprecationListenerTest extends TestCase
         \set_error_handler(function () { return false; });
         try {
             $listener->register();
-            @\trigger_error('This is a notice', E_USER_NOTICE);
+            @\trigger_error('This is a notice', \E_USER_NOTICE);
         } finally {
             $listener->unregister();
             \restore_error_handler();
@@ -88,7 +88,7 @@ class DeprecationListenerTest extends TestCase
         \set_error_handler($handler);
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
+            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
             \restore_error_handler();
@@ -106,7 +106,7 @@ class DeprecationListenerTest extends TestCase
         try {
             $listener->register();
             $listener->unregister();
-            @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
+            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             \restore_error_handler();
         }
@@ -125,7 +125,7 @@ class DeprecationListenerTest extends TestCase
         try {
             $listener->register();
             $listener->unregister();
-            @\trigger_error('This is a deprecation', E_USER_DEPRECATED);
+            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             \restore_error_handler();
         }

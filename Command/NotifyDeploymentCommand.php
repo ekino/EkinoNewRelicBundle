@@ -79,7 +79,7 @@ class NotifyDeploymentCommand extends Command
             switch ($response['status']) {
                 case 200:
                 case 201:
-                    $output->writeLn(\sprintf("Recorded deployment to '%s' (%s)", $appName, ($input->getOption('description') ? $input->getOption('description') : \date('r'))));
+                    $output->writeLn(\sprintf("Recorded deployment to '%s' (%s)", $appName, ($input->getOption('description') ?: \date('r'))));
                     break;
                 case 403:
                     $output->writeLn(\sprintf("<error>Deployment not recorded to '%s': API key invalid</error>", $appName));
