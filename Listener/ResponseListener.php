@@ -55,7 +55,12 @@ class ResponseListener implements EventSubscriberInterface
 
     public function onKernelResponse(KernelResponseEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        $isMainRequest = method_exists($event, 'isMainRequest')
+            ? $event->isMainRequest()
+            : $event->isMasterRequest()
+        ;
+        
+        if (!$isMainRequest) {
             return;
         }
 
