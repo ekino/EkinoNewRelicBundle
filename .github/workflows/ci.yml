@@ -28,6 +28,7 @@ jobs:
           - php: 7.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
+            phpunit: SYMFONY_PHPUNIT_VERSION=6
 
           # symfony version
           - php: 8.0
@@ -78,4 +79,4 @@ jobs:
         env:
           SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
         run: |
-          ./vendor/bin/simple-phpunit ${{ matrix.phpunit }}
+          ${{ matrix.phpunit }} ./vendor/bin/simple-phpunit
