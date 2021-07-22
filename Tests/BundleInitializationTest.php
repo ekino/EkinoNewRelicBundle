@@ -18,24 +18,15 @@ use Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor;
 use Ekino\NewRelicBundle\NewRelic\BlackholeInteractor;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractor;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
-use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Smoke test to see if the bundle can run.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class BundleInitializationTest extends BaseBundleTestCase
+class BundleInitializationTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Make services public that have an idea that matches a regex
-        $this->addCompilerPass(new PublicServicePass('|Ekino.*|i'));
-    }
-
     protected function getBundleClass()
     {
         return EkinoNewRelicBundle::class;
@@ -43,11 +34,11 @@ class BundleInitializationTest extends BaseBundleTestCase
 
     public function testInitBundle()
     {
-        // Boot the kernel.
-        $this->bootKernel();
+        $kernel = new AppKernel(\uniqid('cache'));
+        $kernel->boot();
 
         // Get the container
-        $container = $this->getContainer();
+        $container = $kernel->getContainer();
 
         $services = [
             NewRelicInteractorInterface::class => AdaptiveInteractor::class,
