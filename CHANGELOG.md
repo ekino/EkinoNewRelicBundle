@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.2.3
+
+### Added
+
+- Allow Symfony 6.0
+
 ## v2.2.2
 
 ### Added
