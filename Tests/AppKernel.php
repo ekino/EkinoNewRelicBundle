@@ -42,17 +42,17 @@ class AppKernel extends Kernel
         $this->cachePrefix = $cachePrefix;
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return \sys_get_temp_dir().'/ekino/'.$this->cachePrefix;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return \sys_get_temp_dir().'/ekino/log';
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         if (null === $this->fakedProjectDir) {
             return \realpath(__DIR__.'/../../../../');
@@ -77,7 +77,7 @@ class AppKernel extends Kernel
         $this->fakedProjectDir = $projectDir;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [
             new FrameworkBundle(),
@@ -135,7 +135,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function buildContainer()
+    protected function buildContainer(): ContainerBuilder
     {
         $container = parent::buildContainer();
 
