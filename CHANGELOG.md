@@ -5,6 +5,7 @@
 ### Added
 
 - Allow Symfony 6.0
+- Fix Symfony 5.3 deprecations
 
 ## v2.2.2
 
