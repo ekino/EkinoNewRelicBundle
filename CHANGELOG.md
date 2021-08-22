@@ -11,7 +11,7 @@
 
 ### Added
 
-- Test again PHP 8.0
+- Test against PHP 8.0
 
 ## v2.2.1
 
@@ -29,7 +29,7 @@
 
 ### Added
 
-- Test again PHP 7.4
+- Test against PHP 7.4
 - Use typehinted alias in EventListener
 
 ### Fixed
