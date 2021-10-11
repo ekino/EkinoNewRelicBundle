@@ -276,7 +276,7 @@ class ResponseListenerTest extends TestCase
         $mock->headers = $mock;
 
         $mock->expects($this->any())->method('get')->willReturn($contentType);
-        $mock->expects($content ? $this->any() : $this->never())->method('getContent')->willReturn($content);
+        $mock->expects($content ? $this->any() : $this->never())->method('getContent')->willReturn($content ?? false);
 
         if ($expectsSetContent) {
             $mock->expects($this->exactly(2))->method('setContent')->withConsecutive([''], [$expectsSetContent]);
