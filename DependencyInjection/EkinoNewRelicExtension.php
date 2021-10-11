@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace  Ekino\NewRelicBundle\DependencyInjection;
+namespace Ekino\NewRelicBundle\DependencyInjection;
 
 use Ekino\NewRelicBundle\Listener\CommandListener;
 use Ekino\NewRelicBundle\Listener\RequestListener;
