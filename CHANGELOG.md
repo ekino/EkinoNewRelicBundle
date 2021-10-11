@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3.0
+
+### Added
+
+- Make recordDatastoreSegment execute the callback
+
 ## v2.2.3
 
 ### Added
