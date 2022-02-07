@@ -120,4 +120,27 @@ class BlackholeInteractor implements NewRelicInteractorInterface
     {
         return true;
     }
+
+    public function getTraceMetadata(): array
+    {
+        return [];
+    }
+
+    public function getLinkingMetadata(): array
+    {
+        return [];
+    }
+
+    public function isSampled(): bool
+    {
+        return true;
+    }
+
+    public function insertDistributedTracingHeaders(array $headers): void
+    {
+    }
+
+    public function acceptDistributedTraceHeaders(array $headers, string $transportType = 'HTTP'): void
+    {
+    }
 }

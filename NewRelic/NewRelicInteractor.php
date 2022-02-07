@@ -127,4 +127,49 @@ class NewRelicInteractor implements NewRelicInteractorInterface
     {
         return newrelic_set_user_attributes($userValue, $accountValue, $productValue);
     }
+
+    public function getTraceMetadata(): array
+    {
+        if (!function_exists('newrelic_get_trace_metadata')) {
+            throw new \BadMethodCallException('You need the "newrelic" extension version 9.3 or higher to use this method');
+        }
+
+        return newrelic_get_trace_metadata();
+    }
+
+    public function getLinkingMetadata(): array
+    {
+        if (!function_exists('newrelic_get_linking_metadata')) {
+            throw new \BadMethodCallException('You need the "newrelic" extension version 9.3 or higher to use this method');
+        }
+
+        return newrelic_get_linking_metadata();
+    }
+
+    public function isSampled(): bool
+    {
+        if (!function_exists('newrelic_is_sampled')) {
+            throw new \BadMethodCallException('You need the "newrelic" extension version 9.3 or higher to use this method');
+        }
+
+        return newrelic_is_sampled();
+    }
+
+    public function insertDistributedTracingHeaders(array $headers): void
+    {
+        if (!function_exists('newrelic_insert_distributed_trace_headers')) {
+            throw new \BadMethodCallException('You need the "newrelic" extension version 9.8 or higher to use this method');
+        }
+
+        newrelic_insert_distributed_trace_headers($headers);
+    }
+
+    public function acceptDistributedTraceHeaders(array $headers, string $transportType = 'HTTP'): void
+    {
+        if (!function_exists('newrelic_accept_distributed_trace_headers')) {
+            throw new \BadMethodCallException('You need the "newrelic" extension version 9.8 or higher to use this method');
+        }
+
+        newrelic_accept_distributed_trace_headers($headers, $transportType);
+    }
 }

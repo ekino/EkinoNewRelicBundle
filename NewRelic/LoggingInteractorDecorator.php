@@ -184,4 +184,48 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
 
         return $this->interactor->setUserAttributes($userValue, $accountValue, $productValue);
     }
+
+    public function getTraceMetadata(): array
+    {
+        $traceMetadata = $this->interactor->getTraceMetadata();
+
+        $this->logger->debug('Getting New Relic trace metadata', $traceMetadata);
+
+        return $traceMetadata;
+    }
+
+    public function getLinkingMetadata(): array
+    {
+        $linkingMetadata = $this->interactor->getLinkingMetadata();
+
+        $this->logger->debug('Getting New Relic linking metadata', $linkingMetadata);
+
+        return $linkingMetadata;
+    }
+
+    public function isSampled(): bool
+    {
+        $isSampled = $this->interactor->isSampled();
+
+        $this->logger->debug('Getting New Relic sampled status', ['sampled' => $isSampled]);
+
+        return $isSampled;
+    }
+
+    public function insertDistributedTracingHeaders(array $headers): void
+    {
+        $this->logger->debug('Setting New Relic distributed tracing headers', ['headers' => $headers]);
+
+        $this->interactor->insertDistributedTracingHeaders($headers);
+    }
+
+    public function acceptDistributedTraceHeaders(array $headers, string $transportType = 'HTTP'): void
+    {
+        $this->logger->debug('Accepting New Relic distributed tracing headers', [
+            'headers' => $headers,
+            'transport_type' => $transportType,
+        ]);
+
+        $this->interactor->acceptDistributedTraceHeaders($headers, $transportType);
+    }
 }
