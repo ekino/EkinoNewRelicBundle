@@ -64,7 +64,7 @@ class EkinoNewRelicExtension extends Extension
         }
 
         if (empty($config['deployment_names'])) {
-            $config['deployment_names'] = \array_values(\array_filter(\explode(';', $config['application_name'] ?? '')));
+            $config['deployment_names'] = array_values(array_filter(explode(';', $config['application_name'] ?? '')));
         }
 
         $container->getDefinition(Config::class)
@@ -122,7 +122,7 @@ class EkinoNewRelicExtension extends Extension
         }
 
         if ($config['enabled'] && $config['monolog']['enabled']) {
-            if (!\class_exists(\Monolog\Handler\NewRelicHandler::class)) {
+            if (!class_exists(\Monolog\Handler\NewRelicHandler::class)) {
                 throw new \LogicException('The "symfony/monolog-bundle" package must be installed in order to use "monolog" option.');
             }
             $loader->load('monolog.xml');
@@ -165,7 +165,7 @@ class EkinoNewRelicExtension extends Extension
 
                 return $config['http']['transaction_naming_service'];
             default:
-                throw new \InvalidArgumentException(\sprintf('Invalid transaction naming scheme "%s", must be "route", "controller" or "service".', $config['http']['transaction_naming']));
+                throw new \InvalidArgumentException(sprintf('Invalid transaction naming scheme "%s", must be "route", "controller" or "service".', $config['http']['transaction_naming']));
         }
     }
 }

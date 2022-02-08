@@ -291,7 +291,7 @@ class ResponseListenerTest extends TestCase
     {
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = \class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
+        $eventClass = class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
         $event = new $eventClass($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
 
         return $event;

@@ -29,7 +29,7 @@ class MonologHandlerPass implements CompilerPassInterface
         $configuration = $container->getParameter('ekino.new_relic.monolog');
         if ($container->hasDefinition('ekino.new_relic.logs_handler') && $container->hasParameter('ekino.new_relic.application_name')) {
             $container->findDefinition('ekino.new_relic.logs_handler')
-                ->setArgument('$level', \is_int($configuration['level']) ? $configuration['level'] : \constant('Monolog\Logger::'.\strtoupper($configuration['level'])))
+                ->setArgument('$level', \is_int($configuration['level']) ? $configuration['level'] : \constant('Monolog\Logger::'.strtoupper($configuration['level'])))
                 ->setArgument('$bubble', true)
                 ->setArgument('$appName', $container->getParameter('ekino.new_relic.application_name'));
         }
@@ -39,7 +39,7 @@ class MonologHandlerPass implements CompilerPassInterface
         } elseif ('inclusive' === $configuration['channels']['type']) {
             $channels = $configuration['channels']['elements'] ?: $this->getChannels($container);
         } else {
-            $channels = \array_diff($this->getChannels($container), $configuration['channels']['elements']);
+            $channels = array_diff($this->getChannels($container), $configuration['channels']['elements']);
         }
 
         foreach ($channels as $channel) {
@@ -61,8 +61,8 @@ class MonologHandlerPass implements CompilerPassInterface
                 $channels[] = 'app';
                 continue;
             }
-            if (0 === \strpos($id, 'monolog.logger.')) {
-                $channels[] = \substr($id, 15);
+            if (0 === strpos($id, 'monolog.logger.')) {
+                $channels[] = substr($id, 15);
             }
         }
 

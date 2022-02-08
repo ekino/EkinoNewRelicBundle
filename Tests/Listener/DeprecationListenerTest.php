@@ -29,13 +29,13 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        set_error_handler(function () { return false; });
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
+            @trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 
@@ -46,15 +46,15 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
-        $e = \error_reporting(0);
+        set_error_handler(function () { return false; });
+        $e = error_reporting(0);
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
+            @trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
-            \error_reporting($e);
-            \restore_error_handler();
+            error_reporting($e);
+            restore_error_handler();
         }
     }
 
@@ -65,13 +65,13 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        set_error_handler(function () { return false; });
         try {
             $listener->register();
-            @\trigger_error('This is a notice', \E_USER_NOTICE);
+            @trigger_error('This is a notice', \E_USER_NOTICE);
         } finally {
             $listener->unregister();
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 
@@ -85,13 +85,13 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler($handler);
+        set_error_handler($handler);
         try {
             $listener->register();
-            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
+            @trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
             $listener->unregister();
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 
@@ -102,13 +102,13 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler(function () { return false; });
+        set_error_handler(function () { return false; });
         try {
             $listener->register();
             $listener->unregister();
-            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
+            @trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 
@@ -121,13 +121,13 @@ class DeprecationListenerTest extends TestCase
 
         $listener = new DeprecationListener($interactor);
 
-        \set_error_handler($handler);
+        set_error_handler($handler);
         try {
             $listener->register();
             $listener->unregister();
-            @\trigger_error('This is a deprecation', \E_USER_DEPRECATED);
+            @trigger_error('This is a deprecation', \E_USER_DEPRECATED);
         } finally {
-            \restore_error_handler();
+            restore_error_handler();
         }
     }
 }

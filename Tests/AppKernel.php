@@ -44,18 +44,18 @@ class AppKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return \sys_get_temp_dir().'/ekino/'.$this->cachePrefix;
+        return sys_get_temp_dir().'/ekino/'.$this->cachePrefix;
     }
 
     public function getLogDir(): string
     {
-        return \sys_get_temp_dir().'/ekino/log';
+        return sys_get_temp_dir().'/ekino/log';
     }
 
     public function getProjectDir(): string
     {
         if (null === $this->fakedProjectDir) {
-            return \realpath(__DIR__.'/../../../../');
+            return realpath(__DIR__.'/../../../../');
         }
 
         return $this->fakedProjectDir;
@@ -143,13 +143,13 @@ class AppKernel extends Kernel
             public function process(ContainerBuilder $container)
             {
                 foreach ($container->getDefinitions() as $id => $definition) {
-                    if (\preg_match('|Ekino.*|i', $id)) {
+                    if (preg_match('|Ekino.*|i', $id)) {
                         $definition->setPublic(true);
                     }
                 }
 
                 foreach ($container->getAliases() as $id => $alias) {
-                    if (\preg_match('|Ekino.*|i', $id)) {
+                    if (preg_match('|Ekino.*|i', $id)) {
                         $alias->setPublic(true);
                     }
                 }

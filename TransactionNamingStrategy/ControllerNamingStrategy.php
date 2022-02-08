@@ -33,7 +33,7 @@ class ControllerNamingStrategy implements TransactionNamingStrategyInterface
         }
 
         if (\is_object($controller)) {
-            if (\method_exists($controller, '__invoke')) {
+            if (method_exists($controller, '__invoke')) {
                 return 'Callback controller: '.\get_class($controller).'::__invoke()';
             }
         }
@@ -44,7 +44,7 @@ class ControllerNamingStrategy implements TransactionNamingStrategyInterface
                     $controller[0] = \get_class($controller[0]);
                 }
 
-                $controller = \implode('::', $controller);
+                $controller = implode('::', $controller);
             }
 
             return 'Callback controller: '.$controller.'()';
