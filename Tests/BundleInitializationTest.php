@@ -34,7 +34,7 @@ class BundleInitializationTest extends TestCase
 
     public function testInitBundle()
     {
-        $kernel = new AppKernel(\uniqid('cache'));
+        $kernel = new AppKernel(uniqid('cache'));
         $kernel->boot();
 
         // Get the container

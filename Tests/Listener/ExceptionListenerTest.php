@@ -34,7 +34,7 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = \class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);
@@ -51,7 +51,7 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = \class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);

@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('ekino_new_relic');
-        if (\method_exists(TreeBuilder::class, 'getRootNode')) {
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
             $rootNode = $treeBuilder->getRootNode();
         } else {
             $rootNode = $treeBuilder->root('ekino_new_relic');
@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('enabled')->defaultTrue()->end()
                 ->scalarNode('interactor')->end()
-                ->booleanNode('twig')->defaultValue(\class_exists(Environment::class))->end()
+                ->booleanNode('twig')->defaultValue(class_exists(Environment::class))->end()
                 ->scalarNode('api_key')->defaultValue(null)->end()
                 ->scalarNode('api_host')->defaultValue(null)->end()
                 ->scalarNode('license_key')->defaultValue(null)->end()
@@ -45,7 +45,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->beforeNormalization()
                         ->ifTrue(function ($v) { return !\is_array($v); })
-                        ->then(function ($v) { return \array_values(\array_filter(\explode(';', (string) $v))); })
+                        ->then(function ($v) { return array_values(array_filter(explode(';', (string) $v))); })
                     ->end()
                 ->end()
                 ->scalarNode('xmit')->defaultValue(false)->end()
@@ -116,7 +116,7 @@ class Configuration implements ConfigurationInterface
                                 ->then(function ($v) { return ['elements' => [$v]]; })
                             ->end()
                             ->beforeNormalization()
-                                ->ifTrue(function ($v) { return \is_array($v) && \is_numeric(\key($v)); })
+                                ->ifTrue(function ($v) { return \is_array($v) && is_numeric(key($v)); })
                                 ->then(function ($v) { return ['elements' => $v]; })
                             ->end()
                             ->validate()
@@ -132,11 +132,11 @@ class Configuration implements ConfigurationInterface
 
                                     $elements = [];
                                     foreach ($v['elements'] as $element) {
-                                        if (0 === \strpos($element, '!')) {
+                                        if (0 === strpos($element, '!')) {
                                             if (false === $isExclusive) {
                                                 throw new InvalidConfigurationException('Cannot combine exclusive/inclusive definitions in channels list.');
                                             }
-                                            $elements[] = \substr($element, 1);
+                                            $elements[] = substr($element, 1);
                                             $isExclusive = true;
                                         } else {
                                             if (true === $isExclusive) {

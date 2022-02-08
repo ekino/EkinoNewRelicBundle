@@ -9,7 +9,7 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 EOF;
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
@@ -22,7 +22,7 @@ return PhpCsFixer\Config::create()
         'no_superfluous_elseif' => true,
         'no_useless_else' => true,
         'phpdoc_order' => true,
-        'psr4' => true,
+        'psr_autoloading' => true,
         'simplified_null_return' => true,
         'php_unit_strict' => true,
         'no_useless_return' => true,
@@ -38,7 +38,7 @@ return PhpCsFixer\Config::create()
             ->exclude('vendor')
             ->name('*.php')
     )
-    ->setCacheFile((getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__).'/.php_cs.cache')
+    ->setCacheFile(__DIR__.'/.php_cs.cache')
     ->setUsingCache(true)
 ;
 
