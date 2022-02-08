@@ -139,4 +139,49 @@ class AdaptiveInteractor implements NewRelicInteractorInterface
     {
         return $this->interactor->setUserAttributes($userValue, $accountValue, $productValue);
     }
+
+    public function getTraceMetadata(): array
+    {
+        if (!method_exists($this->interactor, 'getTraceMetadata')) {
+            throw new \BadMethodCallException('The decorated interaction does not implement this method');
+        }
+
+        return $this->interactor->getTraceMetadata();
+    }
+
+    public function getLinkingMetadata(): array
+    {
+        if (!method_exists($this->interactor, 'getLinkingMetadata')) {
+            throw new \BadMethodCallException('The decorated interaction does not implement this method');
+        }
+
+        return $this->interactor->getLinkingMetadata();
+    }
+
+    public function isSampled(): bool
+    {
+        if (!method_exists($this->interactor, 'isSampled')) {
+            throw new \BadMethodCallException('The decorated interaction does not implement this method');
+        }
+
+        return $this->interactor->isSampled();
+    }
+
+    public function insertDistributedTracingHeaders(array $headers): void
+    {
+        if (!method_exists($this->interactor, 'insertDistributedTracingHeaders')) {
+            throw new \BadMethodCallException('The decorated interaction does not implement this method');
+        }
+
+        $this->interactor->insertDistributedTracingHeaders($headers);
+    }
+
+    public function acceptDistributedTraceHeaders(array $headers, string $transportType = 'HTTP'): void
+    {
+        if (!method_exists($this->interactor, 'acceptDistributedTraceHeaders')) {
+            throw new \BadMethodCallException('The decorated interaction does not implement this method');
+        }
+
+        $this->interactor->acceptDistributedTraceHeaders($headers, $transportType);
+    }
 }

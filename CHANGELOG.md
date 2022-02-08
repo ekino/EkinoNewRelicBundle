@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4.0
+
+### Added
+
+- Support for distributed tracing functions provided by the NewRelic PHP extension are now supported in the `NewRelicInteractorInterface`
+
 ## v2.3.0
 
 ### Added
