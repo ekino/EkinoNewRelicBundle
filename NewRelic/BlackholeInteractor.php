@@ -136,7 +136,7 @@ class BlackholeInteractor implements NewRelicInteractorInterface
         return true;
     }
 
-    public function insertDistributedTracingHeaders(array $headers): void
+    public function insertDistributedTracingHeaders(array &$headers): void
     {
     }
 

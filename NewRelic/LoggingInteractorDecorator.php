@@ -212,7 +212,7 @@ class LoggingInteractorDecorator implements NewRelicInteractorInterface
         return $isSampled;
     }
 
-    public function insertDistributedTracingHeaders(array $headers): void
+    public function insertDistributedTracingHeaders(array &$headers): void
     {
         $this->logger->debug('Setting New Relic distributed tracing headers', ['headers' => $headers]);
 

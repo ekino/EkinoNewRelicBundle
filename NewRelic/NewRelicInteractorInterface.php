@@ -19,7 +19,7 @@ namespace Ekino\NewRelicBundle\NewRelic;
  * @method array getTraceMetadata()
  * @method array getLinkingMetadata()
  * @method bool isSampled()
- * @method void insertDistributedTracingHeaders(array $headers)
+ * @method void insertDistributedTracingHeaders(array &$headers)
  * @method void acceptDistributedTraceHeaders(array $headers, string $transportType = 'HTTP')
  */
 interface NewRelicInteractorInterface
