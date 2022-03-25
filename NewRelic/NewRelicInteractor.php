@@ -155,7 +155,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
         return newrelic_is_sampled();
     }
 
-    public function insertDistributedTracingHeaders(array $headers): void
+    public function insertDistributedTracingHeaders(array &$headers): void
     {
         if (!function_exists('newrelic_insert_distributed_trace_headers')) {
             throw new \BadMethodCallException('You need the "newrelic" extension version 9.8 or higher to use this method');

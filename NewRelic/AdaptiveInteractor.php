@@ -167,7 +167,7 @@ class AdaptiveInteractor implements NewRelicInteractorInterface
         return $this->interactor->isSampled();
     }
 
-    public function insertDistributedTracingHeaders(array $headers): void
+    public function insertDistributedTracingHeaders(array &$headers): void
     {
         if (!method_exists($this->interactor, 'insertDistributedTracingHeaders')) {
             throw new \BadMethodCallException('The decorated interaction does not implement this method');
