@@ -77,7 +77,7 @@ class CommandListener implements EventSubscriberInterface
                     $this->interactor->addCustomParameter($key.'['.$k.']', $v);
                 }
             } else {
-                $this->interactor->addCustomParameter($key, $value);
+                $this->interactor->addCustomParameter((string) $key, $value);
             }
         }
     }
