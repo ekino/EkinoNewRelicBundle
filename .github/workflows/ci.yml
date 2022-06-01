@@ -4,7 +4,7 @@ on:
   pull_request: ~
   push:
     branches:
-      - patch-1
+      - patch-1-1
 
 jobs:
   php-cs-fixer:
@@ -29,16 +29,11 @@ jobs:
         symfony: ['']
         stability: ['']
         include:
-          # Force Composer 2.2 LTS for PHP 7.1 support
-          - php: 7.1
-            composer-version: :2.2
-
           # Minimum supported dependencies with the latest and oldest PHP version
           - php: 8.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
-          - php: 7.1
-            composer-version: :2.2
+          - php: 7.2
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
 
@@ -59,11 +54,11 @@ jobs:
 
     steps:
       - name: Set up PHP
-        uses: shivammathur/setup-php@2.18.1
+        uses: shivammathur/setup-php@2.7.0
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-          tools: flex, composer${{ matrix.composer-version }}
+          tools: flex
 
       - name: Checkout code
         uses: actions/checkout@v2
