@@ -4,7 +4,7 @@ on:
   pull_request: ~
   push:
     branches:
-      - master
+      - patch-1
 
 jobs:
   php-cs-fixer:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
         composer: ['']
         phpunit: ['']
         deprecation: ['']
@@ -29,7 +29,7 @@ jobs:
         stability: ['']
         include:
           # Minimum supported dependencies with the latest and oldest PHP version
-          - php: 8.0
+          - php: 8.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
           - php: 7.1
@@ -37,15 +37,15 @@ jobs:
             deprecation: max[direct]=0
 
           # symfony version
-          - php: 8.0
+          - php: 8.1
             symfony: '^3.0'
-          - php: 8.0
+          - php: 8.1
             symfony: '^4.0'
-          - php: 8.0
+          - php: 8.1
             symfony: '^5.0'
 
           # dev
-          - php: 8.0
+          - php: 8.1
             stability: 'dev'
 
     steps:
