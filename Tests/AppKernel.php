@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Ekino\NewRelicBundle\Tests;
 
 use Ekino\NewRelicBundle\EkinoNewRelicBundle;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -158,5 +159,18 @@ class AppKernel extends Kernel
         });
 
         return $container;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function __serialize(): array
+    {
+        return unserialize($this->serialize());
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize(serialize($data));
     }
 }
