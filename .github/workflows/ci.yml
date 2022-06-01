@@ -17,11 +17,12 @@ jobs:
 
   build:
     name: Build
-    runs-on: Ubuntu-20.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1']
+        php: ['7.1, '7.2', '7.3', '7.4', '8.0', '8.1']
+        composer-version: ['']
         composer: ['']
         phpunit: ['']
         deprecation: ['']
@@ -30,6 +31,9 @@ jobs:
         include:
           # Minimum supported dependencies with the latest and oldest PHP version
           - php: 8.1
+            composer: --prefer-stable --prefer-lowest
+            deprecation: max[direct]=0
+          - php: 7.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
 
@@ -68,6 +72,11 @@ jobs:
         if: matrix.symfony != ''
         run: |
           echo 'SYMFONY_REQUIRE=${{ matrix.symfony }}' >> $GITHUB_ENV
+
+      - name: Rollback Composer to 2.2 LTS
+        if: matrix.php == '7.1'
+        run: |
+          composer self-update --2.2
 
       - name: Download dependencies
         run: |

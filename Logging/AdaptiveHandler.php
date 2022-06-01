@@ -29,7 +29,10 @@ class AdaptiveHandler extends NewRelicHandler
         parent::__construct($level, $bubble, $appName, $explodeArrays, $transactionName);
     }
 
-    protected function write(LogRecord $record): void
+    /**
+     * @inheritDoc
+     */
+    protected function write($record): void
     {
         if (!$this->isNewRelicEnabled()) {
             return;
