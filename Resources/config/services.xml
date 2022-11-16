@@ -10,6 +10,10 @@
         <prototype namespace="Ekino\NewRelicBundle\NewRelic\" resource="../../NewRelic/*" />
         <prototype namespace="Ekino\NewRelicBundle\TransactionNamingStrategy\" resource="../../TransactionNamingStrategy/*" />
 
+        <service id="Ekino\NewRelicBundle\Command\NotifyDeploymentCommand" autowire="true" autoconfigure="true">
+            <tag name="console.command" command="newrelic:notify-deployment" />
+        </service>
+
         <service id="Ekino\NewRelicBundle\NewRelic\AdaptiveInteractor">
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\NewRelicInteractor" />
             <argument type="service" id="Ekino\NewRelicBundle\NewRelic\BlackholeInteractor" />

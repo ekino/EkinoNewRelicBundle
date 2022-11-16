@@ -98,6 +98,7 @@ class AppKernel extends Kernel
                     'resource' => 'kernel:loadRoutes',
                     'type' => 'service',
                 ],
+                'http_method_override' => false,
             ]);
 
             // Not setting the router to utf8 is deprecated in symfony 5.1
@@ -157,5 +158,18 @@ class AppKernel extends Kernel
         });
 
         return $container;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function __serialize(): array
+    {
+        return unserialize($this->serialize());
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize(serialize($data));
     }
 }
