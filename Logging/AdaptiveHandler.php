@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Ekino\NewRelicBundle\Logging;
 
+use Monolog\Handler\MissingExtensionException;
 use Monolog\Handler\NewRelicHandler;
 use Psr\Log\LogLevel;
 
@@ -28,6 +29,9 @@ class AdaptiveHandler extends NewRelicHandler
         parent::__construct($level, $bubble, $appName, $explodeArrays, $transactionName);
     }
 
+    /**
+     * @throws MissingExtensionException
+     */
     protected function write(array $record): void
     {
         if (!$this->isNewRelicEnabled()) {

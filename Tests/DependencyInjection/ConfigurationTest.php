@@ -93,7 +93,7 @@ class ConfigurationTest extends TestCase
         $this->assertIsArray($config['deployment_names']);
     }
 
-    public static function ignoredRoutesProvider()
+    public static function ignoredRoutesProvider(): array
     {
         return [
             ['single_ignored_route', ['single_ignored_route']],
@@ -102,7 +102,7 @@ class ConfigurationTest extends TestCase
         ];
     }
 
-    public static function ignoredPathsProvider()
+    public static function ignoredPathsProvider(): array
     {
         return [
             ['/single/ignored/path', ['/single/ignored/path']],
@@ -111,7 +111,7 @@ class ConfigurationTest extends TestCase
         ];
     }
 
-    public static function ignoredCommandsProvider()
+    public static function ignoredCommandsProvider(): array
     {
         return [
             ['single:ignored:command', ['single:ignored:command']],
@@ -120,7 +120,7 @@ class ConfigurationTest extends TestCase
         ];
     }
 
-    public static function deploymentNamesProvider()
+    public static function deploymentNamesProvider(): array
     {
         return [
             ['App1', ['App1']],

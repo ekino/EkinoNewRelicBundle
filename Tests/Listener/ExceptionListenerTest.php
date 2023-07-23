@@ -18,7 +18,6 @@ use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -34,7 +33,7 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = ExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);
@@ -51,7 +50,7 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = ExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);

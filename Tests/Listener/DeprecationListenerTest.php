@@ -68,7 +68,7 @@ class DeprecationListenerTest extends TestCase
         set_error_handler(function () { return false; });
         try {
             $listener->register();
-            @trigger_error('This is a notice', \E_USER_NOTICE);
+            @trigger_error('This is a notice');
         } finally {
             $listener->unregister();
             restore_error_handler();

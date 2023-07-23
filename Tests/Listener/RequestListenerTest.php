@@ -20,7 +20,6 @@ use Ekino\NewRelicBundle\TransactionNamingStrategy\TransactionNamingStrategyInte
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -35,7 +34,7 @@ class RequestListenerTest extends TestCase
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
+        $eventClass = RequestEvent::class;
         $event = new $eventClass($kernel, new Request(), HttpKernelInterface::SUB_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy);
@@ -54,8 +53,8 @@ class RequestListenerTest extends TestCase
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
-        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
+        $eventClass = RequestEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MAIN_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy);
         $listener->setTransactionName($event);
@@ -71,8 +70,8 @@ class RequestListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/ignored_path']);
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
-        $event = new $eventClass($kernel, $request, HttpKernelInterface::MASTER_REQUEST, new Response());
+        $eventClass = RequestEvent::class;
+        $event = new $eventClass($kernel, $request, HttpKernelInterface::MAIN_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], ['/ignored_path'], $namingStrategy);
         $listener->setIgnoreTransaction($event);
@@ -88,8 +87,8 @@ class RequestListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], ['_route' => 'ignored_route']);
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
-        $event = new $eventClass($kernel, $request, HttpKernelInterface::MASTER_REQUEST, new Response());
+        $eventClass = RequestEvent::class;
+        $event = new $eventClass($kernel, $request, HttpKernelInterface::MAIN_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, ['ignored_route'], [], $namingStrategy);
         $listener->setIgnoreTransaction($event);
@@ -104,8 +103,8 @@ class RequestListenerTest extends TestCase
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
-        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
+        $eventClass = RequestEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MAIN_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy, true);
         $listener->setApplicationName($event);
@@ -120,8 +119,8 @@ class RequestListenerTest extends TestCase
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(RequestEvent::class) ? RequestEvent::class : GetResponseEvent::class;
-        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MASTER_REQUEST, new Response());
+        $eventClass = RequestEvent::class;
+        $event = new $eventClass($kernel, new Request(), HttpKernelInterface::MAIN_REQUEST, new Response());
 
         $listener = new RequestListener(new Config('App name', 'Token'), $interactor, [], [], $namingStrategy, false);
         $listener->setApplicationName($event);

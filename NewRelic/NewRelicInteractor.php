@@ -32,7 +32,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
 
     public function addCustomEvent(string $name, array $attributes): void
     {
-        newrelic_record_custom_event((string) $name, $attributes);
+        newrelic_record_custom_event($name, $attributes);
     }
 
     public function addCustomMetric(string $name, float $value): bool
@@ -42,7 +42,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
 
     public function addCustomParameter(string $name, $value): bool
     {
-        return newrelic_add_custom_parameter((string) $name, $value);
+        return newrelic_add_custom_parameter($name, $value);
     }
 
     public function getBrowserTimingHeader(bool $includeTags = true): string
@@ -72,7 +72,7 @@ class NewRelicInteractor implements NewRelicInteractorInterface
 
     public function enableBackgroundJob(): void
     {
-        newrelic_background_job(true);
+        newrelic_background_job();
     }
 
     public function disableBackgroundJob(): void

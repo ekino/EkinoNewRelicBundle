@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace Ekino\NewRelicBundle\Command;
 
 use Ekino\NewRelicBundle\NewRelic\Config;
+use RuntimeException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'newrelic:notify-deployment', description: 'Notifies New Relic that a new deployment has been made')]
 class NotifyDeploymentCommand extends Command
 {
     public const EXIT_NO_APP_NAMES = 1;
@@ -27,7 +30,7 @@ class NotifyDeploymentCommand extends Command
 
     protected static $defaultName = 'newrelic:notify-deployment';
 
-    private $newrelic;
+    private Config $newrelic;
 
     public function __construct(Config $newrelic)
     {
@@ -57,7 +60,6 @@ class NotifyDeploymentCommand extends Command
                     'Text annotation for the deployment — notes for you', null
                 ),
             ])
-            ->setDescription('Notifies New Relic that a new deployment has been made')
         ;
     }
 
@@ -120,7 +122,7 @@ class NotifyDeploymentCommand extends Command
         error_reporting($level);
         if (false === $content) {
             $error = error_get_last();
-            throw new \RuntimeException($error['message']);
+            throw new RuntimeException($error['message']);
         }
 
         $response = [

@@ -18,8 +18,8 @@ use Psr\Log\NullLogger;
 
 class LoggingInteractorDecorator implements NewRelicInteractorInterface
 {
-    private $interactor;
-    private $logger;
+    private NewRelicInteractorInterface $interactor;
+    private LoggerInterface|NullLogger $logger;
 
     public function __construct(NewRelicInteractorInterface $interactor, LoggerInterface $logger = null)
     {
