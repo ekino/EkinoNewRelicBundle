@@ -18,17 +18,16 @@ use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResponseListener implements EventSubscriberInterface
 {
-    private $newRelic;
-    private $interactor;
-    private $instrument;
-    private $symfonyCache;
-    private $newRelicTwigExtension;
+    private Config $newRelic;
+    private NewRelicInteractorInterface $interactor;
+    private bool $instrument;
+    private bool $symfonyCache;
+    private ?NewRelicExtension $newRelicTwigExtension;
 
     public function __construct(
         Config $newRelic,
@@ -53,9 +52,9 @@ class ResponseListener implements EventSubscriberInterface
         ];
     }
 
-    public function onKernelResponse(KernelResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
-        $isMainRequest = method_exists($event, 'isMainRequest') ? $event->isMainRequest() : $event->isMasterRequest();
+        $isMainRequest = $event->isMainRequest();
 
         if (!$isMainRequest) {
             return;
@@ -88,7 +87,7 @@ class ResponseListener implements EventSubscriberInterface
 
                 // We can only instrument HTML responses
                 if (!$response instanceof StreamedResponse
-                    && 'text/html' === substr($response->headers->get('Content-Type', ''), 0, 9)
+                    && str_starts_with($response->headers->get('Content-Type', ''), 'text/html')
                 ) {
                     $responseContent = $response->getContent();
                     $response->setContent(''); // free the memory
@@ -109,13 +108,5 @@ class ResponseListener implements EventSubscriberInterface
         if ($this->symfonyCache) {
             $this->interactor->endTransaction();
         }
-    }
-}
-
-if (!class_exists(KernelResponseEvent::class)) {
-    if (class_exists(ResponseEvent::class)) {
-        class_alias(ResponseEvent::class, KernelResponseEvent::class);
-    } else {
-        class_alias(FilterResponseEvent::class, KernelResponseEvent::class);
     }
 }

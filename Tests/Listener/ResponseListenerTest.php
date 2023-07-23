@@ -20,7 +20,6 @@ use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -157,7 +156,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function providerOnKernelResponseOnlyInstrumentHTMLResponses()
+    public function providerOnKernelResponseOnlyInstrumentHTMLResponses(): array
     {
         return [
             // unsupported content types
@@ -193,8 +192,8 @@ class ResponseListenerTest extends TestCase
         $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(true);
         $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(false);
 
-        $request = $this->createRequestMock(true);
-        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $request = $this->createRequestMock();
+        $response = $this->createResponseMock('content', 'content');
         $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
@@ -215,8 +214,8 @@ class ResponseListenerTest extends TestCase
         $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(false);
         $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(true);
 
-        $request = $this->createRequestMock(true);
-        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $request = $this->createRequestMock();
+        $response = $this->createResponseMock('content', 'content');
         $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
@@ -237,15 +236,15 @@ class ResponseListenerTest extends TestCase
         $this->extension->expects($this->once())->method('isHeaderCalled')->willReturn(true);
         $this->extension->expects($this->once())->method('isFooterCalled')->willReturn(true);
 
-        $request = $this->createRequestMock(true);
-        $response = $this->createResponseMock('content', 'content', 'text/html');
+        $request = $this->createRequestMock();
+        $response = $this->createResponseMock('content', 'content');
         $event = $this->createFilterResponseEventDummy($request, $response);
 
         $object = new ResponseListener($this->newRelic, $this->interactor, true, false, $this->extension);
         $object->onKernelResponse($event);
     }
 
-    private function setUpNoCustomMetricsOrParameters()
+    private function setUpNoCustomMetricsOrParameters(): void
     {
         $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->willReturn([]);
@@ -287,13 +286,11 @@ class ResponseListenerTest extends TestCase
         return $mock;
     }
 
-    private function createFilterResponseEventDummy(Request $request = null, Response $response = null, int $requestType = HttpKernelInterface::MASTER_REQUEST)
+    private function createFilterResponseEventDummy(Request $request = null, Response $response = null, int $requestType = HttpKernelInterface::MAIN_REQUEST)
     {
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
-        $event = new $eventClass($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
-
-        return $event;
+        $eventClass = ResponseEvent::class;
+        return new $eventClass($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
     }
 }

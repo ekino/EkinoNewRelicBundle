@@ -23,11 +23,11 @@ use Twig\TwigFunction;
  */
 class NewRelicExtension extends AbstractExtension
 {
-    private $newRelic;
-    private $interactor;
-    private $instrument;
-    private $headerCalled = false;
-    private $footerCalled = false;
+    private Config $newRelic;
+    private NewRelicInteractorInterface $interactor;
+    private bool $instrument;
+    private bool $headerCalled = false;
+    private bool $footerCalled = false;
 
     public function __construct(
         Config $newRelic,

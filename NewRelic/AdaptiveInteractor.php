@@ -23,7 +23,7 @@ namespace Ekino\NewRelicBundle\NewRelic;
  */
 class AdaptiveInteractor implements NewRelicInteractorInterface
 {
-    private $interactor;
+    private NewRelicInteractorInterface $interactor;
 
     public function __construct(NewRelicInteractorInterface $real, NewRelicInteractorInterface $fake)
     {

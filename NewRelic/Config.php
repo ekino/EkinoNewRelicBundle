@@ -18,15 +18,15 @@ namespace Ekino\NewRelicBundle\NewRelic;
  */
 class Config
 {
-    private $name;
-    private $apiKey;
-    private $apiHost = null;
-    private $licenseKey;
-    private $xmit;
-    private $customEvents;
-    private $customMetrics;
-    private $customParameters;
-    private $deploymentNames;
+    private string|false $name;
+    private ?string $apiKey;
+    private ?string $apiHost;
+    private string|false $licenseKey;
+    private bool $xmit;
+    private array $customEvents;
+    private array $customMetrics;
+    private array $customParameters;
+    private array $deploymentNames;
 
     public function __construct(?string $name, string $apiKey = null, string $licenseKey = null, bool $xmit = false, array $deploymentNames = [], ?string $apiHost = null)
     {
