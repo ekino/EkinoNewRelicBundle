@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class DeprecationListenerTest extends TestCase
 {
-    public function testDeprecationIsReported()
+    public function testDeprecationIsReported(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable')->with(
@@ -39,7 +39,7 @@ class DeprecationListenerTest extends TestCase
         }
     }
 
-    public function testDeprecationIsReportedRegardlessErrorReporting()
+    public function testDeprecationIsReportedRegardlessErrorReporting(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable');
@@ -58,7 +58,7 @@ class DeprecationListenerTest extends TestCase
         }
     }
 
-    public function testOtherErrorAreIgnored()
+    public function testOtherErrorAreIgnored(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('noticeThrowable');
@@ -75,7 +75,7 @@ class DeprecationListenerTest extends TestCase
         }
     }
 
-    public function testInitialHandlerIsCalled()
+    public function testInitialHandlerIsCalled(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->once())->method('noticeThrowable');
@@ -95,7 +95,7 @@ class DeprecationListenerTest extends TestCase
         }
     }
 
-    public function testUnregisterRemovesHandler()
+    public function testUnregisterRemovesHandler(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('noticeThrowable');
@@ -112,7 +112,7 @@ class DeprecationListenerTest extends TestCase
         }
     }
 
-    public function testUnregisterRestorePreviousHandler()
+    public function testUnregisterRestorePreviousHandler(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
 

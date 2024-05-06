@@ -20,14 +20,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EkinoNewRelicBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
         $container->addCompilerPass(new MonologHandlerPass());
     }
 
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
@@ -36,7 +36,7 @@ class EkinoNewRelicBundle extends Bundle
         }
     }
 
-    public function shutdown()
+    public function shutdown(): void
     {
         if ($this->container->has(DeprecationListener::class)) {
             $this->container->get(DeprecationListener::class)->unregister();

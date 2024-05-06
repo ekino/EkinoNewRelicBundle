@@ -34,14 +34,14 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = ExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);
         $listener->onKernelException($event);
     }
 
-    public function testOnKernelExceptionWithHttp()
+    public function testOnKernelExceptionWithHttp(): void
     {
         $exception = new BadRequestHttpException('Boom');
 
@@ -51,7 +51,7 @@ class ExceptionListenerTest extends TestCase
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
-        $eventClass = class_exists(ExceptionEvent::class) ? ExceptionEvent::class : GetResponseForExceptionEvent::class;
+        $eventClass = ExceptionEvent::class;
         $event = new $eventClass($kernel, $request, HttpKernelInterface::SUB_REQUEST, $exception);
 
         $listener = new ExceptionListener($interactor);

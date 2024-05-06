@@ -25,15 +25,13 @@ class NotifyDeploymentCommand extends Command
     public const EXIT_UNAUTHORIZED = 2;
     public const EXIT_HTTP_ERROR = 3;
 
-    protected static $defaultName = 'newrelic:notify-deployment';
-
     private $newrelic;
 
     public function __construct(Config $newrelic)
     {
         $this->newrelic = $newrelic;
 
-        parent::__construct();
+        parent::__construct('newrelic:notify-deployment');
     }
 
     protected function configure(): void

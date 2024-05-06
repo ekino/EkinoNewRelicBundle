@@ -11,17 +11,17 @@ jobs:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: PHP-CS-Fixer
       uses: docker://oskarstark/php-cs-fixer-ga
 
   build:
     name: Build
-    runs-on: Ubuntu-20.04
+    runs-on: Ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['8.1', '8.2', '8.3']
         composer: ['']
         phpunit: ['']
         deprecation: ['']
@@ -29,35 +29,30 @@ jobs:
         stability: ['']
         include:
           # Minimum supported dependencies with the latest and oldest PHP version
-          - php: 8.0
-            composer: --prefer-stable --prefer-lowest
-            deprecation: max[direct]=0
-          - php: 7.1
+          - php: 8.1
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
 
           # symfony version
-          - php: 8.0
-            symfony: '^3.0'
-          - php: 8.0
-            symfony: '^4.0'
-          - php: 8.0
-            symfony: '^5.0'
+          - php: 8.3
+            symfony: '^6.4'
+          - php: 8.3
+            symfony: '^7.0'
 
           # dev
-          - php: 8.0
+          - php: 8.3
             stability: 'dev'
 
     steps:
       - name: Set up PHP
-        uses: shivammathur/setup-php@2.7.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none
           tools: flex
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup stability
         if: matrix.stability != ''
