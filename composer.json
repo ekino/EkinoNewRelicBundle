@@ -46,6 +46,6 @@
         }
     },
     "conflict": {
-        "sebastian/comparator": ">=5.0"
+        "sebastian/comparator": "<5.0"
     }
 }
