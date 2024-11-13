@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
+<phpunit
+        backupGlobals="false"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
          bootstrap="vendor/autoload.php"
@@ -15,16 +12,5 @@
             <directory>./Tests</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Tests/</directory>
-                <directory>./Resources/</directory>
-                <directory>./vendor/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 
 </phpunit>

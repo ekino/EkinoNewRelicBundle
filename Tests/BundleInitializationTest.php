@@ -27,12 +27,12 @@ use PHPUnit\Framework\TestCase;
  */
 class BundleInitializationTest extends TestCase
 {
-    protected function getBundleClass()
+    protected function getBundleClass(): string
     {
         return EkinoNewRelicBundle::class;
     }
 
-    public function testInitBundle()
+    public function testInitBundle(): void
     {
         $kernel = new AppKernel(uniqid('cache'));
         $kernel->boot();

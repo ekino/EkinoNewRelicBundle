@@ -28,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandListenerTest extends TestCase
 {
-    public function testCommandMarkedAsBackgroundJob()
+    public function testCommandMarkedAsBackgroundJob(): void
     {
         if (!class_exists('Symfony\Component\Console\Event\ConsoleCommandEvent')) {
             $this->markTestSkipped('Console Events is only available from Symfony 2.3');
@@ -68,7 +68,7 @@ class CommandListenerTest extends TestCase
         $listener->onConsoleCommand($event);
     }
 
-    public function testIgnoreBackgroundJob()
+    public function testIgnoreBackgroundJob(): void
     {
         $interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
         $interactor->expects($this->never())->method('startTransaction');
@@ -84,7 +84,7 @@ class CommandListenerTest extends TestCase
         $listener->onConsoleCommand($event);
     }
 
-    public function testConsoleError()
+    public function testConsoleError(): void
     {
         $exception = new \Exception('', 1);
 
@@ -103,7 +103,7 @@ class CommandListenerTest extends TestCase
         $listener->onConsoleError($event);
     }
 
-    public function testConsoleErrorsWithThrowable()
+    public function testConsoleErrorsWithThrowable(): void
     {
         $exception = new \Error();
 

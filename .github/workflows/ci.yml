@@ -11,57 +11,39 @@ jobs:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: PHP-CS-Fixer
-      uses: docker://oskarstark/php-cs-fixer-ga
+      - uses: actions/checkout@v4
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
 
   build:
     name: Build
-    runs-on: Ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['8.3']
         composer: ['']
-        phpunit: ['']
-        deprecation: ['']
         symfony: ['']
-        stability: ['']
+        deprecation: ['']
         include:
-          # Minimum supported dependencies with the latest and oldest PHP version
-          - php: 8.0
+          - php: 8.3
             composer: --prefer-stable --prefer-lowest
             deprecation: max[direct]=0
-          - php: 7.1
-            composer: --prefer-stable --prefer-lowest
-            deprecation: max[direct]=0
-
-          # symfony version
-          - php: 8.0
-            symfony: '^3.0'
-          - php: 8.0
-            symfony: '^4.0'
-          - php: 8.0
-            symfony: '^5.0'
-
-          # dev
-          - php: 8.0
-            stability: 'dev'
+          - php: 8.3
+            symfony: '^6.4'
+          - php: 8.3
+            symfony: '^7.0'
 
     steps:
       - name: Set up PHP
-        uses: shivammathur/setup-php@2.7.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: none
           tools: flex
 
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup stability
-        if: matrix.stability != ''
-        run: composer config minimum-stability "${{ matrix.stability }}"
+        uses: actions/checkout@v4
 
       - name: Setup deprecation
         if: matrix.deprecation != ''
@@ -74,15 +56,15 @@ jobs:
 
       - name: Download dependencies
         run: |
-          composer update ${{ matrix.composer}} --prefer-dist --no-interaction
+          composer update ${{ matrix.composer }} --prefer-dist --no-interaction
           ./vendor/bin/simple-phpunit install
 
       - name: Validate
         run: |
-            composer validate --strict --no-check-lock
+          composer validate --strict --no-check-lock
 
       - name: Run tests
         env:
           SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT: 1
         run: |
-          ${{ matrix.phpunit }} ./vendor/bin/simple-phpunit
+          ./vendor/bin/simple-phpunit

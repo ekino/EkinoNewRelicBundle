@@ -18,14 +18,21 @@ use Ekino\NewRelicBundle\NewRelic\Config;
 use Ekino\NewRelicBundle\NewRelic\NewRelicInteractorInterface;
 use Ekino\NewRelicBundle\Twig\NewRelicExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ResponseListenerTest extends TestCase
 {
+    private NewRelicInteractorInterface $interactor;
+
+    private Config $newRelic;
+
+    private NewRelicExtension $extension;
+
     protected function setUp(): void
     {
         $this->interactor = $this->getMockBuilder(NewRelicInteractorInterface::class)->getMock();
@@ -39,7 +46,7 @@ class ResponseListenerTest extends TestCase
             ->getMock();
     }
 
-    public function testOnKernelResponseOnlyMasterRequestsAreProcessed()
+    public function testOnKernelResponseOnlyMasterRequestsAreProcessed(): void
     {
         $event = $this->createFilterResponseEventDummy(null, null, HttpKernelInterface::SUB_REQUEST);
 
@@ -49,7 +56,7 @@ class ResponseListenerTest extends TestCase
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
     }
 
-    public function testOnKernelResponseWithOnlyCustomMetricsAndParameters()
+    public function testOnKernelResponseWithOnlyCustomMetricsAndParameters(): void
     {
         $events = [
             'WidgetSale' => [
@@ -103,7 +110,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function testOnKernelResponseInstrumentDisabledInRequest()
+    public function testOnKernelResponseInstrumentDisabledInRequest(): void
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -115,7 +122,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function testSymfonyCacheEnabled()
+    public function testSymfonyCacheEnabled(): void
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -127,7 +134,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function testSymfonyCacheDisabled()
+    public function testSymfonyCacheDisabled(): void
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -142,7 +149,7 @@ class ResponseListenerTest extends TestCase
     /**
      * @dataProvider providerOnKernelResponseOnlyInstrumentHTMLResponses
      */
-    public function testOnKernelResponseOnlyInstrumentHTMLResponses($content, $expectsSetContent, $contentType)
+    public function testOnKernelResponseOnlyInstrumentHTMLResponses($content, $expectsSetContent, $contentType): void
     {
         $this->setupNoCustomMetricsOrParameters();
 
@@ -157,7 +164,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function providerOnKernelResponseOnlyInstrumentHTMLResponses()
+    public function providerOnKernelResponseOnlyInstrumentHTMLResponses(): array
     {
         return [
             // unsupported content types
@@ -179,7 +186,7 @@ class ResponseListenerTest extends TestCase
         ];
     }
 
-    public function testInteractionWithTwigExtensionHeader()
+    public function testInteractionWithTwigExtensionHeader(): void
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
@@ -201,7 +208,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function testInteractionWithTwigExtensionFooter()
+    public function testInteractionWithTwigExtensionFooter(): void
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
@@ -223,7 +230,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    public function testInteractionWithTwigExtensionHeaderFooter()
+    public function testInteractionWithTwigExtensionHeaderFooter(): void
     {
         $this->newRelic->expects($this->never())->method('getCustomMetrics');
         $this->newRelic->expects($this->never())->method('getCustomParameters');
@@ -245,7 +252,7 @@ class ResponseListenerTest extends TestCase
         $object->onKernelResponse($event);
     }
 
-    private function setUpNoCustomMetricsOrParameters()
+    private function setUpNoCustomMetricsOrParameters(): void
     {
         $this->newRelic->expects($this->once())->method('getCustomEvents')->willReturn([]);
         $this->newRelic->expects($this->once())->method('getCustomMetrics')->willReturn([]);
@@ -256,24 +263,27 @@ class ResponseListenerTest extends TestCase
         $this->interactor->expects($this->never())->method('addCustomParameter');
     }
 
-    private function createRequestMock($instrumentEnabled = true)
+    private function createRequestMock($instrumentEnabled = true): Request
     {
         $mock = $this->getMockBuilder(Request::class)
             ->setMethods(['get'])
             ->getMock();
-        $mock->attributes = $mock;
+        $mock->attributes = new ParameterBag(['_instrument' => $instrumentEnabled]);
 
         $mock->expects($this->any())->method('get')->willReturn($instrumentEnabled);
 
         return $mock;
     }
 
-    private function createResponseMock($content = null, $expectsSetContent = null, $contentType = 'text/html')
-    {
+    private function createResponseMock(
+        $content = null,
+        $expectsSetContent = null,
+        $contentType = 'text/html',
+    ): Response {
         $mock = $this->getMockBuilder(Response::class)
             ->setMethods(['get', 'getContent', 'setContent'])
             ->getMock();
-        $mock->headers = $mock;
+        $mock->headers = new ResponseHeaderBag(['Content-Type' => $contentType]);
 
         $mock->expects($this->any())->method('get')->willReturn($contentType);
         $mock->expects($content ? $this->any() : $this->never())->method('getContent')->willReturn($content ?? false);
@@ -287,13 +297,13 @@ class ResponseListenerTest extends TestCase
         return $mock;
     }
 
-    private function createFilterResponseEventDummy(Request $request = null, Response $response = null, int $requestType = HttpKernelInterface::MASTER_REQUEST)
-    {
+    private function createFilterResponseEventDummy(
+        Request $request = null,
+        Response $response = null,
+        int $requestType = HttpKernelInterface::MAIN_REQUEST,
+    ): ResponseEvent {
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
 
-        $eventClass = class_exists(ResponseEvent::class) ? ResponseEvent::class : FilterResponseEvent::class;
-        $event = new $eventClass($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
-
-        return $event;
+        return new ResponseEvent($kernel, $request ?? new Request(), $requestType, $response ?? new Response());
     }
 }

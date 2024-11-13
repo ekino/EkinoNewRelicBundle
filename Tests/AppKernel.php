@@ -89,7 +89,7 @@ class AppKernel extends Kernel
      * (From MicroKernelTrait)
      * {@inheritdoc}
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(function (ContainerBuilder $container) {
             $container->loadFromExtension('framework', [
@@ -100,21 +100,19 @@ class AppKernel extends Kernel
                 ],
             ]);
 
-            // Not setting the router to utf8 is deprecated in symfony 5.1
-            if (Kernel::VERSION_ID >= 50100) {
+            // Fix deprecations in symfony 6
+            if (Kernel::VERSION_ID >= 60100) {
                 $container->loadFromExtension('framework', [
-                    'router' => ['utf8' => true],
-                ]);
-            }
-
-            // Not setting the "framework.session.storage_factory_id" configuration option is deprecated in symfony 5.3
-            if (Kernel::VERSION_ID >= 50300) {
-                $container->loadFromExtension('framework', [
-                    'session' => ['storage_factory_id' => 'session.storage.factory.mock_file'],
-                ]);
-            } else {
-                $container->loadFromExtension('framework', [
-                    'session' => ['storage_id' => 'session.storage.mock_file'],
+                    'http_method_override' => false,
+                    'handle_all_throwables' => true,
+                    'session' => [
+                        'cookie_secure' => 'auto',
+                        'cookie_samesite' => 'lax',
+                        'handler_id' => null,
+                    ],
+                    'php_errors' => [
+                        'log' => true,
+                    ],
                 ]);
             }
 
@@ -140,7 +138,7 @@ class AppKernel extends Kernel
         $container = parent::buildContainer();
 
         $container->addCompilerPass(new class() implements CompilerPassInterface {
-            public function process(ContainerBuilder $container)
+            public function process(ContainerBuilder $container): void
             {
                 foreach ($container->getDefinitions() as $id => $definition) {
                     if (preg_match('|Ekino.*|i', $id)) {
